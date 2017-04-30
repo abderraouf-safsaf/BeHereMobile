@@ -73,11 +73,10 @@ public class MainActivity extends AppCompatActivity {
 
         loadingProgressDialog.show();
 
-        FirebaseRecyclerAdapter<Section, StructureViewHolder> adapter = new FirebaseRecyclerAdapter<Section, StructureViewHolder>(
-                Section.class, R.layout.structure_item_viewer, StructureViewHolder.class, sectionQuery
-        ) {
+        FirebaseRecyclerAdapterViewer<Section, StructureViewHolder> adapter = new FirebaseRecyclerAdapterViewer<Section, StructureViewHolder>(Section.class,
+                R.layout.structure_item_viewer, StructureViewHolder.class, sectionQuery) {
             @Override
-            protected void populateViewHolder(StructureViewHolder viewHolder, Section model, int position) {
+            protected void populateView(StructureViewHolder viewHolder, Section model, int position) {
 
                 Button structureButton = viewHolder.structureButton;
                 viewHolder.structureButton.setText(model.getDesignation());
@@ -85,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
 
-                        Intent intent = new Intent(MainActivity.this, EtudiantsListActivity.class);
+                        Intent intent = new Intent(MainActivity.this, ListEtudiantsActivity.class);
                         startActivity(intent);
                     }
                 });
@@ -95,6 +94,7 @@ public class MainActivity extends AppCompatActivity {
             protected void onDataChanged() {
 
                 super.onDataChanged();
+
                 loadingProgressDialog.dismiss();
             }
         };
@@ -110,11 +110,11 @@ public class MainActivity extends AppCompatActivity {
         Query groupesQuery = Utils.database.getReference(groupesPath);
 
         loadingProgressDialog.show();;
-        FirebaseRecyclerAdapter<Groupe, StructureViewHolder> adapter = new FirebaseRecyclerAdapter<Groupe, StructureViewHolder>(
+        FirebaseRecyclerAdapterViewer<Groupe, StructureViewHolder> adapter = new FirebaseRecyclerAdapterViewer<Groupe, StructureViewHolder>(
                 Groupe.class, R.layout.structure_item_viewer, StructureViewHolder.class, groupesQuery
         ) {
             @Override
-            protected void populateViewHolder(StructureViewHolder viewHolder, final Groupe groupe, int position) {
+            protected void populateView(StructureViewHolder viewHolder, final Groupe groupe, int position) {
 
                 Button structureButton = viewHolder.structureButton;
                 viewHolder.structureButton.setText(groupe.getDesignation());
@@ -122,7 +122,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
 
-                        Intent intent = new Intent(MainActivity.this, EtudiantsListActivity.class);
+                        Intent intent = new Intent(MainActivity.this, ListEtudiantsActivity.class);
                         intent.putExtra("groupe", groupe);
                         startActivity(intent);
                     }
