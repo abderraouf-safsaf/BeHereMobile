@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">BeHereAndroid</string>
+    <string name="sections">Sections:</string>
+    <string name="groupes">Groupes:</string>
+    <string name="title_activity_etudiants_list">EtudiantsListActivity</string>
+    <string name="action_settings">Settings</string>
+    <string name="chargement_sections_loading_message">Chargement de sections</string>
+    <string name="chargement_groupes_loading_message">Chargement de groupes</string>
+    <string name="chargement_etudiants_loading_message">Chargement d\'étudiants</string>
+</resources>
