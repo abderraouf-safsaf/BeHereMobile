@@ -48,6 +48,7 @@ public abstract class FirebaseRecyclerAdapterViewer<T, VH extends ItemViewHolder
 
     @Override
     protected T parseSnapshot(DataSnapshot snapshot) {
+
         if (snapshot.hasChildren())
             return super.parseSnapshot(snapshot);
         else return null;

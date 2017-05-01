@@ -2,10 +2,12 @@ package com.example.teamloosers.behereandroid;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -15,15 +17,22 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterViewFlipper;
+import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.util.Util;
 import com.example.teamloosers.behereandroid.Structures.Absence;
 import com.example.teamloosers.behereandroid.Structures.Etudiant;
 import com.example.teamloosers.behereandroid.Structures.Module;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
@@ -69,7 +78,7 @@ public class ConsultationEtudiantActivity extends AppCompatActivity {
 
         Etudiant currentEtudiant = etudiantsList.get(etudiantsAdapterViewFlipper.getDisplayedChild());
 
-        String pathToEtudiant = Utils.firebasePath(currentEtudiant.getIdCycle(), currentEtudiant.getIdFilliere(),
+        String pathToEtudiant = Utils.firebasePath(Utils.CYCLES, currentEtudiant.getIdCycle(), currentEtudiant.getIdFilliere(),
                 currentEtudiant.getIdPromo(), currentEtudiant.getIdSection(), currentEtudiant.getIdGroupe(), currentEtudiant.getId(), module.getId());
 
         DatabaseReference etudiantRef = Utils.database.getReference(pathToEtudiant);
@@ -82,9 +91,28 @@ public class ConsultationEtudiantActivity extends AppCompatActivity {
         FirebaseRecyclerAdapterViewer<Absence, AbsenceViewHolder> absencesListAdapter = new FirebaseRecyclerAdapterViewer<Absence, AbsenceViewHolder>(
                 Absence.class, R.layout.view_holder_absence, AbsenceViewHolder.class, etudiantRef) {
             @Override
-            protected void populateView(AbsenceViewHolder viewHolder, Absence absence, int position) {
+            protected void populateView(AbsenceViewHolder viewHolder, final Absence absence, int position) {
 
                 viewHolder.absenceDateTextView.setText(absence.getDate());
+                viewHolder.supprimerAbsenceImageButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        AlertDialog.Builder alertDialog = new AlertDialog.Builder(ConsultationEtudiantActivity.this);
+                        alertDialog.setMessage(R.string.confirmer_suppression_absence_message);
+                        alertDialog.setPositiveButton(R.string.oui, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                                absence.supprimerDb(Utils.database);
+                                Toast.makeText(ConsultationEtudiantActivity.this, R.string.absence_supprimee_message, Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                        alertDialog.setNegativeButton(R.string.non, null);
+                        alertDialog.show();
+
+                    }
+                });
             }
 
             @Override
@@ -95,6 +123,7 @@ public class ConsultationEtudiantActivity extends AppCompatActivity {
                 loadingProgressDialog.dismiss();
             }
         };
+
         etudiantsAbsencesRecyclerView.setAdapter(absencesListAdapter);
     }
 
@@ -104,15 +133,17 @@ public class ConsultationEtudiantActivity extends AppCompatActivity {
         // TODO ajouter les animation de gestures
         return false;
     }
-    public class AbsenceViewHolder extends ItemViewHolder   {
+    public static class AbsenceViewHolder extends ItemViewHolder   {
 
         TextView absenceDateTextView;
+        ImageButton supprimerAbsenceImageButton;
 
         public AbsenceViewHolder(View itemView) {
 
             super(itemView);
 
             absenceDateTextView = (TextView) itemView.findViewById(R.id.abseneDateTextView);
+            supprimerAbsenceImageButton = (ImageButton) itemView.findViewById(R.id.supprimerAbsenceImageButton);
         }
     }
     public class EtudiantsConsultationAdapter extends BaseAdapter   {

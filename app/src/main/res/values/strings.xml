@@ -98,4 +98,8 @@
         "when a user tries to pick up one of cards.\n\n"
     </string>
     <string name="chargement_etudiant_absence_message">Chargement d\'absences</string>
+    <string name="absence_supprimee_message">L\'absence a été supprimée</string>
+    <string name="confirmer_suppression_absence_message">Veuillez confirmer la supression</string>
+    <string name="oui">Supprimer</string>
+    <string name="non">Non</string>
 </resources>
