@@ -107,4 +107,6 @@
     <string name="title_activity_etudiants_presences">EtudiantsPresencesActivity</string>
     <string name="valider_appel_message">Voulez-vous valider l\'appel?</string>
     <string name="valider_appel_toast">L\'appel a été valider</string>
+    <string name="title_activity_main_modues">MainActivityModues</string>
+    <string name="section_format">Hello World from section: %1$d</string>
 </resources>

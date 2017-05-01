@@ -1,0 +1,97 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="top|center"
+    android:orientation="vertical"
+    android:padding="10dp"
+    tools:layout_editor_absoluteX="8dp"
+    tools:layout_editor_absoluteY="8dp">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:weightSum="0">
+
+        <ImageButton
+            android:id="@+id/leftImageButton"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/right_arrow_button_height"
+            android:layout_weight="2"
+            android:adjustViewBounds="false"
+            android:background="@drawable/tw__transparent"
+            android:cropToPadding="false"
+            android:elevation="0dp"
+            android:scaleType="fitCenter"
+            app:srcCompat="@drawable/left_arrow_icon" />
+
+        <TextView
+            android:id="@+id/moduleDesignationTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="TextView"
+            android:textSize="@dimen/module_designation_text_size" />
+
+        <ImageButton
+            android:id="@+id/rightImageButton"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/left_arrow_button_height"
+            android:layout_weight="2"
+            android:adjustViewBounds="false"
+            android:background="@drawable/tw__transparent"
+            android:scaleType="fitCenter"
+            app:srcCompat="@drawable/right_arrow_icon" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/sectionsTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:text="@string/sections" />
+
+    <FrameLayout
+        android:id="@+id/sectionsFrameLayout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/sectionsRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="5dp"
+            android:scrollbars="vertical" />
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/groupesTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:text="@string/groupes" />
+
+    <FrameLayout
+        android:id="@+id/groupesFrameLayout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/groupesRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipChildren="false"
+            android:clipToPadding="false"
+            android:padding="5dp"
+            android:scrollbars="vertical" />
+    </FrameLayout>
+
+</LinearLayout>
+
+

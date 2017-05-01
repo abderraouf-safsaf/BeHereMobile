@@ -12,6 +12,7 @@
         android:layout_height="match_parent"
         android:layout_gravity="center"
         android:gravity="center"
-        android:text="TextView"
+        android:text="Etudiant"
+        android:textColor="@color/textSecondary"
         android:textSize="@dimen/etudiantNomPrenomTextSize" />
 </LinearLayout>

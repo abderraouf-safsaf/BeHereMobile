@@ -1,154 +1,103 @@
 package com.example.teamloosers.behereandroid;
 
-import android.app.ProgressDialog;
-import android.content.Intent;
+import android.content.Context;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.view.View;
-import android.widget.Button;
+import android.support.v7.widget.Toolbar;
 
-import com.example.teamloosers.behereandroid.Structures.Enseignant;
-import com.example.teamloosers.behereandroid.Structures.Groupe;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
+import android.os.Bundle;
+import android.view.View;
+
+import com.bumptech.glide.util.Util;
 import com.example.teamloosers.behereandroid.Structures.Module;
-import com.example.teamloosers.behereandroid.Structures.Personne;
-import com.example.teamloosers.behereandroid.Structures.Section;
-import com.google.firebase.database.Query;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
-    private Module module;
 
-    private RecyclerView groupesRecyclerView, sectionsRecyclerView;
+    private ModulesPageAdapter mSectionsPagerAdapter;
+
+
+    private ViewPager mViewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        module = new Module("Architecture 1");
-        module.setId("Architecture1_50824b38-b894-44b9-af7f-a6e1971e884b");
-        module.setIdCycle("Cyclepreparatoireintegree_d35f9666-8af2-4007-8f2f-0550878f6cd1");
-        module.setIdFilliere("Informatique_db6f8a0e-db55-4ed5-9112-9fb74858a5e7");
-        module.setIdFilliere("Premiereannee_58087455-b575-4cce-8f0c-9252471a36ca");
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitle(String.format("M.%s %s", Utils.enseignant.getNom(), Utils.enseignant.getPrenom()));
+        setSupportActionBar(toolbar);
 
-        sectionsRecyclerView = (RecyclerView) findViewById(R.id.sectionsRecyclerView);
-        groupesRecyclerView = (RecyclerView) findViewById(R.id.groupesRecyclerView);
+        Module architecture1 = new Module("Architecture 1");
+        architecture1.setId("Architecture1_50824b38-b894-44b9-af7f-a6e1971e884b");
+        architecture1.setIdCycle("Cyclepreparatoireintegree_d35f9666-8af2-4007-8f2f-0550878f6cd1");
+        architecture1.setIdFilliere("Informatique_db6f8a0e-db55-4ed5-9112-9fb74858a5e7");
+        architecture1.setIdFilliere("Premiereannee_58087455-b575-4cce-8f0c-9252471a36ca");
 
-        sectionsRecyclerView.setHasFixedSize(true);
-        groupesRecyclerView.setHasFixedSize(true);
+        Module systemExploitation1 = new Module("Systeme d'exploitation 1");
+        systemExploitation1.setId("Systemed'exploitation1_f82a8c66-2340-4095-8118-2e4f4a2b21fd");
+        systemExploitation1.setIdCycle("Cyclepreparatoireintegree_d35f9666-8af2-4007-8f2f-0550878f6cd1");
+        systemExploitation1.setIdFilliere("Informatique_db6f8a0e-db55-4ed5-9112-9fb74858a5e7");
+        systemExploitation1.setIdPromo("Premiereannee_58087455-b575-4cce-8f0c-9252471a36ca");
 
-        LinearLayoutManager sectionsLinearLayoutManager = new LinearLayoutManager(this);
-        sectionsRecyclerView.setLayoutManager(sectionsLinearLayoutManager);
+        ArrayList<Module> modulesList = new ArrayList<>();
 
-        LinearLayoutManager groupesLinearLayoutManager = new LinearLayoutManager(this);
-        groupesRecyclerView.setLayoutManager(groupesLinearLayoutManager);
+        modulesList.add(architecture1);
+        modulesList.add(systemExploitation1);
+
+        mSectionsPagerAdapter = new ModulesPageAdapter(getSupportFragmentManager(), modulesList, this);
+
+        mViewPager = (ViewPager) findViewById(R.id.container);
+        mViewPager.setAdapter(mSectionsPagerAdapter);
+
+
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+            }
+        });
+
     }
 
-    @Override
-    protected void onStart() {
+    public class ModulesPageAdapter extends FragmentPagerAdapter {
 
-        super.onStart();
+        private ArrayList<Module> modulesList;
+        private Context context;
 
-        loadSections();
-        loadGroupes();
-    }
+        public ModulesPageAdapter(FragmentManager fm, ArrayList<Module> modulesList, Context context) {
 
-    private void loadSections() {
+            super(fm);
 
-        final ProgressDialog loadingProgressDialog = new ProgressDialog(this);
-        loadingProgressDialog.setCancelable(false);
-        loadingProgressDialog.setMessage(getResources().getString(R.string.chargement_sections_loading_message));
+            this.modulesList = modulesList;
+            this.context = context;
+        }
 
-        String sectionsPath = Utils.firebasePath(Utils.ENSEIGNANT_MODULE, Utils.enseignant.getId(), module.getId(), Utils.SECTIONS);
+        @Override
+        public Fragment getItem(int position) {
 
-        Query sectionQuery = Utils.database.getReference(sectionsPath);
+            return MainFragment.newInstance(modulesList.get(position));
+        }
 
-        loadingProgressDialog.show();
+        @Override
+        public int getCount() {
 
-        FirebaseRecyclerAdapterViewer<Section, StructureViewHolder> adapter = new FirebaseRecyclerAdapterViewer<Section, StructureViewHolder>(Section.class,
-                R.layout.view_holder_structure, StructureViewHolder.class, sectionQuery) {
-            @Override
-            protected void populateView(StructureViewHolder viewHolder, final Section section, int position) {
+            return modulesList.size();
+        }
 
-                Button structureButton = viewHolder.structureButton;
-                viewHolder.structureButton.setText(section.getDesignation());
-                structureButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
+        @Override
+        public CharSequence getPageTitle(int position) {
 
-                        Intent intent = new Intent(MainActivity.this, ListEtudiantsActivity.class);
-                        intent.putExtra("module", module);
-                        intent.putExtra("section", section);
-
-                        startActivity(intent);
-                    }
-                });
-            }
-
-            @Override
-            protected void onDataChanged() {
-
-                super.onDataChanged();
-
-                loadingProgressDialog.dismiss();
-            }
-        };
-        sectionsRecyclerView.setAdapter(adapter);
-    }
-    private void loadGroupes()  {
-
-        final ProgressDialog loadingProgressDialog = new ProgressDialog(this);
-        loadingProgressDialog.setCancelable(false);
-        loadingProgressDialog.setMessage(getResources().getString(R.string.chargement_groupes_loading_message));
-
-        String groupesPath = Utils.firebasePath(Utils.ENSEIGNANT_MODULE, Utils.enseignant.getId(), module.getId(), Utils.GROUPES);
-        Query groupesQuery = Utils.database.getReference(groupesPath);
-
-        loadingProgressDialog.show();;
-        FirebaseRecyclerAdapterViewer<Groupe, StructureViewHolder> adapter = new FirebaseRecyclerAdapterViewer<Groupe, StructureViewHolder>(
-                Groupe.class, R.layout.view_holder_structure, StructureViewHolder.class, groupesQuery
-        ) {
-            @Override
-            protected void populateView(StructureViewHolder viewHolder, final Groupe groupe, int position) {
-
-                Button structureButton = viewHolder.structureButton;
-                viewHolder.structureButton.setText(groupe.getDesignation());
-                structureButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-
-                        Intent intent = new Intent(MainActivity.this, ListEtudiantsActivity.class);
-                        intent.putExtra("module", module);
-                        intent.putExtra("groupe", groupe);
-
-                        startActivity(intent);
-                    }
-                });
-            }
-
-            @Override
-            protected void onDataChanged() {
-
-                super.onDataChanged();
-
-                loadingProgressDialog.dismiss();
-            }
-        };
-        groupesRecyclerView.setAdapter(adapter);
-    }
-
-    public static class StructureViewHolder extends ItemViewHolder {
-
-        Button structureButton;
-
-        public StructureViewHolder(View itemView) {
-
-            super(itemView);
-
-            structureButton = (Button) itemView.findViewById(R.id.structureButton);
+            return modulesList.get(position).getDesignation();
         }
     }
 }

@@ -5,14 +5,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
+    app:layout_collapseParallaxMultiplier="1.0"
     tools:context="com.example.teamloosers.behereandroid.ListEtudiantsActivity">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/etudiantsListRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:padding="5dp"
         android:scrollbars="vertical"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/app_bar"

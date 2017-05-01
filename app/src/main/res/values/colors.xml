@@ -1,10 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#9C27B0</color>
-    <color name="colorPrimaryDark">#7B1FA2</color>
-    <color name="colorAccent">#FE3F80</color>
+    <!--BeHere style color -->
+    <color name="colorPrimary">#009688</color>
+    <color name="colorPrimaryDark">#00796B</color>
+    <color name="colorAccent">#FF5252</color>
     <color name="textPrimary">#212121</color>
-    <color name="textSecondary">#727272</color>
-    <color name="white">#fff</color>
-    <color name="background">#dae2e2e2</color>
+    <color name="textSecondary">#757575</color>
+    <color name="divider">#BDBDBD</color>
+    <color name="icons">#FFFFFF</color>
+
+    <color name="white">#ffffff</color>
+    <color name="background">#ffffff</color>
+    <color name="structure_button_text_color">#ffffff</color>
+    <color name="etudiant_viewer_background_color">#e0f2f1</color>
+
 </resources>
