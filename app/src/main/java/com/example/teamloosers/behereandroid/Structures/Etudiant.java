@@ -12,7 +12,7 @@ public class Etudiant extends Personne {
     public String idGroupe, idSection, idPromo, idSpecialite, idFilliere, idCycle, imageBase64;
     public int nbAbsences = 0;
 
-    //private ArrayList<Absence> absencesList = new ArrayList<>();
+    private ArrayList<Absence> absencesList = new ArrayList<>();
 
     public Etudiant()   {   }
     public Etudiant(String nom, String prenom, String sexe)  {

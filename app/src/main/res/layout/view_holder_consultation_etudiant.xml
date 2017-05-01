@@ -26,8 +26,8 @@
 
         <ImageView
             android:id="@+id/etudiantImageView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/etudiantImageWidth"
+            android:layout_height="@dimen/etudiantImageHeight"
             android:layout_gravity="center"
             android:layout_weight="1"
             app:srcCompat="@drawable/com_facebook_profile_picture_blank_portrait" />

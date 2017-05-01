@@ -5,4 +5,7 @@
     <dimen name="etudiantNomTextSize">24dp</dimen>
     <dimen name="etudiantPrenomTextSize">20dp</dimen>
     <dimen name="etudiantEmailTextSize">20dp</dimen>
+    <dimen name="etudiantNomPrenomTextSize">20dp</dimen>
+    <dimen name="etudiantImageHeight">200dp</dimen>
+    <dimen name="etudiantImageWidth">200dp</dimen>
 </resources>

@@ -1,18 +1,22 @@
 package com.example.teamloosers.behereandroid;
 
-import android.support.v7.widget.RecyclerView;
-import android.view.ViewGroup;
+import android.view.View;
+import android.widget.AdapterView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.Query;
 
+import java.util.ArrayList;
+
 /**
  * Created by teamloosers on 30/04/17.
  */
 
-public abstract class FirebaseRecyclerAdapterViewer<T, VH extends RecyclerView.ViewHolder>
+public abstract class FirebaseRecyclerAdapterViewer<T, VH extends ItemViewHolder>
         extends FirebaseRecyclerAdapter<T, VH> {
+
+    private AdapterView.OnItemClickListener listener;
     /**
      * @param modelClass      Firebase will marshall the data at a location into
      *                        an instance of a class that you provide
@@ -27,6 +31,14 @@ public abstract class FirebaseRecyclerAdapterViewer<T, VH extends RecyclerView.V
         super(modelClass, modelLayout, viewHolderClass, ref);
     }
 
+    public ArrayList<T> getItems()  {
+
+        ArrayList<T> itemsList = new ArrayList<>();
+        for (int i = 0; i < getItemCount(); i++)
+            itemsList.add(getItem(i));
+
+        return itemsList;
+    }
     @Override
     protected void populateViewHolder(VH viewHolder, T model, int position) {
 
@@ -41,5 +53,16 @@ public abstract class FirebaseRecyclerAdapterViewer<T, VH extends RecyclerView.V
         else return null;
     }
 
+    @Override
+    public void onBindViewHolder(VH viewHolder, int position) {
+
+        super.onBindViewHolder(viewHolder, position);
+        viewHolder.bind(viewHolder.itemView, listener);
+    }
+
+
+    public void setOnItemClickListener(AdapterView.OnItemClickListener listener) {
+        this.listener = listener;
+    }
     protected abstract void populateView(VH viewHolder, T model, int position);
 }

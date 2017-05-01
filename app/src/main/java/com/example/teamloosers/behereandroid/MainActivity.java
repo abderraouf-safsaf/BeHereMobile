@@ -14,7 +14,6 @@ import com.example.teamloosers.behereandroid.Structures.Groupe;
 import com.example.teamloosers.behereandroid.Structures.Module;
 import com.example.teamloosers.behereandroid.Structures.Personne;
 import com.example.teamloosers.behereandroid.Structures.Section;
-import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.database.Query;
 
 public class MainActivity extends AppCompatActivity {
@@ -57,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
 
         super.onStart();
 
-        //loadSections();
+        loadSections();
         loadGroupes();
     }
 
@@ -74,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
         loadingProgressDialog.show();
 
         FirebaseRecyclerAdapterViewer<Section, StructureViewHolder> adapter = new FirebaseRecyclerAdapterViewer<Section, StructureViewHolder>(Section.class,
-                R.layout.structure_item_viewer, StructureViewHolder.class, sectionQuery) {
+                R.layout.view_holder_structure, StructureViewHolder.class, sectionQuery) {
             @Override
             protected void populateView(StructureViewHolder viewHolder, Section model, int position) {
 
@@ -111,7 +110,7 @@ public class MainActivity extends AppCompatActivity {
 
         loadingProgressDialog.show();;
         FirebaseRecyclerAdapterViewer<Groupe, StructureViewHolder> adapter = new FirebaseRecyclerAdapterViewer<Groupe, StructureViewHolder>(
-                Groupe.class, R.layout.structure_item_viewer, StructureViewHolder.class, groupesQuery
+                Groupe.class, R.layout.view_holder_structure, StructureViewHolder.class, groupesQuery
         ) {
             @Override
             protected void populateView(StructureViewHolder viewHolder, final Groupe groupe, int position) {
@@ -140,7 +139,7 @@ public class MainActivity extends AppCompatActivity {
         groupesRecyclerView.setAdapter(adapter);
     }
 
-    public static class StructureViewHolder extends RecyclerView.ViewHolder    {
+    public static class StructureViewHolder extends ItemViewHolder {
 
         Button structureButton;
 
