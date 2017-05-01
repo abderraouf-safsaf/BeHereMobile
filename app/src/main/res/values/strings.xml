@@ -100,6 +100,11 @@
     <string name="chargement_etudiant_absence_message">Chargement d\'absences</string>
     <string name="absence_supprimee_message">L\'absence a été supprimée</string>
     <string name="confirmer_suppression_absence_message">Veuillez confirmer la supression</string>
-    <string name="oui">Supprimer</string>
+    <string name="oui">Oui</string>
     <string name="non">Non</string>
+    <string name="nouvel_appel_snackbar_message"></string>
+    <string name="nouvel_appel_action">Faire l\'appel</string>
+    <string name="title_activity_etudiants_presences">EtudiantsPresencesActivity</string>
+    <string name="valider_appel_message">Voulez-vous valider l\'appel?</string>
+    <string name="valider_appel_toast">L\'appel a été valider</string>
 </resources>

@@ -9,4 +9,5 @@
     <dimen name="etudiantImageHeight">200dp</dimen>
     <dimen name="etudiantImageWidth">200dp</dimen>
     <dimen name="delete_button_height">30dp</dimen>
+    <dimen name="presence_button_height">50dp</dimen>
 </resources>

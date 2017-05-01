@@ -18,7 +18,6 @@ import com.google.firebase.database.Query;
 
 public class MainActivity extends AppCompatActivity {
 
-    private Enseignant enseignant;
     private Module module;
 
     private RecyclerView groupesRecyclerView, sectionsRecyclerView;
@@ -28,9 +27,6 @@ public class MainActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        enseignant = new Enseignant("Badsi", "Hichem",  Personne.HOMME);
-        enseignant.setId("4a04efee-0aa4-4756-bbee-78602a3ee9dc");
 
         module = new Module("Architecture 1");
         module.setId("Architecture1_50824b38-b894-44b9-af7f-a6e1971e884b");
@@ -66,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
         loadingProgressDialog.setCancelable(false);
         loadingProgressDialog.setMessage(getResources().getString(R.string.chargement_sections_loading_message));
 
-        String sectionsPath = Utils.firebasePath(Utils.ENSEIGNANT_MODULE, enseignant.getId(), module.getId(), Utils.SECTIONS);
+        String sectionsPath = Utils.firebasePath(Utils.ENSEIGNANT_MODULE, Utils.enseignant.getId(), module.getId(), Utils.SECTIONS);
 
         Query sectionQuery = Utils.database.getReference(sectionsPath);
 
@@ -75,15 +71,18 @@ public class MainActivity extends AppCompatActivity {
         FirebaseRecyclerAdapterViewer<Section, StructureViewHolder> adapter = new FirebaseRecyclerAdapterViewer<Section, StructureViewHolder>(Section.class,
                 R.layout.view_holder_structure, StructureViewHolder.class, sectionQuery) {
             @Override
-            protected void populateView(StructureViewHolder viewHolder, Section model, int position) {
+            protected void populateView(StructureViewHolder viewHolder, final Section section, int position) {
 
                 Button structureButton = viewHolder.structureButton;
-                viewHolder.structureButton.setText(model.getDesignation());
+                viewHolder.structureButton.setText(section.getDesignation());
                 structureButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
 
                         Intent intent = new Intent(MainActivity.this, ListEtudiantsActivity.class);
+                        intent.putExtra("module", module);
+                        intent.putExtra("section", section);
+
                         startActivity(intent);
                     }
                 });
@@ -105,7 +104,7 @@ public class MainActivity extends AppCompatActivity {
         loadingProgressDialog.setCancelable(false);
         loadingProgressDialog.setMessage(getResources().getString(R.string.chargement_groupes_loading_message));
 
-        String groupesPath = Utils.firebasePath(Utils.ENSEIGNANT_MODULE, enseignant.getId(), module.getId(), Utils.GROUPES);
+        String groupesPath = Utils.firebasePath(Utils.ENSEIGNANT_MODULE, Utils.enseignant.getId(), module.getId(), Utils.GROUPES);
         Query groupesQuery = Utils.database.getReference(groupesPath);
 
         loadingProgressDialog.show();;
@@ -122,7 +121,9 @@ public class MainActivity extends AppCompatActivity {
                     public void onClick(View v) {
 
                         Intent intent = new Intent(MainActivity.this, ListEtudiantsActivity.class);
+                        intent.putExtra("module", module);
                         intent.putExtra("groupe", groupe);
+
                         startActivity(intent);
                     }
                 });

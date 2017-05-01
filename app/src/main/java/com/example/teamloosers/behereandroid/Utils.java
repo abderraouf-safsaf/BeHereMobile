@@ -7,6 +7,7 @@ import android.util.Base64;
 
 import com.example.teamloosers.behereandroid.Structures.Enseignant;
 import com.example.teamloosers.behereandroid.Structures.Identifiable;
+import com.example.teamloosers.behereandroid.Structures.Personne;
 import com.example.teamloosers.behereandroid.Structures.Ref;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.database.DataSnapshot;
@@ -31,6 +32,9 @@ public class Utils {
 
     public static Enseignant enseignant;
     static {
+
+        enseignant = new Enseignant("Badsi", "Hichem", Personne.HOMME);
+        enseignant.setId("4a04efee-0aa4-4756-bbee-78602a3ee9dc");
 
         database = FirebaseDatabase.getInstance();
         //database.setPersistenceEnabled(true);

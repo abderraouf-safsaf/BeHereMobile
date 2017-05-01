@@ -11,18 +11,24 @@
         android:theme="@style/AppTheme">
         <activity android:name=".MainActivity">
 
-        </activity>
-        <activity
-            android:name=".ListEtudiantsActivity"
-            android:label="@string/title_activity_list_etudiants"
-            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ConsultationEtudiantActivity">
+        <activity
+            android:name=".ListEtudiantsActivity"
+            android:label="@string/title_activity_list_etudiants"
+            android:theme="@style/AppTheme.NoActionBar">
+
+        </activity>
+        <activity android:name=".ConsultationEtudiantActivity" />
+        <activity android:name=".NouvelAppelActivity" />
+        <activity
+            android:name=".EtudiantsPresencesActivity"
+            android:label="@string/title_activity_etudiants_presences"
+            android:theme="@style/AppTheme.NoActionBar">
 
         </activity>
     </application>

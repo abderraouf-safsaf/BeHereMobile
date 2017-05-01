@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.DialogFragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -14,29 +16,28 @@ import android.widget.AdapterView;
 import android.widget.TextView;
 
 import com.example.teamloosers.behereandroid.Structures.Etudiant;
+import com.example.teamloosers.behereandroid.Structures.Groupe;
 import com.example.teamloosers.behereandroid.Structures.Module;
 import com.google.firebase.database.DatabaseReference;
 
 public class ListEtudiantsActivity extends AppCompatActivity {
 
     private Module module;
+    private Groupe groupe;
     private RecyclerView etudiantsListRecyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_list_etudiants);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+        module = (Module) getIntent().getExtras().getSerializable("module");
+        groupe = (Groupe) getIntent().getExtras().getSerializable("groupe");
 
         etudiantsListRecyclerView = (RecyclerView) findViewById(R.id.etudiantsListRecyclerView);
 
@@ -45,8 +46,36 @@ public class ListEtudiantsActivity extends AppCompatActivity {
 
         etudiantsListRecyclerView.setHasFixedSize(true);
 
-        module = new Module("Architecture 1");
-        module.setId("Architecture1_50824b38-b894-44b9-af7f-a6e1971e884b");
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                DatePickerFragment nouvelSeanceDialog = new DatePickerFragment();
+
+                Bundle args = new Bundle();
+                args.putSerializable("module", module);
+                args.putSerializable("groupe", groupe);
+                nouvelSeanceDialog.setArguments(args);
+
+                nouvelSeanceDialog.show(getSupportFragmentManager(), "datePicker");
+
+                /*Snackbar.make(view, R.string.nouvel_appel_snackbar_message, Snackbar.LENGTH_LONG)
+                        .setAction(R.string.nouvel_appel_action, new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+
+                                System.out.println("Nouvel appel");
+                            }
+                        }).show();*/
+            }
+        });
+    }
+
+    @Override
+    protected void onStart() {
+
+        super.onStart();
 
         loadEtudiants();
     }
@@ -57,8 +86,11 @@ public class ListEtudiantsActivity extends AppCompatActivity {
         loadingProgressDialog.setCancelable(false);
         loadingProgressDialog.setMessage(getResources().getString(R.string.chargement_etudiants_loading_message));
 
+        String pathToGroupe = Utils.firebasePath(Utils.CYCLES, groupe.getIdCycle(), groupe.getIdFilliere(), groupe.getIdPromo(),
+                groupe.getIdSection(), groupe.getId());
+        DatabaseReference myRef =  Utils.database.getReference(pathToGroupe);
+
         loadingProgressDialog.show();
-        DatabaseReference myRef =  Utils.database.getReference("/Cycles/Cyclepreparatoireintegree_d35f9666-8af2-4007-8f2f-0550878f6cd1/Informatique_db6f8a0e-db55-4ed5-9112-9fb74858a5e7/Premiereannee_58087455-b575-4cce-8f0c-9252471a36ca/SectionA_cd1aee5d-17f4-4ccb-9cec-100adf08effe/Groupe2_75ac381c-2fe6-4ac5-aaa5-4f325396b2f0/");
         final FirebaseRecyclerAdapterViewer<Etudiant, EtudiantViewHolder> etudiantsListAdapater = new FirebaseRecyclerAdapterViewer<Etudiant, EtudiantViewHolder>(
                 Etudiant.class, R.layout.view_holder_etudiant, EtudiantViewHolder.class, myRef
         ) {
@@ -85,6 +117,7 @@ public class ListEtudiantsActivity extends AppCompatActivity {
                 intent.putExtra("etudiantsList", etudiantsListAdapater.getItems());
                 intent.putExtra("currentEtudiantPosition", position);
                 intent.putExtra("module", module);
+
                 startActivity(intent);
             }
         });
