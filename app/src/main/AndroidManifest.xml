@@ -8,22 +8,24 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/BeHere">
         <activity
             android:name=".ListEtudiantsActivity"
             android:label="@string/title_activity_list_etudiants"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
-        <activity android:name=".ConsultationEtudiantActivity" />
-        <activity android:name=".NouvelAppelActivity" />
+            android:theme="@style/BeHere"></activity>
+        <activity android:name=".ConsultationEtudiantActivity">
+        </activity>
+        <activity android:name=".NouvelAppelActivity">
+
+        </activity>
         <activity
             android:name=".EtudiantsPresencesActivity"
             android:label="@string/title_activity_etudiants_presences"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/BeHere"></activity>
         <activity
             android:name=".MainActivity"
             android:label="@string/title_activity_main_modues"
-            android:theme="@style/AppTheme.NoActionBar">
-
+            android:theme="@style/BeHere">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

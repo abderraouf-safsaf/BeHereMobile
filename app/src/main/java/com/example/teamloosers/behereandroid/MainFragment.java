@@ -101,7 +101,6 @@ public class MainFragment extends Fragment {
                     }
                 });
             }
-
             @Override
             protected void onDataChanged() {
 

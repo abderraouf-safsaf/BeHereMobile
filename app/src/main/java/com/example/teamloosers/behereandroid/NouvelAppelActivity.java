@@ -22,6 +22,7 @@ import com.example.teamloosers.behereandroid.Structures.Absence;
 import com.example.teamloosers.behereandroid.Structures.Etudiant;
 import com.example.teamloosers.behereandroid.Structures.Groupe;
 import com.example.teamloosers.behereandroid.Structures.Module;
+import com.example.teamloosers.behereandroid.Structures.Personne;
 import com.example.teamloosers.behereandroid.Structures.Seance;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -55,6 +56,7 @@ public class NouvelAppelActivity extends AppCompatActivity {
         int mois = getIntent().getExtras().getInt("mois");
         int jour = getIntent().getExtras().getInt("jour");
 
+
         seance = new Seance();
         seance.setId(Utils.generateId());
         seance.setDate(String.format("%d/%d/%d", jour, mois, annee));
@@ -63,6 +65,7 @@ public class NouvelAppelActivity extends AppCompatActivity {
         seance.setIdModule(module.getId());
         seance.setTypeSeance(Seance.TD);
         seance.ajouterSeance(Utils.database);
+
 
         etudiantsAppelAdapterViewFlipper = (AdapterViewFlipper) findViewById(R.id.etudiantsAppelAdapterViewFlipper);
 
@@ -78,7 +81,8 @@ public class NouvelAppelActivity extends AppCompatActivity {
         absentImageButton.setOnClickListener(new PresenceButtonListener());
         presentImageButton.setOnClickListener(new PresenceButtonListener());
 
-        loadEtudiants();
+        //loadEtudiants();
+        loadEtudiantsToViewFlipper();
     }
 
     private void loadEtudiants() {
@@ -174,6 +178,7 @@ public class NouvelAppelActivity extends AppCompatActivity {
 
             nomTextView.setText(etudiant.getNom());
             prenomTextView.setText(etudiant.getPrenom());
+            emailTextView.setText(etudiant.getEmail());
 
             return convertView;
         }
@@ -191,12 +196,15 @@ public class NouvelAppelActivity extends AppCompatActivity {
             if (clickedButton == presentImageButton)    {
 
                 etudiantPresenceHashMap.put(displayedEtudiant, Absence.PRESENT);
-                finAppel();
             }
             else if (clickedButton == absentImageButton)
                 etudiantPresenceHashMap.put(displayedEtudiant, Absence.ABSENT);
 
-            etudiantsAppelAdapterViewFlipper.showNext();
+            if (etudiantsAppelAdapterViewFlipper.getDisplayedChild() == etudiantsAppelAdapterViewFlipper.
+                    getChildCount())
+                finAppel();
+            else
+                etudiantsAppelAdapterViewFlipper.showNext();
         }
     }
 }

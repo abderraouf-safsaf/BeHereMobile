@@ -1,7 +1,9 @@
 package com.example.teamloosers.behereandroid;
 
+import android.annotation.TargetApi;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -15,10 +17,12 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.TextView;
 
+import com.bumptech.glide.util.Util;
 import com.example.teamloosers.behereandroid.Structures.Etudiant;
 import com.example.teamloosers.behereandroid.Structures.Groupe;
 import com.example.teamloosers.behereandroid.Structures.Module;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.Query;
 
 public class ListEtudiantsActivity extends AppCompatActivity {
 
@@ -34,6 +38,11 @@ public class ListEtudiantsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_list_etudiants);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        String toolbarTitle = String.format("M. %s %s", Utils.enseignant.getNom(), Utils.enseignant.getPrenom());
+        String toolbarSubTitle = String.format("%s: %s", module.getDesignation(), groupe.getDesignation());
+        toolbar.setTitle(toolbarTitle);
+        toolbar.setSubtitle(toolbarSubTitle);
+
         setSupportActionBar(toolbar);
 
         module = (Module) getIntent().getExtras().getSerializable("module");
@@ -48,30 +57,29 @@ public class ListEtudiantsActivity extends AppCompatActivity {
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
+            @TargetApi(Build.VERSION_CODES.M)
             @Override
             public void onClick(View view) {
 
-                DatePickerFragment nouvelSeanceDialog = new DatePickerFragment();
-
-                Bundle args = new Bundle();
-                args.putSerializable("module", module);
-                args.putSerializable("groupe", groupe);
-                nouvelSeanceDialog.setArguments(args);
-
-                nouvelSeanceDialog.show(getSupportFragmentManager(), "datePicker");
-
-                /*Snackbar.make(view, R.string.nouvel_appel_snackbar_message, Snackbar.LENGTH_LONG)
+                Snackbar.make(view, R.string.nouvel_appel_snackbar_message, Snackbar.LENGTH_LONG)
                         .setAction(R.string.nouvel_appel_action, new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
 
-                                System.out.println("Nouvel appel");
+                                DatePickerFragment nouvelSeanceDialog = new DatePickerFragment();
+
+                                Bundle args = new Bundle();
+                                args.putSerializable("module", module);
+                                args.putSerializable("groupe", groupe);
+                                nouvelSeanceDialog.setArguments(args);
+
+                                nouvelSeanceDialog.show(getSupportFragmentManager(), "datePicker");
                             }
-                        }).show();*/
+                        }).setActionTextColor(getResources().
+                        getColor(R.color.textSecondary, null)).show();
             }
         });
     }
-
     @Override
     protected void onStart() {
 
@@ -88,7 +96,7 @@ public class ListEtudiantsActivity extends AppCompatActivity {
 
         String pathToGroupe = Utils.firebasePath(Utils.CYCLES, groupe.getIdCycle(), groupe.getIdFilliere(), groupe.getIdPromo(),
                 groupe.getIdSection(), groupe.getId());
-        DatabaseReference myRef =  Utils.database.getReference(pathToGroupe);
+        Query myRef =  Utils.database.getReference(pathToGroupe);
 
         loadingProgressDialog.show();
         final FirebaseRecyclerAdapterViewer<Etudiant, EtudiantViewHolder> etudiantsListAdapater = new FirebaseRecyclerAdapterViewer<Etudiant, EtudiantViewHolder>(

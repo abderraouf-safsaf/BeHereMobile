@@ -29,6 +29,7 @@ import com.bumptech.glide.util.Util;
 import com.example.teamloosers.behereandroid.Structures.Absence;
 import com.example.teamloosers.behereandroid.Structures.Etudiant;
 import com.example.teamloosers.behereandroid.Structures.Module;
+import com.example.teamloosers.behereandroid.Structures.Personne;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -44,6 +45,8 @@ public class ConsultationEtudiantActivity extends AppCompatActivity {
 
     private AdapterViewFlipper etudiantsAdapterViewFlipper;
     private RecyclerView etudiantsAbsencesRecyclerView;
+    private float lastX;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,11 +56,13 @@ public class ConsultationEtudiantActivity extends AppCompatActivity {
         this.etudiantsList = (ArrayList<Etudiant>) getIntent().getExtras().getSerializable("etudiantsList");
         this.currentEtudiantPosition = getIntent().getExtras().getInt("currentEtudiantPosition");
 
+
         etudiantsAdapterViewFlipper = (AdapterViewFlipper) findViewById(R.id.etudiantsAdapterViewFlipper);
 
         EtudiantsConsultationAdapter etudiantsArrayAdapter = new EtudiantsConsultationAdapter(this,
                 etudiantsList);
         etudiantsAdapterViewFlipper.setAdapter(etudiantsArrayAdapter);
+        etudiantsAdapterViewFlipper.setDisplayedChild(currentEtudiantPosition);
 }
 
     @Override
@@ -71,7 +76,7 @@ public class ConsultationEtudiantActivity extends AppCompatActivity {
         etudiantsAbsencesRecyclerView.setLayoutManager(linearLayoutManager);
 
         etudiantsAbsencesRecyclerView.setHasFixedSize(true);
-        loadAbsecnces();
+        //loadAbsecnces();
     }
 
     private void loadAbsecnces() {
@@ -110,11 +115,9 @@ public class ConsultationEtudiantActivity extends AppCompatActivity {
                         });
                         alertDialog.setNegativeButton(R.string.non, null);
                         alertDialog.show();
-
                     }
                 });
             }
-
             @Override
             protected void onDataChanged() {
 
@@ -126,11 +129,32 @@ public class ConsultationEtudiantActivity extends AppCompatActivity {
 
         etudiantsAbsencesRecyclerView.setAdapter(absencesListAdapter);
     }
-
     @Override
     public boolean onTouchEvent(MotionEvent event) {
 
-        // TODO ajouter les animation de gestures
+        switch (event.getAction()) {
+
+            case MotionEvent.ACTION_DOWN:
+                lastX = event.getX();
+                break;
+            case MotionEvent.ACTION_UP:
+                float currentX = event.getX();
+
+                if (lastX < currentX) {
+
+                    if (etudiantsAdapterViewFlipper.getDisplayedChild() == 0)
+                        break;
+
+                    etudiantsAdapterViewFlipper.showNext();
+                }
+                if (lastX > currentX) {
+
+                    if (etudiantsAdapterViewFlipper.getDisplayedChild() == 1)
+                        break;
+                    etudiantsAdapterViewFlipper.showPrevious();
+                }
+                break;
+        }
         return false;
     }
     public static class AbsenceViewHolder extends ItemViewHolder   {
@@ -194,6 +218,7 @@ public class ConsultationEtudiantActivity extends AppCompatActivity {
 
             nomTextView.setText(etudiant.getNom());
             prenomTextView.setText(etudiant.getPrenom());
+            emailTextView.setText(etudiant.getEmail());
 
             return convertView;
         }

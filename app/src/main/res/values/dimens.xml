@@ -22,4 +22,10 @@
     <dimen name="absence_date_text_size">24dp</dimen>
     <dimen name="presence_switch_text_size">30dp</dimen>
     <dimen name="presence_nometprenom_text_size">18dp</dimen>
+    <dimen name="send_mail_image_button_height">40dp</dimen>
+    <dimen name="valider_appel_float_button_heigh">100dp</dimen>
+    <dimen name="valider_appel_float_button_width">100dp</dimen>
+    <dimen name="valider_list_appel_text_size">20dp</dimen>
+    <dimen name="nouveau_appel_float_button_width">100dp</dimen>
+    <dimen name="nouveau_appel_float_button_height">100dp</dimen>
 </resources>

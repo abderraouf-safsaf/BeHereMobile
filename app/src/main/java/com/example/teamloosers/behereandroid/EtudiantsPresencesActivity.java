@@ -54,9 +54,6 @@ public class EtudiantsPresencesActivity extends AppCompatActivity {
                 });
                 alertDialog.setNegativeButton(R.string.non, null);
                 alertDialog.show();
-
-                /*Snackbar.make(view, R.string.confirmer_appel_message, Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();*/
             }
         });
 
