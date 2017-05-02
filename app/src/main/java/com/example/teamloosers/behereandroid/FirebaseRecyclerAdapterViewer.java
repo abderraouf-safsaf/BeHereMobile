@@ -1,6 +1,7 @@
 package com.example.teamloosers.behereandroid;
 
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
@@ -49,9 +50,7 @@ public abstract class FirebaseRecyclerAdapterViewer<T, VH extends ItemViewHolder
     @Override
     protected T parseSnapshot(DataSnapshot snapshot) {
 
-        if (snapshot.hasChildren())
-            return super.parseSnapshot(snapshot);
-        else return null;
+        return super.parseSnapshot(snapshot);
     }
 
     @Override

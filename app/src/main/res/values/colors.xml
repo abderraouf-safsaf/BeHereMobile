@@ -3,7 +3,7 @@
     <!--BeHere style color -->
     <color name="colorPrimary">#009688</color>
     <color name="colorPrimaryDark">#00796B</color>
-    <color name="colorAccent">#FF5252</color>
+    <color name="colorAccent">#ff8652</color>
     <color name="textPrimary">#212121</color>
     <color name="textSecondary">#757575</color>
     <color name="divider">#BDBDBD</color>

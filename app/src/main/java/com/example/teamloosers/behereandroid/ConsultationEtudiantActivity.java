@@ -3,8 +3,11 @@ package com.example.teamloosers.behereandroid;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.app.AlertDialog;
@@ -22,6 +25,7 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,9 +34,11 @@ import com.example.teamloosers.behereandroid.Structures.Absence;
 import com.example.teamloosers.behereandroid.Structures.Etudiant;
 import com.example.teamloosers.behereandroid.Structures.Module;
 import com.example.teamloosers.behereandroid.Structures.Personne;
+import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
@@ -58,11 +64,12 @@ public class ConsultationEtudiantActivity extends AppCompatActivity {
 
 
         etudiantsAdapterViewFlipper = (AdapterViewFlipper) findViewById(R.id.etudiantsAdapterViewFlipper);
-
         EtudiantsConsultationAdapter etudiantsArrayAdapter = new EtudiantsConsultationAdapter(this,
                 etudiantsList);
+
         etudiantsAdapterViewFlipper.setAdapter(etudiantsArrayAdapter);
         etudiantsAdapterViewFlipper.setDisplayedChild(currentEtudiantPosition);
+
 }
 
     @Override
@@ -70,33 +77,35 @@ public class ConsultationEtudiantActivity extends AppCompatActivity {
 
         super.onStart();
 
-        etudiantsAbsencesRecyclerView = (RecyclerView) findViewById(R.id.etudiantsAbsencesRecyclerView);
-
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-        etudiantsAbsencesRecyclerView.setLayoutManager(linearLayoutManager);
-
-        etudiantsAbsencesRecyclerView.setHasFixedSize(true);
-        //loadAbsecnces();
+        loadAbsecnces();
     }
 
     private void loadAbsecnces() {
+
+        etudiantsAbsencesRecyclerView = (RecyclerView) findViewById(R.id.etudiantsAbsencesRecyclerView);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        linearLayoutManager.setOrientation(LinearLayout.VERTICAL);
+        etudiantsAbsencesRecyclerView.setLayoutManager(linearLayoutManager);
+
+        etudiantsAbsencesRecyclerView.setHasFixedSize(true);
 
         Etudiant currentEtudiant = etudiantsList.get(etudiantsAdapterViewFlipper.getDisplayedChild());
 
         String pathToEtudiant = Utils.firebasePath(Utils.CYCLES, currentEtudiant.getIdCycle(), currentEtudiant.getIdFilliere(),
                 currentEtudiant.getIdPromo(), currentEtudiant.getIdSection(), currentEtudiant.getIdGroupe(), currentEtudiant.getId(), module.getId());
 
-        DatabaseReference etudiantRef = Utils.database.getReference(pathToEtudiant);
+        Query etudiantRef = Utils.database.getReference(pathToEtudiant);
 
         final ProgressDialog loadingProgressDialog = new ProgressDialog(this);
         loadingProgressDialog.setCancelable(false);
         loadingProgressDialog.setMessage(getResources().getString(R.string.chargement_etudiant_absence_message));
 
         loadingProgressDialog.show();
-        FirebaseRecyclerAdapterViewer<Absence, AbsenceViewHolder> absencesListAdapter = new FirebaseRecyclerAdapterViewer<Absence, AbsenceViewHolder>(
+
+        FirebaseRecyclerAdapter<Absence, AbsenceViewHolder> absencesListAdapter = new FirebaseRecyclerAdapter<Absence, AbsenceViewHolder>(
                 Absence.class, R.layout.view_holder_absence, AbsenceViewHolder.class, etudiantRef) {
             @Override
-            protected void populateView(AbsenceViewHolder viewHolder, final Absence absence, int position) {
+            protected void populateViewHolder(AbsenceViewHolder viewHolder, final Absence absence, int position) {
 
                 viewHolder.absenceDateTextView.setText(absence.getDate());
                 viewHolder.supprimerAbsenceImageButton.setOnClickListener(new View.OnClickListener() {
@@ -180,7 +189,6 @@ public class ConsultationEtudiantActivity extends AppCompatActivity {
 
             this.context = context;
             this.etudiantsList = etudiantsList;
-
             inflater = (LayoutInflater.from(this.context));
         }
 
@@ -199,6 +207,7 @@ public class ConsultationEtudiantActivity extends AppCompatActivity {
             return 0;
         }
 
+
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
 
@@ -208,18 +217,36 @@ public class ConsultationEtudiantActivity extends AppCompatActivity {
             TextView nomTextView = (TextView) convertView.findViewById(R.id.nomTextView);
             TextView prenomTextView = (TextView) convertView.findViewById(R.id.prenomTextView);
             TextView emailTextView = (TextView) convertView.findViewById(R.id.emailTextView);
+            ImageButton sendEmail = (ImageButton) convertView.findViewById(R.id.sendEmailImageButton);
 
-            Bitmap defaultImage = BitmapFactory.decodeResource(getResources(), R.drawable.com_facebook_profile_picture_blank_portrait);
-            RoundedBitmapDrawable dr = RoundedBitmapDrawableFactory.create(null, defaultImage);
+            int etudiantImageHeight = getResources().getDimensionPixelSize(R.dimen.etudiantImageHeight);
+            int etudiantImageWidth = getResources().getDimensionPixelSize(R.dimen.etudiantImageWidth);
+            Bitmap image = Utils.decodeToImage(etudiantsList.get(position).getImageBase64());
+            Bitmap imageResized = Bitmap.createScaledBitmap(image, etudiantImageWidth, etudiantImageHeight, true);
+
+
+            RoundedBitmapDrawable dr = RoundedBitmapDrawableFactory.create(null, imageResized);
             dr.setCornerRadius(200);
             etudiantImageView.setImageDrawable(dr);
 
-            Etudiant etudiant = (Etudiant) getItem(position);
+            final Etudiant etudiant = (Etudiant) getItem(position);
 
             nomTextView.setText(etudiant.getNom());
             prenomTextView.setText(etudiant.getPrenom());
             emailTextView.setText(etudiant.getEmail());
 
+            sendEmail.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    Intent emailIntent = new Intent(Intent.ACTION_SEND);
+
+                    emailIntent.setType("plain/text");
+                    emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{etudiant.getEmail()});
+
+                    context.startActivity(Intent.createChooser(emailIntent, "Envoyer email..."));
+                }
+            });
             return convertView;
         }
     }

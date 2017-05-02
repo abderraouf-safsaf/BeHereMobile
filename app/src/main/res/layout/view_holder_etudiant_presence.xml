@@ -5,7 +5,8 @@
     android:layout_height="wrap_content"
     android:layout_gravity="center"
     android:gravity="center"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    android:padding="10dp">
 
     <TextView
         android:id="@+id/etudiantTextView"
@@ -13,7 +14,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:layout_weight="4"
-        android:gravity="center"
+        android:gravity="left"
         android:text="Hello world"
         android:textAppearance="?attr/textAppearanceListItem"
         android:textColor="@color/textSecondary"

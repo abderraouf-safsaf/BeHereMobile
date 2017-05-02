@@ -27,6 +27,7 @@ import com.example.teamloosers.behereandroid.Structures.Seance;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
@@ -81,15 +82,15 @@ public class NouvelAppelActivity extends AppCompatActivity {
         absentImageButton.setOnClickListener(new PresenceButtonListener());
         presentImageButton.setOnClickListener(new PresenceButtonListener());
 
-        //loadEtudiants();
-        loadEtudiantsToViewFlipper();
+        loadEtudiants();
     }
 
     private void loadEtudiants() {
 
         String pathToGroupe = Utils.firebasePath(Utils.CYCLES, groupe.getIdCycle(), groupe.getIdFilliere(), groupe.getIdPromo(),
                 groupe.getIdSection(), groupe.getId());
-        DatabaseReference myRef =  Utils.database.getReference(pathToGroupe);
+        Query myRef =  Utils.database.getReference(pathToGroupe).orderByChild("idCycle").equalTo(
+                groupe.getIdCycle());
 
         final ProgressDialog loadingProgressDialog = new ProgressDialog(this);
         loadingProgressDialog.setCancelable(false);
@@ -123,9 +124,11 @@ public class NouvelAppelActivity extends AppCompatActivity {
         etudiantsPresenceIntent.putExtra("seance", seance);
 
         startActivity(etudiantsPresenceIntent);
+        finish();
     }
     private void loadEtudiantsToViewFlipper() {
 
+        System.out.println("etudiant list size = " + etudiantsList.size());
         EtudiantsAppelAdapter etudiantsArrayAdapter = new EtudiantsAppelAdapter(this, etudiantsList);
         etudiantsAppelAdapterViewFlipper.setAdapter(etudiantsArrayAdapter);
     }
@@ -140,7 +143,6 @@ public class NouvelAppelActivity extends AppCompatActivity {
 
             this.context = context;
             this.etudiantsList = etudiantsList;
-
             inflater = (LayoutInflater.from(this.context));
         }
 
@@ -159,6 +161,7 @@ public class NouvelAppelActivity extends AppCompatActivity {
             return 0;
         }
 
+
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
 
@@ -169,9 +172,9 @@ public class NouvelAppelActivity extends AppCompatActivity {
             TextView prenomTextView = (TextView) convertView.findViewById(R.id.prenomTextView);
             TextView emailTextView = (TextView) convertView.findViewById(R.id.emailTextView);
 
-            Bitmap defaultImage = BitmapFactory.decodeResource(getResources(), R.drawable.com_facebook_profile_picture_blank_portrait);
+            Bitmap defaultImage = BitmapFactory.decodeResource(getResources(), R.drawable.com_facebook_profile_picture_blank_square);
             RoundedBitmapDrawable dr = RoundedBitmapDrawableFactory.create(null, defaultImage);
-            dr.setCornerRadius(200);
+            dr.setCornerRadius(400);
             etudiantImageView.setImageDrawable(dr);
 
             Etudiant etudiant = (Etudiant) getItem(position);
@@ -200,8 +203,7 @@ public class NouvelAppelActivity extends AppCompatActivity {
             else if (clickedButton == absentImageButton)
                 etudiantPresenceHashMap.put(displayedEtudiant, Absence.ABSENT);
 
-            if (etudiantsAppelAdapterViewFlipper.getDisplayedChild() == etudiantsAppelAdapterViewFlipper.
-                    getChildCount())
+            if (etudiantsAppelAdapterViewFlipper.getDisplayedChild() == etudiantsList.size() - 1)
                 finAppel();
             else
                 etudiantsAppelAdapterViewFlipper.showNext();

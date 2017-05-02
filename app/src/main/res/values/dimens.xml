@@ -5,7 +5,7 @@
     <dimen name="etudiantNomTextSize">40dp</dimen>
     <dimen name="etudiantPrenomTextSize">20dp</dimen>
     <dimen name="etudiantEmailTextSize">20dp</dimen>
-    <dimen name="etudiantNomPrenomTextSize">24dp</dimen>
+    <dimen name="etudiantNomPrenomTextSize">20dp</dimen>
     <dimen name="etudiantImageHeight">200dp</dimen>
     <dimen name="etudiantImageWidth">200dp</dimen>
     <dimen name="delete_button_height">30dp</dimen>
@@ -23,9 +23,9 @@
     <dimen name="presence_switch_text_size">30dp</dimen>
     <dimen name="presence_nometprenom_text_size">18dp</dimen>
     <dimen name="send_mail_image_button_height">40dp</dimen>
-    <dimen name="valider_appel_float_button_heigh">100dp</dimen>
-    <dimen name="valider_appel_float_button_width">100dp</dimen>
+    <dimen name="valider_appel_float_button_heigh">80dp</dimen>
+    <dimen name="valider_appel_float_button_width">80dp</dimen>
     <dimen name="valider_list_appel_text_size">20dp</dimen>
-    <dimen name="nouveau_appel_float_button_width">100dp</dimen>
-    <dimen name="nouveau_appel_float_button_height">100dp</dimen>
+    <dimen name="nouveau_appel_float_button_width">80dp</dimen>
+    <dimen name="nouveau_appel_float_button_height">80dp</dimen>
 </resources>

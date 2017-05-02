@@ -6,50 +6,24 @@
     android:layout_gravity="center"
     android:gravity="center"
     android:orientation="vertical"
-    app:layout_anchorGravity="center">
+    android:padding="5dp"
+    android:weightSum="17"
+    app:layout_anchorGravity="center"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
+    <ImageView
+        android:id="@+id/etudiantImageView"
+        android:layout_width="@dimen/etudiantImageHeight"
+        android:layout_height="@dimen/etudiantImageHeight"
         android:layout_gravity="center"
-        android:layout_weight="1.5"
-        android:gravity="center"
-        android:orientation="horizontal">
-
-        <ImageButton
-            android:id="@+id/previousEtudiantImageButton"
-            android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            android:background="@android:color/transparent"
-            android:scaleType="fitCenter"
-            app:srcCompat="@drawable/left_arrow_icon" />
-
-        <ImageView
-            android:id="@+id/etudiantImageView"
-            android:layout_width="@dimen/etudiantImageWidth"
-            android:layout_height="@dimen/etudiantImageHeight"
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            app:srcCompat="@drawable/com_facebook_profile_picture_blank_portrait" />
-
-        <ImageButton
-            android:id="@+id/nextEtudiantImageButton"
-            android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            android:background="@android:color/transparent"
-            android:scaleType="fitCenter"
-            app:srcCompat="@drawable/right_arrow_icon" />
-
-    </LinearLayout>
+        android:layout_weight="2"
+        app:srcCompat="@drawable/com_facebook_profile_picture_blank_portrait" />
 
     <TextView
         android:id="@+id/nomTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_weight="1"
         android:gravity="center"
         android:text="TextView"
         android:textSize="@dimen/etudiantNomTextSize"
@@ -59,48 +33,44 @@
         android:id="@+id/prenomTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_weight="1"
         android:gravity="center"
         android:text="TextView"
         android:textColor="@color/textSecondary"
         android:textSize="@dimen/etudiantPrenomTextSize"
         android:textStyle="italic" />
 
-    <LinearLayout
+    <TextView
+        android:id="@+id/emailTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:layout_weight="1"
         android:gravity="center"
-        android:orientation="horizontal">
+        android:text="TextView"
+        android:textColor="@color/textSecondary"
+        android:textSize="@dimen/etudiantEmailTextSize" />
 
-        <TextView
-            android:id="@+id/emailTextView"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_weight="5"
-            android:gravity="center"
-            android:text="TextView"
-            android:textColor="@color/textSecondary"
-            android:textSize="@dimen/etudiantEmailTextSize" />
+    <ImageButton
+        android:id="@+id/sendEmailImageButton"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/send_mail_image_button_height"
+        android:layout_gravity="center"
+        android:layout_weight="1"
+        android:adjustViewBounds="true"
+        android:background="@android:color/transparent"
+        android:scaleType="fitCenter"
+        app:srcCompat="@drawable/send_email_icon" />
 
-        <ImageButton
-            android:id="@+id/imageButton"
-            android:layout_width="0dp"
-            android:layout_height="@dimen/send_mail_image_button_height"
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            android:adjustViewBounds="true"
-            android:background="@android:color/transparent"
-            android:scaleType="fitCenter"
-            app:srcCompat="@drawable/com_facebook_button_send_icon_blue" />
-
-    </LinearLayout>
-
-    <android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
+    <android.support.v7.widget.RecyclerView
         android:id="@+id/etudiantsAbsencesRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_gravity="center"
-        android:layout_weight="1"
-        android:scrollbars="vertical" />
+        android:layout_gravity="left"
+        android:layout_weight="11"
+        android:padding="5dp"
+        android:scrollbars="vertical"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+
 </LinearLayout>

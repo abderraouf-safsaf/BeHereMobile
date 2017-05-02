@@ -8,8 +8,10 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -37,6 +39,9 @@ public class ListEtudiantsActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_list_etudiants);
 
+        module = (Module) getIntent().getExtras().getSerializable("module");
+        groupe = (Groupe) getIntent().getExtras().getSerializable("groupe");
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         String toolbarTitle = String.format("M. %s %s", Utils.enseignant.getNom(), Utils.enseignant.getPrenom());
         String toolbarSubTitle = String.format("%s: %s", module.getDesignation(), groupe.getDesignation());
@@ -45,15 +50,17 @@ public class ListEtudiantsActivity extends AppCompatActivity {
 
         setSupportActionBar(toolbar);
 
-        module = (Module) getIntent().getExtras().getSerializable("module");
-        groupe = (Groupe) getIntent().getExtras().getSerializable("groupe");
-
         etudiantsListRecyclerView = (RecyclerView) findViewById(R.id.etudiantsListRecyclerView);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         etudiantsListRecyclerView.setLayoutManager(linearLayoutManager);
 
         etudiantsListRecyclerView.setHasFixedSize(true);
+
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(etudiantsListRecyclerView.getContext(),
+                linearLayoutManager.getOrientation());
+        dividerItemDecoration.setDrawable(ContextCompat.getDrawable(this, R.drawable.recyclerview_divider));
+        etudiantsListRecyclerView.addItemDecoration(dividerItemDecoration);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -75,8 +82,7 @@ public class ListEtudiantsActivity extends AppCompatActivity {
 
                                 nouvelSeanceDialog.show(getSupportFragmentManager(), "datePicker");
                             }
-                        }).setActionTextColor(getResources().
-                        getColor(R.color.textSecondary, null)).show();
+                        }).show();
             }
         });
     }
@@ -96,7 +102,8 @@ public class ListEtudiantsActivity extends AppCompatActivity {
 
         String pathToGroupe = Utils.firebasePath(Utils.CYCLES, groupe.getIdCycle(), groupe.getIdFilliere(), groupe.getIdPromo(),
                 groupe.getIdSection(), groupe.getId());
-        Query myRef =  Utils.database.getReference(pathToGroupe);
+        Query myRef = Utils.database.getReference(pathToGroupe).orderByChild("idCycle").
+                equalTo(groupe.getIdCycle());
 
         loadingProgressDialog.show();
         final FirebaseRecyclerAdapterViewer<Etudiant, EtudiantViewHolder> etudiantsListAdapater = new FirebaseRecyclerAdapterViewer<Etudiant, EtudiantViewHolder>(

@@ -21,4 +21,5 @@
         <item name="android:windowBackground">@android:color/white</item>
         <item name="android:textColor">@color/textPrimary</item>
     </style>
+
 </resources>

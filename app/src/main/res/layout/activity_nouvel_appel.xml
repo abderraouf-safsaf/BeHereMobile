@@ -8,20 +8,23 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="5dp"
+        android:weightSum="10">
 
         <AdapterViewFlipper
             android:id="@+id/etudiantsAppelAdapterViewFlipper"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="0.9"
+            android:layout_weight="9"
             tools:layout_editor_absoluteX="8dp"
             tools:layout_editor_absoluteY="8dp" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="0.1"
+            android:layout_marginBottom="20dp"
+            android:layout_weight="1"
             android:orientation="horizontal">
 
             <ImageButton

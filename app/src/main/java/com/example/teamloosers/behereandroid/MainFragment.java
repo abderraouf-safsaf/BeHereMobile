@@ -120,7 +120,7 @@ public class MainFragment extends Fragment {
         String groupesPath = Utils.firebasePath(Utils.ENSEIGNANT_MODULE, Utils.enseignant.getId(), module.getId(), Utils.GROUPES);
         Query groupesQuery = Utils.database.getReference(groupesPath);
 
-        loadingProgressDialog.show();;
+        loadingProgressDialog.show();
         FirebaseRecyclerAdapterViewer<Groupe, StructureViewHolder> adapter = new FirebaseRecyclerAdapterViewer<Groupe, StructureViewHolder>(
                 Groupe.class, R.layout.view_holder_structure, StructureViewHolder.class, groupesQuery
         ) {

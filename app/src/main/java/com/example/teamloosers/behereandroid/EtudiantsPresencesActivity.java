@@ -34,7 +34,15 @@ public class EtudiantsPresencesActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_etudiants_presences);
+
+        etudiantsPresenecesHashMap = (HashMap<Etudiant, Boolean>) getIntent().getExtras().getSerializable(
+                "etudiantsPresencesHashMap");
+        seance = (Seance) getIntent().getExtras().getSerializable("seance");
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        String toolbarTitle = String.format("Seance: %s", seance.getDate());
+        toolbar.setTitle(toolbarTitle);
+
         setSupportActionBar(toolbar);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -50,16 +58,15 @@ public class EtudiantsPresencesActivity extends AppCompatActivity {
 
                         ajouterAbsencesDb();
                         Toast.makeText(EtudiantsPresencesActivity.this, R.string.valider_appel_toast, Toast.LENGTH_SHORT).show();
-                    }
+                        finish();
+                        }
                 });
                 alertDialog.setNegativeButton(R.string.non, null);
                 alertDialog.show();
             }
         });
 
-        etudiantsPresenecesHashMap = (HashMap<Etudiant, Boolean>) getIntent().getExtras().getSerializable(
-                "etudiantsPresencesHashMap");
-        seance = (Seance) getIntent().getExtras().getSerializable("seance");
+
 
 
         etudiantsPresencesRecyclerView = (RecyclerView) findViewById(R.id.etudiantsPresencesRecyclerView);
