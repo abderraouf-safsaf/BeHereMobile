@@ -1,4 +1,4 @@
-package com.example.teamloosers.behereandroid;
+package com.example.teamloosers.behereandroid.Activities;
 
 import android.annotation.TargetApi;
 import android.app.ProgressDialog;
@@ -6,10 +6,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -19,11 +16,15 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.TextView;
 
-import com.bumptech.glide.util.Util;
+import com.example.teamloosers.behereandroid.DatePickerFragment;
+import com.example.teamloosers.behereandroid.FirebaseRecyclerAdapterViewer;
+import com.example.teamloosers.behereandroid.ItemViewHolder;
+import com.example.teamloosers.behereandroid.R;
 import com.example.teamloosers.behereandroid.Structures.Etudiant;
 import com.example.teamloosers.behereandroid.Structures.Groupe;
 import com.example.teamloosers.behereandroid.Structures.Module;
-import com.google.firebase.database.DatabaseReference;
+import com.example.teamloosers.behereandroid.Structures.Seance;
+import com.example.teamloosers.behereandroid.Utils;
 import com.google.firebase.database.Query;
 
 public class ListEtudiantsActivity extends AppCompatActivity {
@@ -51,10 +52,8 @@ public class ListEtudiantsActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         etudiantsListRecyclerView = (RecyclerView) findViewById(R.id.etudiantsListRecyclerView);
-
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         etudiantsListRecyclerView.setLayoutManager(linearLayoutManager);
-
         etudiantsListRecyclerView.setHasFixedSize(true);
 
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(etudiantsListRecyclerView.getContext(),
@@ -62,27 +61,34 @@ public class ListEtudiantsActivity extends AppCompatActivity {
         dividerItemDecoration.setDrawable(ContextCompat.getDrawable(this, R.drawable.recyclerview_divider));
         etudiantsListRecyclerView.addItemDecoration(dividerItemDecoration);
 
+        FloatingActionButton seancesFloatButton = (FloatingActionButton) findViewById(R.id.seancesFloatButton);
+        seancesFloatButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent seancesIntent = new Intent(ListEtudiantsActivity.this, SeancesActivity.class);
+
+                seancesIntent.putExtra("module", module);
+                seancesIntent.putExtra("groupe", groupe);
+                seancesIntent.putExtra("typeSeance", Seance.TD);
+
+                startActivity(seancesIntent);
+            }
+        });
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @TargetApi(Build.VERSION_CODES.M)
             @Override
             public void onClick(View view) {
 
-                Snackbar.make(view, R.string.nouvel_appel_snackbar_message, Snackbar.LENGTH_LONG)
-                        .setAction(R.string.nouvel_appel_action, new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
+                DatePickerFragment nouvelSeanceDialog = new DatePickerFragment();
 
-                                DatePickerFragment nouvelSeanceDialog = new DatePickerFragment();
+                Bundle args = new Bundle();
+                args.putSerializable("module", module);
+                args.putSerializable("groupe", groupe);
+                nouvelSeanceDialog.setArguments(args);
 
-                                Bundle args = new Bundle();
-                                args.putSerializable("module", module);
-                                args.putSerializable("groupe", groupe);
-                                nouvelSeanceDialog.setArguments(args);
-
-                                nouvelSeanceDialog.show(getSupportFragmentManager(), "datePicker");
-                            }
-                        }).show();
+                nouvelSeanceDialog.show(getSupportFragmentManager(), "datePicker");
             }
         });
     }
@@ -104,7 +110,7 @@ public class ListEtudiantsActivity extends AppCompatActivity {
                 groupe.getIdSection(), groupe.getId());
         Query myRef = Utils.database.getReference(pathToGroupe).orderByChild("idCycle").
                 equalTo(groupe.getIdCycle());
-
+        myRef.keepSynced(true); // Keeping data fresh
         loadingProgressDialog.show();
         final FirebaseRecyclerAdapterViewer<Etudiant, EtudiantViewHolder> etudiantsListAdapater = new FirebaseRecyclerAdapterViewer<Etudiant, EtudiantViewHolder>(
                 Etudiant.class, R.layout.view_holder_etudiant, EtudiantViewHolder.class, myRef
@@ -128,7 +134,7 @@ public class ListEtudiantsActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                Intent intent = new Intent(ListEtudiantsActivity.this, ConsultationEtudiantActivity.class);
+                Intent intent = new Intent(ListEtudiantsActivity.this, ConsultationEtudiantsActivity.class);
                 intent.putExtra("etudiantsList", etudiantsListAdapater.getItems());
                 intent.putExtra("currentEtudiantPosition", position);
                 intent.putExtra("module", module);
@@ -139,7 +145,7 @@ public class ListEtudiantsActivity extends AppCompatActivity {
         etudiantsListRecyclerView.setAdapter(etudiantsListAdapater);
     }
 
-    public static class EtudiantViewHolder extends ItemViewHolder  {
+    public static class EtudiantViewHolder extends ItemViewHolder {
 
         TextView etudiantNomPrenomTextView;
 

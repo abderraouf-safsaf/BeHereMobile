@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center"
+    android:gravity="top"
+    android:orientation="vertical"
+    android:padding="5dp"
+    android:weightSum="20"
+    app:layout_anchorGravity="center"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+    <ImageView
+        android:id="@+id/etudiantImageView"
+        android:layout_width="@dimen/etudiantImageWidth"
+        android:layout_height="@dimen/etudiantImageHeight"
+        android:layout_gravity="top|center"
+        android:layout_weight="0"
+        android:contentDescription="@string/etudiant_image_view_description"
+        android:scaleType="fitCenter"
+        app:srcCompat="@drawable/com_facebook_profile_picture_blank_portrait" />
+
+    <TextView
+        android:id="@+id/nomTextView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="4"
+        android:gravity="center"
+        android:text="TextView"
+        android:textSize="@dimen/etudiantNomTextSize"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/prenomTextView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_margin="5dp"
+        android:layout_weight="2"
+        android:gravity="center"
+        android:text="TextView"
+        android:textColor="@color/textSecondary"
+        android:textSize="@dimen/etudiantPrenomTextSize"
+        android:textStyle="italic" />
+
+    <TextView
+        android:id="@+id/emailTextView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_gravity="center"
+        android:layout_margin="5dp"
+        android:layout_weight="2"
+        android:gravity="center"
+        android:text="TextView"
+        android:textColor="@color/textSecondary"
+        android:textSize="@dimen/etudiantEmailTextSize" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_gravity="left|center"
+        android:layout_marginBottom="5dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="5dp"
+        android:layout_weight="2"
+        android:gravity="left|center"
+        android:text="@string/liste_absence_text_view"
+        android:textSize="@dimen/liste_absence_text_view_text_size" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/etudiantsAbsencesRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_gravity="left"
+        android:layout_margin="5dp"
+        android:layout_weight="10"
+        android:padding="5dp"
+        android:scrollIndicators="left"
+        android:scrollbarAlwaysDrawHorizontalTrack="false"
+        android:scrollbarAlwaysDrawVerticalTrack="true"
+        android:scrollbars="vertical"
+        android:verticalScrollbarPosition="left"
+
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+
+</LinearLayout>

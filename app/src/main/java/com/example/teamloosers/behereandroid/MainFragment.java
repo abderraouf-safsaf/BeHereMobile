@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.example.teamloosers.behereandroid.Activities.ListEtudiantsActivity;
 import com.example.teamloosers.behereandroid.Structures.Groupe;
 import com.example.teamloosers.behereandroid.Structures.Module;
 import com.example.teamloosers.behereandroid.Structures.Section;
@@ -113,13 +114,14 @@ public class MainFragment extends Fragment {
     }
     private void loadGroupes()  {
 
+
         final ProgressDialog loadingProgressDialog = new ProgressDialog(getContext());
         loadingProgressDialog.setCancelable(false);
         loadingProgressDialog.setMessage(getResources().getString(R.string.chargement_groupes_loading_message));
 
         String groupesPath = Utils.firebasePath(Utils.ENSEIGNANT_MODULE, Utils.enseignant.getId(), module.getId(), Utils.GROUPES);
         Query groupesQuery = Utils.database.getReference(groupesPath);
-
+        groupesQuery.keepSynced(true); // Keeping data fresh
         loadingProgressDialog.show();
         FirebaseRecyclerAdapterViewer<Groupe, StructureViewHolder> adapter = new FirebaseRecyclerAdapterViewer<Groupe, StructureViewHolder>(
                 Groupe.class, R.layout.view_holder_structure, StructureViewHolder.class, groupesQuery

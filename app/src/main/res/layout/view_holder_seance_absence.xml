@@ -4,28 +4,27 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:gravity="center"
     android:orientation="horizontal"
     android:weightSum="10">
 
     <TextView
-        android:id="@+id/abseneDateTextView"
+        android:id="@+id/nomPrenomEtudiantTextView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_margin="5dp"
-        android:layout_weight="6"
-        android:gravity="center"
+        android:layout_gravity="center"
+        android:layout_weight="8"
+        android:gravity="left|center"
         android:text="TextView"
         android:textColor="@color/textSecondary"
-        android:textSize="@dimen/absence_date_text_size" />
+        android:textSize="@dimen/etudiantNomPrenomTextSize" />
 
     <ImageButton
         android:id="@+id/supprimerAbsenceImageButton"
         android:layout_width="0dp"
         android:layout_height="@dimen/delete_button_height"
-        android:layout_weight="4"
-        android:background="@android:color/transparent"
-        android:padding="0dp"
+        android:layout_weight="2"
+        android:background="@drawable/tw__transparent"
         android:scaleType="fitCenter"
-        app:srcCompat="@drawable/delete_icon" />
+        app:srcCompat="@drawable/trash_icon" />
+
 </LinearLayout>

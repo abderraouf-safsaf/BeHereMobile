@@ -1,4 +1,4 @@
-package com.example.teamloosers.behereandroid;
+package com.example.teamloosers.behereandroid.Activities;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -18,15 +18,15 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.teamloosers.behereandroid.R;
 import com.example.teamloosers.behereandroid.Structures.Absence;
 import com.example.teamloosers.behereandroid.Structures.Etudiant;
 import com.example.teamloosers.behereandroid.Structures.Groupe;
 import com.example.teamloosers.behereandroid.Structures.Module;
-import com.example.teamloosers.behereandroid.Structures.Personne;
 import com.example.teamloosers.behereandroid.Structures.Seance;
+import com.example.teamloosers.behereandroid.Utils;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
@@ -91,7 +91,7 @@ public class NouvelAppelActivity extends AppCompatActivity {
                 groupe.getIdSection(), groupe.getId());
         Query myRef =  Utils.database.getReference(pathToGroupe).orderByChild("idCycle").equalTo(
                 groupe.getIdCycle());
-
+        myRef.keepSynced(true); // Keeping data fresh
         final ProgressDialog loadingProgressDialog = new ProgressDialog(this);
         loadingProgressDialog.setCancelable(false);
         loadingProgressDialog.setMessage(getResources().getString(R.string.chargement_etudiants_loading_message));

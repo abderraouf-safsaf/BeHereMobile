@@ -10,20 +10,16 @@
         android:supportsRtl="true"
         android:theme="@style/BeHere">
         <activity
-            android:name=".ListEtudiantsActivity"
+            android:name=".Activities.ListEtudiantsActivity"
             android:label="@string/title_activity_list_etudiants"
-            android:theme="@style/BeHere"></activity>
-        <activity android:name=".ConsultationEtudiantActivity">
-        </activity>
-        <activity android:name=".NouvelAppelActivity">
-
-        </activity>
+            android:theme="@style/BeHere" />
+        <activity android:name=".Activities.NouvelAppelActivity" />
         <activity
-            android:name=".EtudiantsPresencesActivity"
+            android:name=".Activities.EtudiantsPresencesActivity"
             android:label="@string/title_activity_etudiants_presences"
-            android:theme="@style/BeHere"></activity>
+            android:theme="@style/BeHere" />
         <activity
-            android:name=".MainActivity"
+            android:name=".Activities.MainActivity"
             android:label="@string/title_activity_main_modues"
             android:theme="@style/BeHere">
             <intent-filter>
@@ -32,6 +28,18 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".Activities.ConsultationEtudiantsActivity"
+            android:label="@string/title_activity_consultation_etudiants"
+            android:theme="@style/BeHere" />
+        <activity
+            android:name=".Activities.SeancesActivity"
+            android:label="@string/title_activity_seances"
+            android:theme="@style/BeHere" />
+        <activity
+            android:name=".Activities.SeanceAbsencesActivity"
+            android:label="@string/title_activity_seance_absences"
+            android:theme="@style/BeHere"></activity>
     </application>
 
 </manifest>

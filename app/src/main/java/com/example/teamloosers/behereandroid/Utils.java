@@ -37,7 +37,12 @@ public class Utils {
         enseignant.setId("4a04efee-0aa4-4756-bbee-78602a3ee9dc");
 
         database = FirebaseDatabase.getInstance();
-        //database.setPersistenceEnabled(true);
+
+        // Enable disk persistence (Offline)
+        database.setPersistenceEnabled(true);
+
+        // TODO: go online
+        //database.goOffline();
     }
     public final static String  CYCLES = "/Cycles", SPECIALITE_PROMOS = "/Specialite_Promos",
             FILLIERE_SPECIALITES = "/Filliere_Specialites",

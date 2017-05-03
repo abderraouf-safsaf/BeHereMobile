@@ -1,11 +1,12 @@
-package com.example.teamloosers.behereandroid;
+package com.example.teamloosers.behereandroid.Activities;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -16,10 +17,11 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.teamloosers.behereandroid.R;
 import com.example.teamloosers.behereandroid.Structures.Absence;
 import com.example.teamloosers.behereandroid.Structures.Etudiant;
-import com.example.teamloosers.behereandroid.Structures.Personne;
 import com.example.teamloosers.behereandroid.Structures.Seance;
+import com.example.teamloosers.behereandroid.Utils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -73,6 +75,11 @@ public class EtudiantsPresencesActivity extends AppCompatActivity {
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         etudiantsPresencesRecyclerView.setLayoutManager(linearLayoutManager);
+
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(etudiantsPresencesRecyclerView.getContext(),
+                linearLayoutManager.getOrientation());
+        dividerItemDecoration.setDrawable(ContextCompat.getDrawable(this, R.drawable.recyclerview_divider));
+        etudiantsPresencesRecyclerView.addItemDecoration(dividerItemDecoration);
     }
 
     @Override

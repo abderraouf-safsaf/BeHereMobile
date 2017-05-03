@@ -19,11 +19,13 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
 
         final int position = getAdapterPosition();
 
-        itemView.setOnClickListener(new View.OnClickListener() {
+        if (itemView != null)
+            itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                listener.onItemClick(null, v, position, 0);
+                if (listener != null)
+                    listener.onItemClick(null, v, position, 0);
             }
         });
     }

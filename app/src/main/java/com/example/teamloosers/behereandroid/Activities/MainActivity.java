@@ -1,4 +1,4 @@
-package com.example.teamloosers.behereandroid;
+package com.example.teamloosers.behereandroid.Activities;
 
 import android.content.Context;
 import android.support.design.widget.FloatingActionButton;
@@ -14,15 +14,16 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.bumptech.glide.util.Util;
+import com.example.teamloosers.behereandroid.MainFragment;
+import com.example.teamloosers.behereandroid.R;
 import com.example.teamloosers.behereandroid.Structures.Module;
+import com.example.teamloosers.behereandroid.Utils;
 
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
-
     private ModulesPageAdapter mSectionsPagerAdapter;
-
 
     private ViewPager mViewPager;
 

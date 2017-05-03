@@ -22,4 +22,16 @@
     <string name="section_format">Hello World from section: %1$d</string>
     <string name="liste_appel">Veuillez valider la liste de présences:</string>
     <string name="etudiant_liste_text">Liste des étudiants:</string>
+    <string name="title_activity_consultation_etudiants">ConsultationEtudiantsActivity</string>
+    <string name="email_intent_title">Selectionnez une application de messagerie</string>
+    <string name="liste_absence_text_view">Dates des absences:</string>
+    <string name="etudiant_image_view_description">Photo de l\'étudiant</string>
+    <string name="title_activity_main2">Main2Activity</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="title_activity_seances">SeancesActivity</string>
+    <string name="chargement_seances_loading_message">Chargement de séances</string>
+    <string name="title_activity_seance_absences">SeanceAbsencesActivity</string>
+    <string name="chargement_absences_loading_message">Chargement des absents</string>
 </resources>
