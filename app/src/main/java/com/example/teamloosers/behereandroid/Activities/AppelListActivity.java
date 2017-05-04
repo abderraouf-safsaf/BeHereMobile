@@ -2,9 +2,11 @@ package com.example.teamloosers.behereandroid.Activities;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
@@ -24,6 +26,7 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.teamloosers.behereandroid.DatePickerFragment;
 import com.example.teamloosers.behereandroid.FirebaseRecyclerAdapterViewer;
 import com.example.teamloosers.behereandroid.ItemViewHolder;
 import com.example.teamloosers.behereandroid.R;
@@ -36,11 +39,13 @@ import com.example.teamloosers.behereandroid.Utils;
 import com.firebase.ui.database.ChangeEventListener;
 import com.google.firebase.database.Query;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 
-public class AppelListActivity extends AppCompatActivity {
+public class AppelListActivity extends AppCompatActivity implements DatePickerFragment.OnDateSelectedListener {
 
     private Module module;
     private Groupe groupe;
@@ -48,8 +53,10 @@ public class AppelListActivity extends AppCompatActivity {
 
     private int annee, mois, jour;
 
+    private CoordinatorLayout mainLayout;
     private RecyclerView etudiantAppelListRecyclerView;
     private FloatingActionButton validerAppelFloatButton;
+    private TextView snackbarTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,9 +75,9 @@ public class AppelListActivity extends AppCompatActivity {
         mois = calendar.get(Calendar.MONTH);
         jour = calendar.get(Calendar.DAY_OF_MONTH);
 
-
         etudiantAppelListRecyclerView = (RecyclerView) findViewById(R.id.etudiantsAppelListRecyclerView);
         validerAppelFloatButton = (FloatingActionButton) findViewById(R.id.validerAppelFloatButton);
+        mainLayout = (CoordinatorLayout) findViewById(R.id.mainLayout);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         etudiantAppelListRecyclerView.setLayoutManager(linearLayoutManager);
@@ -79,8 +86,9 @@ public class AppelListActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null);
+
+                DatePickerFragment changerDateDialog = new DatePickerFragment();
+                changerDateDialog.show(getSupportFragmentManager(), "datePickerDialog");
             }
         });
 
@@ -97,15 +105,26 @@ public class AppelListActivity extends AppCompatActivity {
             }
         });
     }
-
     @Override
     protected void onStart() {
 
         super.onStart();
 
+        Snackbar snackbar =  Snackbar.make(mainLayout, getString(R.string.appel_un_par_un_text), Snackbar.LENGTH_INDEFINITE);
+        snackbar.setAction(R.string.commencer, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                //TODO: Faire l'appel un par un
+            }
+        });
+
+        snackbarTextView = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
+        snackbarTextView.setTextColor(ContextCompat.getColor(this, R.color.white));
+        snackbar.show();
+
         loadEtudiant();
     }
-
     private void loadEtudiant() {
 
         final ProgressDialog loadingProgressDialog = new ProgressDialog(this);
@@ -181,6 +200,15 @@ public class AppelListActivity extends AppCompatActivity {
             }
         }
     }
+
+    @Override
+    public void onDateSelected(int day, int month, int year) {
+
+        this.jour = day;
+        this.mois = month;
+        this.annee = year;
+    }
+
     public static class EtudiantPresenceViewHolder extends ItemViewHolder {
 
         Etudiant etudiant;

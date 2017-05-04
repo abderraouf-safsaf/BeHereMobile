@@ -3,6 +3,7 @@ package com.example.teamloosers.behereandroid.Activities;
 import android.annotation.TargetApi;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -20,12 +21,17 @@ import com.example.teamloosers.behereandroid.DatePickerFragment;
 import com.example.teamloosers.behereandroid.FirebaseRecyclerAdapterViewer;
 import com.example.teamloosers.behereandroid.ItemViewHolder;
 import com.example.teamloosers.behereandroid.R;
+import com.example.teamloosers.behereandroid.Structures.Enseignant;
 import com.example.teamloosers.behereandroid.Structures.Etudiant;
 import com.example.teamloosers.behereandroid.Structures.Groupe;
 import com.example.teamloosers.behereandroid.Structures.Module;
 import com.example.teamloosers.behereandroid.Structures.Seance;
 import com.example.teamloosers.behereandroid.Utils;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 public class ListEtudiantsActivity extends AppCompatActivity {
 
@@ -126,6 +132,8 @@ public class ListEtudiantsActivity extends AppCompatActivity {
 
                 String nomEtPrenom = String.format("%s %s", etudiant.getNom(), etudiant.getPrenom());
                 viewHolder.etudiantNomPrenomTextView.setText(nomEtPrenom);
+
+                setNbAbsenceTextView(viewHolder.etudiantNbAbsencesTextView, etudiant);
             }
 
             @Override
@@ -151,15 +159,58 @@ public class ListEtudiantsActivity extends AppCompatActivity {
         etudiantsListRecyclerView.setAdapter(etudiantsListAdapater);
     }
 
+    private void setNbAbsenceTextView(final TextView etudiantNbAbsencesTextView, Etudiant etudiant) {
+
+        String pathToEtudiant = Utils.firebasePath(Utils.CYCLES, etudiant.getIdCycle(), etudiant.getIdFilliere(),
+                etudiant.getIdPromo(), etudiant.getIdSection(), etudiant.getIdGroupe(),
+                etudiant.getId(), module.getId());
+
+        DatabaseReference etudiantRef = Utils.database.getReference(pathToEtudiant);
+        etudiantRef.keepSynced(true); // Keeping data fresh
+
+        System.out.println("Path = " + etudiantRef.getRef());
+        etudiantRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                long etudiantNbAbsences = dataSnapshot.getChildrenCount();
+                displayNbAbsencesInTextView(etudiantNbAbsencesTextView, etudiantNbAbsences);
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {  }
+        });
+    }
+
+    private void displayNbAbsencesInTextView(TextView etudiantNbAbsencesTextView, long etudiantNbAbsences) {
+
+        int textColor;
+        switch (Integer.valueOf(String.format("%d", etudiantNbAbsences))) {
+
+            case 0:
+                textColor = ContextCompat.getColor(this, R.color.textSecondary);
+                break;
+            case 1:
+                textColor = ContextCompat.getColor(this, R.color.textSecondary);
+                break;
+            case 2:
+                textColor = ContextCompat.getColor(this, R.color.deux_absences);
+                break;
+            default: textColor = ContextCompat.getColor(this, R.color.plus_deux_absences);
+        }
+        etudiantNbAbsencesTextView.setText(String.format("%d", etudiantNbAbsences));
+        etudiantNbAbsencesTextView.setTextColor(textColor);
+    }
+
     public static class EtudiantViewHolder extends ItemViewHolder {
 
-        TextView etudiantNomPrenomTextView;
+        TextView etudiantNomPrenomTextView, etudiantNbAbsencesTextView;
 
         public EtudiantViewHolder(View itemView) {
 
             super(itemView);
 
             etudiantNomPrenomTextView = (TextView) itemView.findViewById(R.id.etudiantNomPrenomTextView);
+            etudiantNbAbsencesTextView = (TextView) itemView.findViewById(R.id.etudiantNbAbsences);
         }
 
     }

@@ -13,5 +13,8 @@
     <color name="background">#ffffff</color>
     <color name="structure_button_text_color">#ffffff</color>
     <color name="etudiant_viewer_background_color">#e0f2f1</color>
+    <color name="une_absence">#f4c542</color>
+    <color name="plus_deux_absences">#ff0000</color>
+    <color name="deux_absences">#ff9811</color>
 
 </resources>

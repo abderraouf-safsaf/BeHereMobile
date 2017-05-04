@@ -2,6 +2,7 @@ package com.example.teamloosers.behereandroid;
 
 import android.app.Dialog;
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
@@ -17,6 +18,16 @@ import java.util.Calendar;
 
 public class DatePickerFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
 
+    OnDateSelectedListener mListener;
+
+    @Override
+    public void onAttach(Context context) {
+
+        super.onAttach(context);
+
+        mListener = (OnDateSelectedListener) getActivity();
+    }
+
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
@@ -31,13 +42,11 @@ public class DatePickerFragment extends DialogFragment implements DatePickerDial
     @Override
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
 
-        Intent appelIntent = new Intent(getContext(), NouvelAppelActivity.class);
-        appelIntent.putExtra("annee", year);
-        appelIntent.putExtra("mois", month);
-        appelIntent.putExtra("jour", dayOfMonth);
-        appelIntent.putExtra("groupe", getArguments().getSerializable("groupe"));
-        appelIntent.putExtra("module", getArguments().getSerializable("module"));
+        mListener.onDateSelected(dayOfMonth, month, year);
+    }
 
-        startActivity(appelIntent);
+    public interface OnDateSelectedListener {
+
+        public void onDateSelected(int day, int month, int year);
     }
 }

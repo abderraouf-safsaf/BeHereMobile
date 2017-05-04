@@ -1,5 +1,9 @@
 package com.example.teamloosers.behereandroid.Structures;
 
+import com.bumptech.glide.util.Util;
+import com.example.teamloosers.behereandroid.Utils;
+import com.google.firebase.database.DatabaseReference;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -79,4 +83,5 @@ public class Etudiant extends Personne {
     public void setNbAbsences(int nbAbsences) {
         this.nbAbsences = nbAbsences;
     }
+
 }

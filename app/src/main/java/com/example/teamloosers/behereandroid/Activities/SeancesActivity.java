@@ -98,9 +98,7 @@ public class SeancesActivity extends AppCompatActivity {
 
                 String dateSeance = seance.getDate();
 
-                //TODO: mettre la date de la seance au lieu que l'id
-                String idSeance = seance.getId();
-                viewHolder.dateSeanceTextView.setText(idSeance);
+                viewHolder.dateSeanceTextView.setText(dateSeance);
             }
 
             @Override
