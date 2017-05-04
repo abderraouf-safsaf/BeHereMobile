@@ -39,6 +39,10 @@
         <activity
             android:name=".Activities.SeanceAbsencesActivity"
             android:label="@string/title_activity_seance_absences"
+            android:theme="@style/BeHere" />
+        <activity
+            android:name=".Activities.AppelListActivity"
+            android:label="@string/title_activity_appel_list"
             android:theme="@style/BeHere"></activity>
     </application>
 

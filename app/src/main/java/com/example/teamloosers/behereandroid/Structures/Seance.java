@@ -20,6 +20,11 @@ public class Seance extends Ref {
 
     public Seance(){    }
 
+    public Seance(int jour, int mois, int annee)   {
+
+        this.date = String.format("%d/%d/%d", jour, mois, annee);
+    }
+
     public String getIdSection() {
         return idSection;
     }

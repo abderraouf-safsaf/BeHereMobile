@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.TextView;
 
+import com.example.teamloosers.behereandroid.DatePickerFragment;
 import com.example.teamloosers.behereandroid.FirebaseRecyclerAdapterViewer;
 import com.example.teamloosers.behereandroid.ItemViewHolder;
 import com.example.teamloosers.behereandroid.R;
@@ -44,6 +45,10 @@ public class SeancesActivity extends AppCompatActivity {
         this.groupe = (Groupe) getIntent().getExtras().getSerializable("groupe");
         this.typeSeance = getIntent().getExtras().getString("typeSeance");
 
+        seancesRecyclerView = (RecyclerView) findViewById(R.id.seancesRecyclerView);
+        LinearLayoutManager seancesLinearLayoutManager = new LinearLayoutManager(this);
+        seancesRecyclerView.setLayoutManager(seancesLinearLayoutManager);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -51,15 +56,17 @@ public class SeancesActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+
+                DatePickerFragment nouvelSeanceDialog = new DatePickerFragment();
+
+                Bundle args = new Bundle();
+                args.putSerializable("module", module);
+                args.putSerializable("groupe", groupe);
+                nouvelSeanceDialog.setArguments(args);
+
+                nouvelSeanceDialog.show(getSupportFragmentManager(), "datePicker");
             }
         });
-
-        seancesRecyclerView = (RecyclerView) findViewById(R.id.seancesRecyclerView);
-        LinearLayoutManager seancesLinearLayoutManager = new LinearLayoutManager(this);
-        seancesRecyclerView.setLayoutManager(seancesLinearLayoutManager);
-
     }
 
     @Override

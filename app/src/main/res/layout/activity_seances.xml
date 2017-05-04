@@ -30,10 +30,10 @@
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="@dimen/nouveau_appel_float_button_width"
+        android:layout_height="@dimen/nouveau_appel_float_button_height"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
-        app:srcCompat="@android:drawable/ic_dialog_email" />
+        app:srcCompat="@drawable/nouveau_appel_icon" />
 
 </android.support.design.widget.CoordinatorLayout>

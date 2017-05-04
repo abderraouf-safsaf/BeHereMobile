@@ -34,4 +34,7 @@
     <string name="chargement_seances_loading_message">Chargement de séances</string>
     <string name="title_activity_seance_absences">SeanceAbsencesActivity</string>
     <string name="chargement_absences_loading_message">Chargement des absents</string>
+    <string name="liste_des_etudiants_text">Liste des étudiants:</string>
+    <string name="title_activity_appel_list">AppelListActivity</string>
+    <string name="appel_un_par_un_text">Liste des étudiants:</string>
 </resources>

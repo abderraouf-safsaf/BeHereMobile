@@ -38,6 +38,7 @@ public class NouvelAppelActivity extends AppCompatActivity {
     private Module module;
     private Groupe groupe;
     private Seance seance;
+
     private ArrayList<Etudiant> etudiantsList = new ArrayList<>();
     private HashMap<Etudiant, Boolean> etudiantPresenceHashMap = new HashMap<>();
 

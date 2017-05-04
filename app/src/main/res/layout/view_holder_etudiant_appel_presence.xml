@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+    <TextView
+        android:id="@+id/etudiantNomPrenomTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_weight="4"
+        android:gravity="left"
+        android:text="Hello world"
+        android:textAppearance="?attr/textAppearanceListItem"
+        android:textColor="@color/textSecondary"
+        android:textSize="@dimen/presence_nometprenom_text_size" />
+
+    <Switch
+        android:id="@+id/presenceSwitch"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_weight="4"
+        android:checked="false"
+        android:contentDescription="test"
+        android:gravity="center"
+        android:shadowDx="10"
+        android:shadowDy="10"
+        android:showText="true"
+        android:splitTrack="false"
+        android:textAppearance="@style/TextAppearance.Design.Counter"
+        android:textOff="A"
+        android:textOn="P"
+        android:textSize="@dimen/presence_switch_text_size" />
+</LinearLayout>

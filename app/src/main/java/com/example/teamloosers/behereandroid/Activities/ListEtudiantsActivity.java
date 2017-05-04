@@ -54,7 +54,6 @@ public class ListEtudiantsActivity extends AppCompatActivity {
         etudiantsListRecyclerView = (RecyclerView) findViewById(R.id.etudiantsListRecyclerView);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         etudiantsListRecyclerView.setLayoutManager(linearLayoutManager);
-        etudiantsListRecyclerView.setHasFixedSize(true);
 
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(etudiantsListRecyclerView.getContext(),
                 linearLayoutManager.getOrientation());
@@ -81,14 +80,21 @@ public class ListEtudiantsActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                DatePickerFragment nouvelSeanceDialog = new DatePickerFragment();
+                //TODO: changer l'intent
+                /*DatePickerFragment nouvelSeanceDialog = new DatePickerFragment();
 
                 Bundle args = new Bundle();
                 args.putSerializable("module", module);
                 args.putSerializable("groupe", groupe);
                 nouvelSeanceDialog.setArguments(args);
 
-                nouvelSeanceDialog.show(getSupportFragmentManager(), "datePicker");
+                nouvelSeanceDialog.show(getSupportFragmentManager(), "datePicker");*/
+
+                Intent appelListIntent = new Intent(ListEtudiantsActivity.this, AppelListActivity.class);
+                appelListIntent.putExtra("module", module);
+                appelListIntent.putExtra("groupe", groupe);
+
+                startActivity(appelListIntent);
             }
         });
     }
