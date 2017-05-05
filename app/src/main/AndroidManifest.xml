@@ -18,7 +18,6 @@
             android:name=".Activities.ListEtudiantsActivity"
             android:label="@string/title_activity_list_etudiants"
             android:theme="@style/BeHere" />
-        <activity android:name=".Activities.NouvelAppelActivity" />
         <activity
             android:name=".Activities.EtudiantsPresencesActivity"
             android:label="@string/title_activity_etudiants_presences"
@@ -33,6 +32,7 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
         </activity>
         <activity
             android:name=".Activities.ConsultationEtudiantsActivity"
@@ -50,7 +50,11 @@
             android:name=".Activities.AppelListActivity"
             android:label="@string/title_activity_appel_list"
             android:theme="@style/BeHere" />
-        <activity android:name=".Activities.LoginActivity">
+        <activity android:name=".Activities.LoginActivity" />
+        <activity
+            android:name=".Activities.RootActivity"
+            android:label="@string/title_activity_root"
+            android:theme="@style/BeHere">
 
         </activity>
     </application>

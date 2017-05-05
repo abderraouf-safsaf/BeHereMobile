@@ -8,5 +8,16 @@
         android:id="@+id/dateSeanceTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="TextView" />
+        android:layout_gravity="center"
+        android:layout_marginBottom="10dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_weight="8"
+        android:gravity="left"
+        android:text="TextView"
+        android:textColor="@color/textSecondary"
+        android:textSize="@dimen/seance_text_size" />
 </LinearLayout>

@@ -165,7 +165,8 @@ public class ListEtudiantsActivity extends AppCompatActivity {
                 etudiant.getIdPromo(), etudiant.getIdSection(), etudiant.getIdGroupe(),
                 etudiant.getId(), module.getId());
 
-        DatabaseReference etudiantRef = Utils.database.getReference(pathToEtudiant);
+        Query etudiantRef = Utils.database.getReference(pathToEtudiant).orderByChild("idModule")
+                .equalTo(module.getId());
         etudiantRef.keepSynced(true); // Keeping data fresh
 
         System.out.println("Path = " + etudiantRef.getRef());

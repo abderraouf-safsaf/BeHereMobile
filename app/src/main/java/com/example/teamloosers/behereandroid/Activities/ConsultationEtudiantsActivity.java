@@ -30,6 +30,7 @@ public class ConsultationEtudiantsActivity extends AppCompatActivity {
 
     private Module module;
     private ArrayList<Etudiant> etudiantsList;
+
     private EtudiantPageAdapter mSectionsPagerAdapter;
     private ViewPager mViewPager;
 

@@ -44,13 +44,15 @@ public class Utils {
         // TODO: go online
         //database.goOffline();
     }
+
     public final static String  CYCLES = "/Cycles", SPECIALITE_PROMOS = "/Specialite_Promos",
             FILLIERE_SPECIALITES = "/Filliere_Specialites",
             MODULE_ENSEIGNANTS = "/Module_Enseignants",
             ENSEIGNANT_MODULE = "/Enseignant_Modules",
             PROMO_MODULES = "/Promo_Modules",
             GROUPES = "/Groupes", SECTIONS = "/Sections",
-            PHOTO_URL_ATTRIBUT = "imageBase64";
+            PHOTO_URL_ATTRIBUT = "imageBase64",
+            SCORE = "/score";
 
     public static String firebasePath(String ... noeuds)   {
 

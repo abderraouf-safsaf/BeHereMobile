@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -53,11 +54,11 @@ public class MainFragment extends Fragment {
         sectionsRecyclerView.setHasFixedSize(true);
         groupesRecyclerView.setHasFixedSize(true);
 
-        LinearLayoutManager sectionsLinearLayoutManager = new LinearLayoutManager(getContext());
-        sectionsRecyclerView.setLayoutManager(sectionsLinearLayoutManager);
+        GridLayoutManager sectionsLayoutManager = new GridLayoutManager(getContext(), 2);
+        sectionsRecyclerView.setLayoutManager(sectionsLayoutManager);
 
-        LinearLayoutManager groupesLinearLayoutManager = new LinearLayoutManager(getContext());
-        groupesRecyclerView.setLayoutManager(groupesLinearLayoutManager);
+        GridLayoutManager groupesLayoutManager = new GridLayoutManager(getContext(), 2);
+        groupesRecyclerView.setLayoutManager(groupesLayoutManager);
 
         return rootView;
     }

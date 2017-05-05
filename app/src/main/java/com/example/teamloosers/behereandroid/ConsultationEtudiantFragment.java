@@ -27,7 +27,11 @@ import com.example.teamloosers.behereandroid.Structures.Absence;
 import com.example.teamloosers.behereandroid.Structures.Etudiant;
 import com.example.teamloosers.behereandroid.Structures.Module;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 /**
  * Created by teamloosers on 01/05/17.
@@ -38,7 +42,8 @@ public class ConsultationEtudiantFragment extends Fragment {
     private Etudiant etudiant;
 
     private ImageView etudiantImageView;
-    private TextView nomTextView, prenomTextView, emailTextView;
+    private ImageButton plusImageButton, minusImageButton;
+    private TextView nomTextView, prenomTextView, emailTextView, etudiantScoreTextView;
     private RecyclerView etudiantsAbsencesRecyclerView;
 
     public ConsultationEtudiantFragment() {  }
@@ -58,15 +63,18 @@ public class ConsultationEtudiantFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_consultation_etudiants, container, false);
 
         etudiantImageView = (ImageView) rootView.findViewById(R.id.etudiantImageView);
+        plusImageButton = (ImageButton) rootView.findViewById(R.id.plusImageButton);
+        minusImageButton = (ImageButton) rootView.findViewById(R.id.minusImageButton);
+        etudiantScoreTextView = (TextView) rootView.findViewById(R.id.etudiantScoreTextView);
         nomTextView = (TextView) rootView.findViewById(R.id.nomTextView);
         prenomTextView = (TextView) rootView.findViewById(R.id.prenomTextView);
         emailTextView = (TextView) rootView.findViewById(R.id.emailTextView);
         etudiantsAbsencesRecyclerView = (RecyclerView) rootView.findViewById(R.id.etudiantsAbsencesRecyclerView);
-
         etudiantsAbsencesRecyclerView.setHasFixedSize(true);
 
         LinearLayoutManager absenceLinearLayoutManager = new LinearLayoutManager(getContext());
         etudiantsAbsencesRecyclerView.setLayoutManager(absenceLinearLayoutManager);
+
 
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(etudiantsAbsencesRecyclerView.getContext(),
                 absenceLinearLayoutManager.getOrientation());
@@ -96,14 +104,50 @@ public class ConsultationEtudiantFragment extends Fragment {
         nomTextView.setText(etudiant.getNom());
         prenomTextView.setText(etudiant.getPrenom());
         emailTextView.setText(etudiant.getEmail());
+
+        String pathToEtudiantScore = Utils.firebasePath(Utils.CYCLES, etudiant.getIdCycle(), etudiant.getIdFilliere(),
+                etudiant.getIdPromo(), etudiant.getIdSection(), etudiant.getIdGroupe(), etudiant.getId(), module.getId(),
+                Utils.SCORE);
+
+        Query scoreRef = Utils.database.getReference(pathToEtudiantScore);
+        scoreRef.keepSynced(true); // Keeping data fresh
+
+        scoreRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                Long score = (Long) dataSnapshot.getValue();
+                score = (score == null)? 0: score;
+                etudiantScoreTextView.setText(String.valueOf(score));
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {  }
+        });
+
+        plusImageButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                incrementerScore(etudiant);
+            }
+        });
+        minusImageButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                decrementerScore(etudiant);
+            }
+        });
     }
     private void loadAbsecnces() {
 
         String pathToEtudiant = Utils.firebasePath(Utils.CYCLES, etudiant.getIdCycle(), etudiant.getIdFilliere(),
                 etudiant.getIdPromo(), etudiant.getIdSection(), etudiant.getIdGroupe(), etudiant.getId(), module.getId());
 
-        Query etudiantRef = Utils.database.getReference(pathToEtudiant);
+        Query etudiantRef = Utils.database.getReference(pathToEtudiant).orderByChild("idModule")
+                .equalTo(module.getId());
         etudiantRef.keepSynced(true); // Keeping data fresh
+
         final ProgressDialog loadingProgressDialog = new ProgressDialog(getContext());
         loadingProgressDialog.setCancelable(false);
         loadingProgressDialog.setMessage(getResources().getString(R.string.chargement_etudiant_absence_message));
@@ -143,6 +187,49 @@ public class ConsultationEtudiantFragment extends Fragment {
         };
 
         etudiantsAbsencesRecyclerView.setAdapter(absencesListAdapter);
+    }
+
+    private void incrementerScore(Etudiant etudiant) {
+
+        String pathToEtudiantScore = Utils.firebasePath(Utils.CYCLES, etudiant.getIdCycle(), etudiant.getIdFilliere(),
+                etudiant.getIdPromo(), etudiant.getIdSection(), etudiant.getIdGroupe(), etudiant.getId(), module.getId(),
+                Utils.SCORE);
+
+        Query scoreRef = Utils.database.getReference(pathToEtudiantScore);
+        scoreRef.keepSynced(true); // Keeping data fresh
+
+        scoreRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                Long score = (Long) dataSnapshot.getValue();
+                Long newScore = (score == null)? 1: score + 1;
+                dataSnapshot.getRef().setValue(newScore);
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {  }
+        });
+    }
+    private void decrementerScore(Etudiant etudiant)    {
+
+        String pathToEtudiantScore = Utils.firebasePath(Utils.CYCLES, etudiant.getIdCycle(), etudiant.getIdFilliere(),
+                etudiant.getIdPromo(), etudiant.getIdSection(), etudiant.getIdGroupe(), etudiant.getId(), module.getId(),
+                Utils.SCORE);
+
+        Query scoreRef = Utils.database.getReference(pathToEtudiantScore);
+        scoreRef.keepSynced(true); // Keeping data fresh
+
+        scoreRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                Long score = (Long) dataSnapshot.getValue();
+                Long newScore = (score == null)? 1: score - 1;
+                dataSnapshot.getRef().setValue(newScore);
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {  }
+        });
     }
     public static class AbsenceViewHolder extends ItemViewHolder {
 

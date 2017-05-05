@@ -3,12 +3,12 @@
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="text_margin">16dp</dimen>
     <dimen name="etudiantNomTextSize">40sp</dimen>
-    <dimen name="etudiantPrenomTextSize">20sp</dimen>
+    <dimen name="etudiantPrenomTextSize">30sp</dimen>
     <dimen name="etudiantEmailTextSize">20sp</dimen>
     <dimen name="etudiantNomPrenomTextSize">18sp</dimen>
     <dimen name="etudiantImageHeight">180dp</dimen>
     <dimen name="etudiantImageWidth">180dp</dimen>
-    <dimen name="delete_button_height">30dp</dimen>
+    <dimen name="delete_button_height">20dp</dimen>
     <dimen name="presence_button_height">50dp</dimen>
     <dimen name="left_arrow_button_height">30dp</dimen>
     <dimen name="right_arrow_button_height">30dp</dimen>
@@ -19,7 +19,7 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="appbar_padding_top">8dp</dimen>
     <dimen name="module_designation_text_size">24sp</dimen>
-    <dimen name="absence_date_text_size">24sp</dimen>
+    <dimen name="absence_date_text_size">18sp</dimen>
     <dimen name="presence_switch_text_size">30sp</dimen>
     <dimen name="presence_nometprenom_text_size">18sp</dimen>
     <dimen name="send_mail_image_button_height">40dp</dimen>
@@ -33,10 +33,17 @@
     <dimen name="nav_header_height">160dp</dimen>
     <dimen name="seance_float_button_height">60dp</dimen>
     <dimen name="seance_float_button_width">60dp</dimen>
-    <dimen name="liste_des_etudiants_text_view_text_size">20sp</dimen>
-    <dimen name="student_icon_width">60dp</dimen>
+    <dimen name="liste_des_etudiants_text_view_text_size">18sp</dimen>
+    <dimen name="student_icon_width">40dp</dimen>
     <dimen name="student_icon_height">40dp</dimen>
     <dimen name="appel_image_height">40dp</dimen>
     <dimen name="changer_date_float_button_height">60dp</dimen>
     <dimen name="changer_date_float_button_width">60dp</dimen>
+    <dimen name="plus_icon_height">30dp</dimen>
+    <dimen name="plus_icon_width">30dp</dimen>
+    <dimen name="minus_icon_width">30dp</dimen>
+    <dimen name="minus_icon_height">30dp</dimen>
+    <dimen name="etudiant_nb_absences_text_size">20sp</dimen>
+    <dimen name="score_text_size">20sp</dimen>
+    <dimen name="seance_text_size">18sp</dimen>
 </resources>

@@ -19,24 +19,24 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:weightSum="10">
+            android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="top"
-                android:layout_weight="9"
-                android:gravity="center"
+                android:gravity="top"
                 android:orientation="horizontal"
-                android:weightSum="10"
+                android:paddingStart="30dp"
+                android:paddingTop="5dp"
                 app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
                 <ImageView
                     android:id="@+id/imageView2"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="@dimen/student_icon_height"
-                    android:layout_weight="1"
+                    android:layout_gravity="top"
+                    android:layout_marginEnd="10dp"
                     android:adjustViewBounds="true"
                     android:background="@drawable/tw__transparent"
                     android:scaleType="fitCenter"
@@ -44,11 +44,11 @@
 
                 <TextView
                     android:id="@+id/textView2"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_weight="9"
-                    android:gravity="start"
+                    android:layout_marginStart="5dp"
+                    android:gravity="top"
                     android:text="@string/liste_des_etudiants_text"
                     android:textSize="@dimen/liste_des_etudiants_text_view_text_size" />
             </LinearLayout>
@@ -58,7 +58,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="top"
-                android:layout_weight="9"
                 android:padding="5dp"
                 android:scrollbars="vertical"
                 app:layout_behavior="@string/appbar_scrolling_view_behavior" />
@@ -69,7 +68,7 @@
         android:id="@+id/app_bar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/app_bar_height"
-        android:fitsSystemWindows="true"
+        android:fitsSystemWindows="false"
         android:theme="@style/AppTheme.AppBarOverlay">
 
         <android.support.design.widget.CollapsingToolbarLayout

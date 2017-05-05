@@ -52,4 +52,10 @@
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
+    <string name="title_activity_appel_un_par_un">AppelUnParUnActivity</string>
+    <string name="title_activity_root">RootActivity</string>
+    <string name="parametres">Paramétres</string>
+    <string name="se_deconnecter">Se déconnecter</string>
+    <string name="aide">Aide</string>
+    <string name="score_text_view">Score:</string>
 </resources>

@@ -3,12 +3,9 @@ package com.example.teamloosers.behereandroid;
 import android.app.Dialog;
 import android.app.DatePickerDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.widget.DatePicker;
-
-import com.example.teamloosers.behereandroid.Activities.NouvelAppelActivity;
 
 import java.util.Calendar;
 

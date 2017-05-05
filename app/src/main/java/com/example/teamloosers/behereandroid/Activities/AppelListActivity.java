@@ -13,6 +13,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -82,6 +83,11 @@ public class AppelListActivity extends AppCompatActivity implements DatePickerFr
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         etudiantAppelListRecyclerView.setLayoutManager(linearLayoutManager);
 
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(etudiantAppelListRecyclerView.getContext(),
+                linearLayoutManager.getOrientation());
+        dividerItemDecoration.setDrawable(ContextCompat.getDrawable(this, R.drawable.recyclerview_divider));
+        etudiantAppelListRecyclerView.addItemDecoration(dividerItemDecoration);
+
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -110,18 +116,10 @@ public class AppelListActivity extends AppCompatActivity implements DatePickerFr
 
         super.onStart();
 
-        Snackbar snackbar =  Snackbar.make(mainLayout, getString(R.string.appel_un_par_un_text), Snackbar.LENGTH_INDEFINITE);
-        snackbar.setAction(R.string.commencer, new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                //TODO: Faire l'appel un par un
-            }
-        });
-
-        snackbarTextView = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
+        //TODO: snackbar text color
+        /*snackbarTextView = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
         snackbarTextView.setTextColor(ContextCompat.getColor(this, R.color.white));
-        snackbar.show();
+        snackbar.show();*/
 
         loadEtudiant();
     }
