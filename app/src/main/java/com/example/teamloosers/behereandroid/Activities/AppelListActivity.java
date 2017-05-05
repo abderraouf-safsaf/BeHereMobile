@@ -116,10 +116,7 @@ public class AppelListActivity extends AppCompatActivity implements DatePickerFr
 
         super.onStart();
 
-        //TODO: snackbar text color
-        /*snackbarTextView = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
-        snackbarTextView.setTextColor(ContextCompat.getColor(this, R.color.white));
-        snackbar.show();*/
+
 
         loadEtudiant();
     }

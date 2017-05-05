@@ -32,6 +32,4 @@ public class Enseignant extends Personne implements Serializable{
         this.grade = grade;
     }
 
-
-
 }

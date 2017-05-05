@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/mainLinearLayout"
     android:layout_width="368dp"
     android:layout_height="551dp"
     xmlns:tools="http://schemas.android.com/tools"
@@ -15,4 +16,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:srcCompat="@drawable/esisba_logo" />
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="startLogin"
+        android:text="Se connecter" />
 </LinearLayout>

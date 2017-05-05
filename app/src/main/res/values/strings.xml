@@ -58,4 +58,8 @@
     <string name="se_deconnecter">Se déconnecter</string>
     <string name="aide">Aide</string>
     <string name="score_text_view">Score:</string>
+    <string name="email_nexiste_pas_message">L\'email que vous avez entrez n\'a pas un enseignant associé</string>
+    <string name="chargement_enseignants_message">Chargement d\'enseignant</string>
+    <string name="list_seances_text_view_text">Liste des séances:</string>
+    <string name="liste_absents_text_view_text">Liste des absents:</string>
 </resources>

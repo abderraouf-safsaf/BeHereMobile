@@ -4,7 +4,6 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
@@ -15,6 +14,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.TextView;
 
+import com.bumptech.glide.util.Util;
 import com.example.teamloosers.behereandroid.DatePickerFragment;
 import com.example.teamloosers.behereandroid.FirebaseRecyclerAdapterViewer;
 import com.example.teamloosers.behereandroid.ItemViewHolder;
@@ -24,10 +24,10 @@ import com.example.teamloosers.behereandroid.Structures.Groupe;
 import com.example.teamloosers.behereandroid.Structures.Module;
 import com.example.teamloosers.behereandroid.Structures.Seance;
 import com.example.teamloosers.behereandroid.Utils;
-import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.Query;
-
-import org.w3c.dom.Text;
+import com.google.firebase.database.ValueEventListener;
 
 public class SeancesActivity extends AppCompatActivity {
 
@@ -107,6 +107,7 @@ public class SeancesActivity extends AppCompatActivity {
                 String dateSeance = seance.getDate();
 
                 viewHolder.dateSeanceTextView.setText(dateSeance);
+                setNbAbsenceTextView(viewHolder.seanceNbAbsencesTextView, seance);
             }
 
             @Override
@@ -132,15 +133,56 @@ public class SeancesActivity extends AppCompatActivity {
         });
         seancesRecyclerView.setAdapter(seancesAdapter);
     }
+    private void setNbAbsenceTextView(final TextView seanceNbAbsencesTextView, Seance seance) {
+
+        String pathToSeance = Utils.firebasePath(Utils.ENSEIGNANT_MODULE, Utils.enseignant.getId(),
+                module.getId(),  seance.getTypeSeance(), groupe.getId(), seance.getId());
+
+        Query seanceRef = Utils.database.getReference(pathToSeance).orderByChild("idModule")
+                .equalTo(module.getId());
+        seanceRef.keepSynced(true); // Keeping data fresh
+
+        System.out.println("Path = " + seanceRef.getRef());
+        seanceRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                long seanceNbAbsences = dataSnapshot.getChildrenCount();
+                displayNbAbsencesInTextView(seanceNbAbsencesTextView, seanceNbAbsences);
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {  }
+        });
+    }
+    private void displayNbAbsencesInTextView(TextView seanceNbAbsencesTextView, long seanceNbAbsences) {
+
+        int textColor;
+        switch (Integer.valueOf(String.format("%d", seanceNbAbsences))) {
+
+            case 0:
+                textColor = ContextCompat.getColor(this, R.color.textSecondary);
+                break;
+            case 1:
+                textColor = ContextCompat.getColor(this, R.color.textSecondary);
+                break;
+            case 2:
+                textColor = ContextCompat.getColor(this, R.color.deux_absences);
+                break;
+            default: textColor = ContextCompat.getColor(this, R.color.plus_deux_absences);
+        }
+        seanceNbAbsencesTextView.setText(String.format("%d", seanceNbAbsences));
+        seanceNbAbsencesTextView.setTextColor(textColor);
+    }
     public static class SeanceViewHolder extends ItemViewHolder{
 
-        TextView dateSeanceTextView;
+        TextView dateSeanceTextView, seanceNbAbsencesTextView;
 
         public SeanceViewHolder(View itemView) {
 
             super(itemView);
 
             dateSeanceTextView = (TextView) itemView.findViewById(R.id.dateSeanceTextView);
+            seanceNbAbsencesTextView = (TextView) itemView.findViewById(R.id.seanceNbAbsencesTextView);
         }
     }
 }

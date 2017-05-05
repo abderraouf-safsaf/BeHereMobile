@@ -2,15 +2,17 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:padding="10dp">
+    android:orientation="vertical">
 
     <Button
         android:id="@+id/structureButton"
         android:layout_width="match_parent"
         android:layout_height="@dimen/structure_button_height"
+        android:layout_gravity="center"
+        android:layout_margin="5dp"
         android:background="@color/colorPrimary"
-        android:elevation="24dp"
+        android:gravity="center|start"
+        android:padding="3dp"
         android:text="Button"
         android:textColor="@color/structure_button_text_color"
         android:textSize="@dimen/structure_button_text_size" />

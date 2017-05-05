@@ -2,14 +2,19 @@ package com.example.teamloosers.behereandroid;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.support.design.widget.Snackbar;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.Base64;
+import android.view.View;
+import android.widget.TextView;
 
 import com.example.teamloosers.behereandroid.Structures.Enseignant;
 import com.example.teamloosers.behereandroid.Structures.Identifiable;
 import com.example.teamloosers.behereandroid.Structures.Personne;
 import com.example.teamloosers.behereandroid.Structures.Ref;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -28,21 +33,21 @@ public class Utils {
 
     public static final Boolean BACKABLE = true, NOT_BACKABLE = false;
 
-    public static FirebaseDatabase database = null;
+    public static FirebaseDatabase database;
+    public static FirebaseAuth auth;
 
     public static Enseignant enseignant;
     static {
 
         enseignant = new Enseignant("Badsi", "Hichem", Personne.HOMME);
         enseignant.setId("4a04efee-0aa4-4756-bbee-78602a3ee9dc");
+        enseignant.setEmail("safsaf.abderraouf@gmail.com");
 
+        auth = FirebaseAuth.getInstance();
         database = FirebaseDatabase.getInstance();
 
         // Enable disk persistence (Offline)
         database.setPersistenceEnabled(true);
-
-        // TODO: go online
-        //database.goOffline();
     }
 
     public final static String  CYCLES = "/Cycles", SPECIALITE_PROMOS = "/Specialite_Promos",
@@ -147,5 +152,12 @@ public class Utils {
         Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
 
         return decodedByte;
+    }
+    public static void showSnackBar(View view, String message) {
+
+        Snackbar snackbar = Snackbar.make(view, message, Snackbar.LENGTH_LONG);
+        TextView snackbarTextView = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
+        snackbarTextView.setTextColor(ContextCompat.getColor(view.getContext(), R.color.white));
+        snackbar.show();
     }
 }

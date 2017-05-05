@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/headerLinearLayout"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/nav_header_height"
+    android:layout_height="wrap_content"
     android:background="@drawable/side_nav_bar"
     android:gravity="bottom"
     android:orientation="vertical"
@@ -14,10 +14,12 @@
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
     <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:id="@+id/enseignantImageView"
+        android:layout_width="@dimen/enseignant_image_view_width"
+        android:layout_height="@dimen/enseignant_image_view_height"
+        android:background="@drawable/tw__transparent"
         android:paddingTop="@dimen/nav_header_vertical_spacing"
+        android:scaleType="fitCenter"
         app:srcCompat="@android:drawable/sym_def_app_icon" />
 
     <TextView
