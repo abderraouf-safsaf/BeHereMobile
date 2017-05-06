@@ -3,6 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
+    android:layout_margin="7dp"
+    android:background="@drawable/shape"
     android:gravity="left"
     android:orientation="horizontal"
     android:weightSum="10">
@@ -21,7 +23,7 @@
         android:layout_weight="8"
         android:gravity="left"
         android:text="Etudiant"
-        android:textColor="@color/textSecondary"
+        android:textColor="@color/white"
         android:textSize="@dimen/etudiantNomPrenomTextSize" />
 
     <TextView
@@ -32,6 +34,7 @@
         android:layout_weight="2"
         android:gravity="center"
         android:text="nb"
+        android:textColor="@color/white"
         android:textSize="@dimen/etudiant_nb_absences_text_size" />
 
 </LinearLayout>

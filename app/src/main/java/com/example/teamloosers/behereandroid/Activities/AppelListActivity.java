@@ -38,7 +38,10 @@ import com.example.teamloosers.behereandroid.Structures.Module;
 import com.example.teamloosers.behereandroid.Structures.Seance;
 import com.example.teamloosers.behereandroid.Utils;
 import com.firebase.ui.database.ChangeEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 import org.w3c.dom.Text;
 
@@ -195,7 +198,6 @@ public class AppelListActivity extends AppCompatActivity implements DatePickerFr
             }
         }
     }
-
     @Override
     public void onDateSelected(int day, int month, int year) {
 

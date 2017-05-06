@@ -62,4 +62,11 @@
     <string name="chargement_enseignants_message">Chargement d\'enseignant</string>
     <string name="list_seances_text_view_text">Liste des séances:</string>
     <string name="liste_absents_text_view_text">Liste des absents:</string>
+    <string name="email_envoye_toast">Email envoyé avec succé</string>
+    <string name="email_non_envoye_toast">Erreur: email non envoyé</string>
+    <string name="email_subject">Notification</string>
+    <string name="title_activity_structure">StructureActivity</string>
+    <string name="seance_tab_title">Seances</string>
+    <string name="etudiants_tab_title">Etudiants</string>
+    <string name="liste_des_seances_text">Liste des séances:</string>
 </resources>

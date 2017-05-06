@@ -1,5 +1,6 @@
 package com.example.teamloosers.behereandroid;
 
+import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.design.widget.Snackbar;
@@ -8,15 +9,21 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Base64;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.teamloosers.behereandroid.Structures.Enseignant;
+import com.example.teamloosers.behereandroid.Structures.Etudiant;
 import com.example.teamloosers.behereandroid.Structures.Identifiable;
 import com.example.teamloosers.behereandroid.Structures.Personne;
 import com.example.teamloosers.behereandroid.Structures.Ref;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
+import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings;
 
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
@@ -159,5 +166,61 @@ public class Utils {
         TextView snackbarTextView = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
         snackbarTextView.setTextColor(ContextCompat.getColor(view.getContext(), R.color.white));
         snackbar.show();
+    }
+    public static void envoyerNotification(final Activity activity, final Etudiant etudiant, final String message)   {
+
+        final FirebaseRemoteConfig mRemoteConfig = FirebaseRemoteConfig.getInstance();
+        FirebaseRemoteConfigSettings remoteConfigSettings = new FirebaseRemoteConfigSettings.Builder()
+                .setDeveloperModeEnabled(true)
+                .build();
+        mRemoteConfig.setConfigSettings(remoteConfigSettings);
+
+        long cacheExpiration = 3600;
+        if (mRemoteConfig.getInfo().getConfigSettings().isDeveloperModeEnabled()) {
+            cacheExpiration = 0;
+        }
+        mRemoteConfig.fetch(cacheExpiration)
+                .addOnCompleteListener(activity, new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            // task successful. Activate the fetched data
+                            mRemoteConfig.activateFetched();
+
+                            final String email = mRemoteConfig.getString("email");
+                            final String password = mRemoteConfig.getString("password");
+
+                            Thread thread = new Thread(new Runnable() {
+
+                                @Override
+                                public void run() {
+                                    try  {
+                                        Mail m = new Mail(email, password);
+
+                                        String[] toArr = {etudiant.getEmail()};
+                                        m.set_to(toArr);
+                                        m.set_from(email);
+                                        m.set_subject(activity.getString(R.string.email_subject));
+                                        m.setBody(message);
+                                        try {
+                                            if (m.send())
+                                                System.out.println("Email envoye");
+                                            else System.out.println("Erreur envoie email");
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
+                                        }
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            });
+
+                            thread.start();
+                        } else {
+                            //task failed
+                        }
+                    }
+                });
+
     }
 }

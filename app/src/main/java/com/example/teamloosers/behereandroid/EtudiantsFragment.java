@@ -1,81 +1,66 @@
-package com.example.teamloosers.behereandroid.Activities;
+package com.example.teamloosers.behereandroid;
 
-import android.annotation.TargetApi;
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.view.animation.OvershootInterpolator;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.TextView;
 
-import com.example.teamloosers.behereandroid.DatePickerFragment;
-import com.example.teamloosers.behereandroid.FirebaseRecyclerAdapterViewer;
-import com.example.teamloosers.behereandroid.ItemViewHolder;
-import com.example.teamloosers.behereandroid.R;
-import com.example.teamloosers.behereandroid.Structures.Enseignant;
+import com.example.teamloosers.behereandroid.Activities.ConsultationEtudiantsActivity;
+import com.example.teamloosers.behereandroid.Activities.ListEtudiantsActivity;
 import com.example.teamloosers.behereandroid.Structures.Etudiant;
 import com.example.teamloosers.behereandroid.Structures.Groupe;
 import com.example.teamloosers.behereandroid.Structures.Module;
-import com.example.teamloosers.behereandroid.Structures.Seance;
-import com.example.teamloosers.behereandroid.Utils;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
-import jp.wasabeef.recyclerview.adapters.AlphaInAnimationAdapter;
-import jp.wasabeef.recyclerview.adapters.ScaleInAnimationAdapter;
-import jp.wasabeef.recyclerview.animators.FadeInAnimator;
-import jp.wasabeef.recyclerview.animators.FlipInRightYAnimator;
-import jp.wasabeef.recyclerview.animators.LandingAnimator;
-import jp.wasabeef.recyclerview.animators.OvershootInRightAnimator;
-import jp.wasabeef.recyclerview.animators.ScaleInAnimator;
-import jp.wasabeef.recyclerview.animators.SlideInDownAnimator;
-import jp.wasabeef.recyclerview.animators.SlideInLeftAnimator;
 import jp.wasabeef.recyclerview.animators.SlideInRightAnimator;
-import jp.wasabeef.recyclerview.animators.SlideInUpAnimator;
 
-public class ListEtudiantsActivity extends AppCompatActivity {
+/**
+ * Created by teamloosers on 06/05/17.
+ */
+
+public class EtudiantsFragment extends Fragment {
 
     private Module module;
     private Groupe groupe;
 
     private RecyclerView etudiantsListRecyclerView;
 
+    public EtudiantsFragment() {    }
+
+    public static EtudiantsFragment newInstance(Module module, Groupe groupe) {
+
+        EtudiantsFragment fragment = new EtudiantsFragment();
+        Bundle args = new Bundle();
+        args.putSerializable("module", module);
+        args.putSerializable("groupe", groupe);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
 
-        super.onCreate(savedInstanceState);
+        View rootView = inflater.inflate(R.layout.fragment_etudiants, container, false);
 
-        setContentView(R.layout.activity_list_etudiants);
+        module = (Module) getArguments().getSerializable("module");
+        groupe = (Groupe) getArguments().getSerializable("groupe");
 
-        module = (Module) getIntent().getExtras().getSerializable("module");
-        groupe = (Groupe) getIntent().getExtras().getSerializable("groupe");
+        etudiantsListRecyclerView = (RecyclerView) rootView.findViewById(R.id.etudiantsListRecyclerView);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        String toolbarTitle = String.format("M. %s %s", Utils.enseignant.getNom(), Utils.enseignant.getPrenom());
-        String toolbarSubTitle = String.format("%s: %s", module.getDesignation(), groupe.getDesignation());
-        toolbar.setTitle(toolbarTitle);
-        toolbar.setSubtitle(toolbarSubTitle);
-
-        setSupportActionBar(toolbar);
-
-        etudiantsListRecyclerView = (RecyclerView) findViewById(R.id.etudiantsListRecyclerView);
-
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         etudiantsListRecyclerView.setLayoutManager(linearLayoutManager);
 
         SlideInRightAnimator animator = new SlideInRightAnimator();
@@ -84,49 +69,22 @@ public class ListEtudiantsActivity extends AppCompatActivity {
 
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(etudiantsListRecyclerView.getContext(),
                 linearLayoutManager.getOrientation());
-        dividerItemDecoration.setDrawable(ContextCompat.getDrawable(this, R.drawable.recyclerview_divider));
+        dividerItemDecoration.setDrawable(ContextCompat.getDrawable(getContext(), R.drawable.recyclerview_divider));
         etudiantsListRecyclerView.addItemDecoration(dividerItemDecoration);
 
-
-        FloatingActionButton seancesFloatButton = (FloatingActionButton) findViewById(R.id.seancesFloatButton);
-        seancesFloatButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                Intent seancesIntent = new Intent(ListEtudiantsActivity.this, SeancesActivity.class);
-
-                seancesIntent.putExtra("module", module);
-                seancesIntent.putExtra("groupe", groupe);
-                seancesIntent.putExtra("typeSeance", Seance.TD);
-
-                startActivity(seancesIntent);
-            }
-        });
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @TargetApi(Build.VERSION_CODES.M)
-            @Override
-            public void onClick(View view) {
-
-                Intent appelListIntent = new Intent(ListEtudiantsActivity.this, AppelListActivity.class);
-                appelListIntent.putExtra("module", module);
-                appelListIntent.putExtra("groupe", groupe);
-
-                startActivity(appelListIntent);
-            }
-        });
+        return rootView;
     }
+
     @Override
-    protected void onStart() {
+    public void onStart() {
 
         super.onStart();
 
         loadEtudiants();
     }
-
     private void loadEtudiants() {
 
-        final ProgressDialog loadingProgressDialog = new ProgressDialog(this);
+        final ProgressDialog loadingProgressDialog = new ProgressDialog(getContext());
         loadingProgressDialog.setCancelable(false);
         loadingProgressDialog.setMessage(getResources().getString(R.string.chargement_etudiants_loading_message));
 
@@ -135,6 +93,7 @@ public class ListEtudiantsActivity extends AppCompatActivity {
         Query myRef = Utils.database.getReference(pathToGroupe).orderByChild("idCycle").
                 equalTo(groupe.getIdCycle());
         myRef.keepSynced(true); // Keeping data fresh
+
         loadingProgressDialog.show();
         final FirebaseRecyclerAdapterViewer<Etudiant, EtudiantViewHolder> etudiantsListAdapater = new FirebaseRecyclerAdapterViewer<Etudiant, EtudiantViewHolder>(
                 Etudiant.class, R.layout.view_holder_etudiant, EtudiantViewHolder.class, myRef
@@ -161,7 +120,7 @@ public class ListEtudiantsActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                Intent intent = new Intent(ListEtudiantsActivity.this, ConsultationEtudiantsActivity.class);
+                Intent intent = new Intent(getContext(), ConsultationEtudiantsActivity.class);
                 intent.putExtra("etudiantsList", etudiantsListAdapater.getItems());
                 intent.putExtra("currentEtudiantPosition", position);
                 intent.putExtra("module", module);
@@ -200,20 +159,19 @@ public class ListEtudiantsActivity extends AppCompatActivity {
         switch (Integer.valueOf(String.format("%d", etudiantNbAbsences))) {
 
             case 0:
-                textColor = ContextCompat.getColor(this, R.color.textSecondary);
+                textColor = ContextCompat.getColor(getContext(), R.color.textSecondary);
                 break;
             case 1:
-                textColor = ContextCompat.getColor(this, R.color.textSecondary);
+                textColor = ContextCompat.getColor(getContext(), R.color.textSecondary);
                 break;
             case 2:
-                textColor = ContextCompat.getColor(this, R.color.deux_absences);
+                textColor = ContextCompat.getColor(getContext(), R.color.deux_absences);
                 break;
-            default: textColor = ContextCompat.getColor(this, R.color.plus_deux_absences);
+            default: textColor = ContextCompat.getColor(getContext(), R.color.plus_deux_absences);
         }
         etudiantNbAbsencesTextView.setText(String.format("%d", etudiantNbAbsences));
         etudiantNbAbsencesTextView.setTextColor(textColor);
     }
-
     public static class EtudiantViewHolder extends ItemViewHolder {
 
         TextView etudiantNomPrenomTextView, etudiantNbAbsencesTextView;

@@ -11,10 +11,12 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.teamloosers.behereandroid.Activities.ListEtudiantsActivity;
+import com.example.teamloosers.behereandroid.Activities.StructureActivity;
 import com.example.teamloosers.behereandroid.Structures.Groupe;
 import com.example.teamloosers.behereandroid.Structures.Module;
 import com.example.teamloosers.behereandroid.Structures.Section;
@@ -84,24 +86,12 @@ public class MainFragment extends Fragment {
 
         loadingProgressDialog.show();
 
-        FirebaseRecyclerAdapterViewer<Section, StructureViewHolder> adapter = new FirebaseRecyclerAdapterViewer<Section, StructureViewHolder>(Section.class,
+        final FirebaseRecyclerAdapterViewer<Section, StructureViewHolder> adapter = new FirebaseRecyclerAdapterViewer<Section, StructureViewHolder>(Section.class,
                 R.layout.view_holder_structure, StructureViewHolder.class, sectionQuery) {
             @Override
             protected void populateView(StructureViewHolder viewHolder, final Section section, int position) {
 
-                Button structureButton = viewHolder.structureButton;
-                viewHolder.structureButton.setText(section.getDesignation());
-                structureButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-
-                        Intent intent = new Intent(getContext(), ListEtudiantsActivity.class);
-                        intent.putExtra("module", module);
-                        intent.putExtra("section", section);
-
-                        startActivity(intent);
-                    }
-                });
+                viewHolder.structureDesignationTextView.setText(section.getDesignation());
             }
             @Override
             protected void onDataChanged() {
@@ -111,6 +101,17 @@ public class MainFragment extends Fragment {
                 loadingProgressDialog.dismiss();
             }
         };
+        adapter.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                Intent groupeIntent = new Intent(getContext(), StructureActivity.class);
+                groupeIntent.putExtra("module", module);
+                groupeIntent.putExtra("section", adapter.getItem(position));
+
+                startActivity(groupeIntent);
+            }
+        });
         sectionsRecyclerView.setAdapter(adapter);
     }
     private void loadGroupes()  {
@@ -124,25 +125,13 @@ public class MainFragment extends Fragment {
         Query groupesQuery = Utils.database.getReference(groupesPath);
         groupesQuery.keepSynced(true); // Keeping data fresh
         loadingProgressDialog.show();
-        FirebaseRecyclerAdapterViewer<Groupe, StructureViewHolder> adapter = new FirebaseRecyclerAdapterViewer<Groupe, StructureViewHolder>(
+        final FirebaseRecyclerAdapterViewer<Groupe, StructureViewHolder> adapter = new FirebaseRecyclerAdapterViewer<Groupe, StructureViewHolder>(
                 Groupe.class, R.layout.view_holder_structure, StructureViewHolder.class, groupesQuery
         ) {
             @Override
             protected void populateView(StructureViewHolder viewHolder, final Groupe groupe, int position) {
 
-                Button structureButton = viewHolder.structureButton;
-                viewHolder.structureButton.setText(groupe.getDesignation());
-                structureButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-
-                        Intent intent = new Intent(getContext(), ListEtudiantsActivity.class);
-                        intent.putExtra("module", module);
-                        intent.putExtra("groupe", groupe);
-
-                        startActivity(intent);
-                    }
-                });
+                viewHolder.structureDesignationTextView.setText(groupe.getDesignation());
             }
 
             @Override
@@ -153,18 +142,29 @@ public class MainFragment extends Fragment {
                 loadingProgressDialog.dismiss();
             }
         };
+        adapter.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                Intent groupeIntent = new Intent(getContext(), StructureActivity.class);
+                groupeIntent.putExtra("module", module);
+                groupeIntent.putExtra("groupe", adapter.getItem(position));
+
+                startActivity(groupeIntent);
+            }
+        });
         groupesRecyclerView.setAdapter(adapter);
     }
 
     public static class StructureViewHolder extends ItemViewHolder {
 
-        Button structureButton;
+        TextView structureDesignationTextView;
 
         public StructureViewHolder(View itemView) {
 
             super(itemView);
 
-            structureButton = (Button) itemView.findViewById(R.id.structureButton);
+            structureDesignationTextView = (TextView) itemView.findViewById(R.id.structureDesignationTextView);
         }
     }
     public static MainFragment newInstance(Module module) {
