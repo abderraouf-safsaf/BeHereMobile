@@ -17,7 +17,7 @@ import com.example.teamloosers.behereandroid.Structures.Groupe;
 import com.example.teamloosers.behereandroid.Structures.Module;
 import com.example.teamloosers.behereandroid.Structures.Seance;
 
-public class StructureActivity extends AppCompatActivity {
+public class StructureActivity <T> extends AppCompatActivity {
 
     private Module module;
     private Groupe groupe;
