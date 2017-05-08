@@ -1,38 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
-    android:gravity="center"
+    android:alignmentMode="alignBounds"
+    android:columnCount="3"
+    android:columnOrderPreserved="false"
     android:orientation="horizontal"
-    android:weightSum="10">
+    android:paddingBottom="5dp"
+    android:paddingTop="5dp"
+    android:rowCount="2"
+    android:rowOrderPreserved="false"
+    android:useDefaultMargins="false">
+
+    <ImageView
+        android:id="@+id/etudiantSmallImageView"
+        android:layout_width="@dimen/etudiant_small_image_width"
+        android:layout_height="@dimen/etudiant_small_image_height"
+        android:layout_columnWeight="0"
+        android:layout_gravity="center"
+        android:layout_marginLeft="5dp"
+        android:layout_rowSpan="2"
+        android:layout_rowWeight="1"
+        app:srcCompat="@drawable/com_facebook_profile_picture_blank_portrait" />
 
     <TextView
         android:id="@+id/etudiantNomPrenomTextView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
+        android:layout_column="1"
+        android:layout_columnWeight="10"
         android:layout_marginBottom="10dp"
         android:layout_marginEnd="20dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:layout_marginStart="20dp"
         android:layout_marginTop="10dp"
-        android:layout_weight="8"
-        android:gravity="left"
-        android:text="Hello world"
+        android:layout_row="0"
+        android:layout_rowWeight="1"
+        android:text="Etudiant"
         android:textAppearance="?attr/textAppearanceListItem"
         android:textColor="@color/textSecondary"
         android:textSize="@dimen/presence_nometprenom_text_size" />
 
     <Switch
         android:id="@+id/presenceSwitch"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_column="2"
+        android:layout_columnWeight="0"
         android:layout_gravity="center"
-        android:layout_weight="2"
+        android:layout_row="1"
+        android:layout_rowWeight="1"
         android:checked="false"
-        android:contentDescription="test"
         android:gravity="center"
         android:shadowDx="10"
         android:shadowDy="10"
@@ -43,4 +65,83 @@
         android:textOff="A"
         android:textOn="P"
         android:textSize="@dimen/presence_switch_text_size" />
-</LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_column="2"
+        android:layout_columnWeight="0"
+        android:layout_gravity="left|center"
+        android:layout_row="0"
+        android:layout_rowWeight="1"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="@string/etudiant_absences_text_view"
+            android:textColor="@color/textSecondary" />
+
+        <TextView
+            android:id="@+id/etudiantNbAbsencesTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="5dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="nb"
+            android:textSize="@dimen/etudiant_nb_absences_text_size" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_column="1"
+        android:layout_columnWeight="0"
+        android:layout_gravity="left"
+        android:layout_row="1"
+        android:layout_rowWeight="1"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/etudiantScoreTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/score_text_view"
+            android:textColor="@color/textSecondary"
+            android:textSize="@dimen/score_text_size" />
+
+        <ImageButton
+            android:id="@+id/dislikeImageButton"
+            android:layout_width="@dimen/like_image_button_width"
+            android:layout_height="@dimen/like_image_button_height"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_weight="1"
+            android:background="@drawable/tw__transparent"
+            android:scaleType="fitCenter"
+            app:srcCompat="@drawable/disklike_icon" />
+
+        <ImageButton
+            android:id="@+id/likeImageButton"
+            android:layout_width="@dimen/like_image_button_width"
+            android:layout_height="@dimen/like_image_button_height"
+            android:layout_gravity="center"
+            android:layout_marginLeft="5dp"
+            android:layout_weight="1"
+            android:background="@drawable/tw__transparent"
+            android:scaleType="fitCenter"
+            app:srcCompat="@drawable/like_icon" />
+
+    </LinearLayout>
+
+</GridLayout>

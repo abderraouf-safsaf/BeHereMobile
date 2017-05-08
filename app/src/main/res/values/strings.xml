@@ -69,4 +69,8 @@
     <string name="seance_tab_title">Seances</string>
     <string name="etudiants_tab_title">Etudiants</string>
     <string name="liste_des_seances_text">Liste des séances:</string>
+    <string name="absences_text_view">Absences:</string>
+    <string name="etudiant_absences_text_view">Abs:</string>
+    <string name="valider_appel_button">Valider</string>
+    <string name="modifier_date_button_text">Modifier</string>
 </resources>

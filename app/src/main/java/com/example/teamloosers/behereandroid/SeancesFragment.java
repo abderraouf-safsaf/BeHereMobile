@@ -3,10 +3,10 @@ package com.example.teamloosers.behereandroid;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,8 +14,8 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.TextView;
 
+import com.example.teamloosers.behereandroid.Activities.AppelListActivity;
 import com.example.teamloosers.behereandroid.Activities.SeanceAbsencesActivity;
-import com.example.teamloosers.behereandroid.Activities.SeancesActivity;
 import com.example.teamloosers.behereandroid.Structures.Groupe;
 import com.example.teamloosers.behereandroid.Structures.Module;
 import com.example.teamloosers.behereandroid.Structures.Seance;
@@ -24,7 +24,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
-import jp.wasabeef.recyclerview.animators.SlideInRightAnimator;
 import jp.wasabeef.recyclerview.animators.SlideInUpAnimator;
 
 /**
@@ -38,6 +37,8 @@ public class SeancesFragment extends Fragment {
     private String typeSeance;
 
     private RecyclerView seancesRecyclerView;
+
+    private FloatingActionButton nouveauAppelFloatButton;
 
     public SeancesFragment() {    }
 
@@ -56,7 +57,7 @@ public class SeancesFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View rootView = inflater.inflate(R.layout.fragment_structure, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_seances, container, false);
 
         module = (Module) getArguments().getSerializable("module");
         groupe = (Groupe) getArguments().getSerializable("groupe");
@@ -71,6 +72,19 @@ public class SeancesFragment extends Fragment {
         GridLayoutManager seancesGridLayoutManager = new GridLayoutManager(getContext(), 2);
         seancesRecyclerView.setLayoutManager(seancesGridLayoutManager);
 
+        nouveauAppelFloatButton = (FloatingActionButton) rootView.findViewById(R.id.nouveauAppelFlatButton);
+        nouveauAppelFloatButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+
+                Intent appelListIntent = new Intent(getContext(), AppelListActivity.class);
+                appelListIntent.putExtra("module", module);
+                appelListIntent.putExtra("groupe", groupe);
+
+                startActivity(appelListIntent);
+            }
+        });
         return rootView;
     }
     @Override

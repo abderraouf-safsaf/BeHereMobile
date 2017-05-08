@@ -52,7 +52,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onDismiss(DialogInterface dialog) {
 
-                if (Utils.enseignant != null)   {
+                if (Utils.auth.getCurrentUser() != null)   {
 
                     startMainActivity();
                     finish();
@@ -66,6 +66,18 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
     }
+
+    @Override
+    protected void onStart() {
+
+        super.onStart();
+
+        if (Utils.auth.getCurrentUser() != null)    {
+
+            loadEnseignantFromUser(Utils.auth.getCurrentUser());
+        }
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
@@ -115,6 +127,7 @@ public class LoginActivity extends AppCompatActivity {
                             .createSignInIntentBuilder()
                             .setProviders(Arrays.asList(new AuthUI.IdpConfig.Builder(AuthUI.GOOGLE_PROVIDER).build()))
                             .setTheme(R.style.BeHere)
+                            .setIsSmartLockEnabled(false)
                             .build(),
                     RC_SIGN_IN);
         }

@@ -54,7 +54,7 @@ public class Utils {
         database = FirebaseDatabase.getInstance();
 
         // Enable disk persistence (Offline)
-        database.setPersistenceEnabled(true);
+        //database.setPersistenceEnabled(true);
     }
 
     public final static String  CYCLES = "/Cycles", SPECIALITE_PROMOS = "/Specialite_Promos",

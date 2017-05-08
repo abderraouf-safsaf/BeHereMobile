@@ -44,8 +44,13 @@
     <dimen name="minus_icon_width">30dp</dimen>
     <dimen name="minus_icon_height">30dp</dimen>
     <dimen name="etudiant_nb_absences_text_size">20sp</dimen>
-    <dimen name="score_text_size">20sp</dimen>
+    <dimen name="score_text_size">18sp</dimen>
     <dimen name="seance_text_size">18sp</dimen>
     <dimen name="enseignant_image_view_width">70dp</dimen>
     <dimen name="enseignant_image_view_height">70dp</dimen>
+    <dimen name="etudiant_small_image_width">50dp</dimen>
+    <dimen name="etudiant_small_image_height">50dp</dimen>
+    <dimen name="like_image_button_width">20dp</dimen>
+    <dimen name="like_image_button_height">20dp</dimen>
+    <dimen name="date_seance_text_view">20sp</dimen>
 </resources>
