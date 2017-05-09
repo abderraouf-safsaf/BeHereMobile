@@ -1,4 +1,4 @@
-package com.example.teamloosers.behereandroid;
+package com.example.teamloosers.behereandroid.Fragments;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -15,10 +15,13 @@ import android.widget.AdapterView;
 import android.widget.TextView;
 
 import com.example.teamloosers.behereandroid.Activities.ConsultationEtudiantsActivity;
-import com.example.teamloosers.behereandroid.Activities.ListEtudiantsActivity;
+import com.example.teamloosers.behereandroid.Utils.FirebaseRecyclerAdapterViewer;
+import com.example.teamloosers.behereandroid.Utils.ItemViewHolder;
+import com.example.teamloosers.behereandroid.R;
 import com.example.teamloosers.behereandroid.Structures.Etudiant;
-import com.example.teamloosers.behereandroid.Structures.Groupe;
 import com.example.teamloosers.behereandroid.Structures.Module;
+import com.example.teamloosers.behereandroid.Structures.Structurable;
+import com.example.teamloosers.behereandroid.Utils.Utils;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.Query;
@@ -30,21 +33,21 @@ import jp.wasabeef.recyclerview.animators.SlideInRightAnimator;
  * Created by teamloosers on 06/05/17.
  */
 
-public class EtudiantsFragment extends Fragment {
+public class EtudiantsFragment <T extends Structurable> extends Fragment {
 
     private Module module;
-    private Groupe groupe;
+    private T structure;
 
     private RecyclerView etudiantsListRecyclerView;
 
     public EtudiantsFragment() {    }
 
-    public static EtudiantsFragment newInstance(Module module, Groupe groupe) {
+    public static <T extends Structurable> EtudiantsFragment newInstance(Module module, T structure) {
 
         EtudiantsFragment fragment = new EtudiantsFragment();
         Bundle args = new Bundle();
         args.putSerializable("module", module);
-        args.putSerializable("groupe", groupe);
+        args.putSerializable("structure", structure);
         fragment.setArguments(args);
         return fragment;
     }
@@ -56,7 +59,7 @@ public class EtudiantsFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_etudiants, container, false);
 
         module = (Module) getArguments().getSerializable("module");
-        groupe = (Groupe) getArguments().getSerializable("groupe");
+        structure = (T) getArguments().getSerializable("structure");
 
         etudiantsListRecyclerView = (RecyclerView) rootView.findViewById(R.id.etudiantsListRecyclerView);
 
@@ -88,10 +91,10 @@ public class EtudiantsFragment extends Fragment {
         loadingProgressDialog.setCancelable(false);
         loadingProgressDialog.setMessage(getResources().getString(R.string.chargement_etudiants_loading_message));
 
-        String pathToGroupe = Utils.firebasePath(Utils.CYCLES, groupe.getIdCycle(), groupe.getIdFilliere(), groupe.getIdPromo(),
-                groupe.getIdSection(), groupe.getId());
-        Query myRef = Utils.database.getReference(pathToGroupe).orderByChild("idCycle").
-                equalTo(groupe.getIdCycle());
+        String pathToStructure = Utils.firebasePath(Utils.CYCLES, structure.getIdCycle(), structure.getIdFilliere(), structure.getIdPromo(),
+                structure.getIdSection(), structure.getId());
+        Query myRef = Utils.database.getReference(pathToStructure).orderByChild("idCycle").
+                equalTo(structure.getIdCycle());
         myRef.keepSynced(true); // Keeping data fresh
 
         loadingProgressDialog.show();

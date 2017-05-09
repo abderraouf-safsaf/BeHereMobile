@@ -20,50 +20,6 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="9"
-                android:gravity="right|center"
-                android:orientation="horizontal"
-                android:weightSum="10">
-
-                <TextView
-                    android:id="@+id/dateSeanceTextView"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_weight="4"
-                    android:gravity="center"
-                    android:text="Date"
-                    android:textColor="@color/textSecondary"
-                    android:textSize="@dimen/date_seance_text_view"
-                    android:textStyle="bold" />
-
-                <Button
-                    android:id="@+id/modifierDateButton"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="right"
-                    android:layout_weight="3"
-                    android:background="@drawable/tw__transparent"
-                    android:gravity="center"
-                    android:text="@string/modifier_date_button_text"
-                    android:textColor="@color/textSecondary" />
-
-                <Button
-                    android:id="@+id/validerAppelButton"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="right"
-                    android:layout_weight="3"
-                    android:background="@drawable/tw__transparent"
-                    android:gravity="center"
-                    android:text="@string/valider_appel_button"
-                    android:textColor="@color/textSecondary" />
-
-            </LinearLayout>
-
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/etudiantsAppelListRecyclerView"
                 android:layout_width="match_parent"
@@ -78,12 +34,13 @@
     <android.support.design.widget.AppBarLayout
         android:id="@+id/app_bar"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:fitsSystemWindows="true"
+        android:layout_height="120dp"
+        android:background="@color/tw__transparent"
+        android:fitsSystemWindows="false"
         android:theme="@style/BeHere.AppBarOverlay">
 
         <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar2"
+            android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:layout_weight="1"
@@ -91,6 +48,42 @@
             app:popupTheme="@style/BeHere.PopupOverlay">
 
         </android.support.v7.widget.Toolbar>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:gravity="right|center"
+            android:orientation="horizontal"
+            android:weightSum="10">
+
+            <Button
+                android:id="@+id/modifierDateButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right|center"
+                android:layout_weight="7"
+                android:background="@drawable/tw__transparent"
+                android:gravity="center|start"
+                android:paddingLeft="40dp"
+                android:text="@string/modifier_date_button_text"
+                android:textColor="@color/colorAccent"
+                android:textSize="@dimen/date_seance_text_size" />
+
+            <Button
+                android:id="@+id/validerAppelButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right|center"
+                android:layout_weight="3"
+                android:background="@drawable/tw__transparent"
+                android:gravity="center"
+                android:text="@string/valider_appel_button"
+                android:textColor="@color/colorAccent" />
+
+        </LinearLayout>
+
     </android.support.design.widget.AppBarLayout>
 
 </android.support.design.widget.CoordinatorLayout>

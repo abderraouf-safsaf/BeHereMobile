@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">BeHereAndroid</string>
+    <string name="app_name">BeHere</string>
     <string name="sections">Sections:</string>
     <string name="groupes">Groupes:</string>
     <string name="title_activity_etudiants_list">EtudiantsListActivity</string>
@@ -70,7 +70,11 @@
     <string name="etudiants_tab_title">Etudiants</string>
     <string name="liste_des_seances_text">Liste des séances:</string>
     <string name="absences_text_view">Absences:</string>
-    <string name="etudiant_absences_text_view">Abs:</string>
+    <string name="etudiant_absences_text_view">absences</string>
     <string name="valider_appel_button">Valider</string>
-    <string name="modifier_date_button_text">Modifier</string>
+    <string name="modifier_date_button_text">Date</string>
+    <string name="chargement_modules_loading_message">Chargement de modules</string>
+    <string name="faire_appel_toolbar_title">Nouveau appel</string>
+    <string name="seance_absences_toolbar_title">Liste des absents</string>
+    <string name="sautentifier_text_view_text">S\'authentifier:</string>
 </resources>

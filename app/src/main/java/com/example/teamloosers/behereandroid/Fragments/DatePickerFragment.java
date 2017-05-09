@@ -1,4 +1,4 @@
-package com.example.teamloosers.behereandroid;
+package com.example.teamloosers.behereandroid.Fragments;
 
 import android.app.Dialog;
 import android.app.DatePickerDialog;

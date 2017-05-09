@@ -1,4 +1,4 @@
-package com.example.teamloosers.behereandroid;
+package com.example.teamloosers.behereandroid.Utils;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;

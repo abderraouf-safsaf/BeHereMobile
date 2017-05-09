@@ -16,15 +16,33 @@
         android:id="@+id/imageView3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="@drawable/tw__transparent"
+        android:scaleType="fitCenter"
         app:srcCompat="@drawable/esisba_logo" />
 
-    <Button
-        android:id="@+id/button2"
-        android:layout_width="wrap_content"
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="100dp" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginTop="130dp"
         android:gravity="center"
+        android:text="@string/sautentifier_text_view_text"
+        android:textColor="@color/textSecondary" />
+
+    <ImageButton
+        android:id="@+id/imageButton"
+        android:layout_width="@dimen/login_image_button_width"
+        android:layout_height="@dimen/login_image_button_height"
+        android:layout_gravity="center"
+        android:layout_margin="20dp"
+        android:background="@drawable/tw__transparent"
         android:onClick="startLogin"
-        android:text="Se connecter" />
+        android:scaleType="fitCenter"
+        app:srcCompat="@drawable/login_image_buuton" />
+
 </LinearLayout>

@@ -20,10 +20,12 @@
     <style name="BeHere" parent="AppTheme.NoActionBar">
         <item name="android:windowBackground">@android:color/white</item>
         <item name="android:textColor">@color/textPrimary</item>
+        <item name="android:fontFamily">@string/font_path</item>
     </style>
 
     <style name="BeHere.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="BeHere.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
+    <string name="font_path">font/Roboto-Light.ttf</string>
 </resources>

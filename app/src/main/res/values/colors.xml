@@ -2,8 +2,9 @@
 <resources>
     <!--BeHere style color -->
     <color name="colorPrimary">#009688</color>
-    <color name="colorPrimaryDark">#00796B</color>
-    <color name="colorAccent">#ff8652</color>
+    <color name="colorPrimaryDark">#00675b</color>
+    <color name="secondaryColor">#FBE9E7</color>
+    <color name="colorAccent">#ff8a65</color>
     <color name="textPrimary">#212121</color>
     <color name="textSecondary">#757575</color>
     <color name="divider">#BDBDBD</color>
@@ -13,8 +14,10 @@
     <color name="background">#ffffff</color>
     <color name="structure_button_text_color">#ffffff</color>
     <color name="etudiant_viewer_background_color">#e0f2f1</color>
-    <color name="une_absence">#f4c542</color>
-    <color name="plus_deux_absences">#ff0000</color>
+    <color name="une_absence">#ff8a65</color>
+    <color name="plus_deux_absences">#BF360C</color>
     <color name="deux_absences">#ff9811</color>
+    <color name="score_positif">#009688</color>
+    <color name="score_negatif">#BF360C</color>
 
 </resources>

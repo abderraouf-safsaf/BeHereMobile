@@ -1,4 +1,4 @@
-package com.example.teamloosers.behereandroid;
+package com.example.teamloosers.behereandroid.Fragments;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -6,20 +6,21 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.TextView;
 
-import com.example.teamloosers.behereandroid.Activities.ListEtudiantsActivity;
 import com.example.teamloosers.behereandroid.Activities.StructureActivity;
+import com.example.teamloosers.behereandroid.Utils.FirebaseRecyclerAdapterViewer;
+import com.example.teamloosers.behereandroid.Utils.ItemViewHolder;
+import com.example.teamloosers.behereandroid.R;
 import com.example.teamloosers.behereandroid.Structures.Groupe;
 import com.example.teamloosers.behereandroid.Structures.Module;
 import com.example.teamloosers.behereandroid.Structures.Section;
+import com.example.teamloosers.behereandroid.Utils.Utils;
 import com.google.firebase.database.Query;
 
 /**
@@ -107,7 +108,7 @@ public class MainFragment extends Fragment {
 
                 Intent groupeIntent = new Intent(getContext(), StructureActivity.class);
                 groupeIntent.putExtra("module", module);
-                groupeIntent.putExtra("section", adapter.getItem(position));
+                groupeIntent.putExtra("structure", adapter.getItem(position));
 
                 startActivity(groupeIntent);
             }
@@ -148,7 +149,7 @@ public class MainFragment extends Fragment {
 
                 Intent groupeIntent = new Intent(getContext(), StructureActivity.class);
                 groupeIntent.putExtra("module", module);
-                groupeIntent.putExtra("groupe", adapter.getItem(position));
+                groupeIntent.putExtra("structure", adapter.getItem(position));
 
                 startActivity(groupeIntent);
             }

@@ -1,22 +1,20 @@
-package com.example.teamloosers.behereandroid;
+package com.example.teamloosers.behereandroid.Utils;
 
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.RecyclerView;
 import android.util.Base64;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.example.teamloosers.behereandroid.R;
 import com.example.teamloosers.behereandroid.Structures.Enseignant;
 import com.example.teamloosers.behereandroid.Structures.Etudiant;
 import com.example.teamloosers.behereandroid.Structures.Identifiable;
 import com.example.teamloosers.behereandroid.Structures.Personne;
 import com.example.teamloosers.behereandroid.Structures.Ref;
-import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -46,15 +44,15 @@ public class Utils {
     public static Enseignant enseignant;
     static {
 
-        enseignant = new Enseignant("Badsi", "Hichem", Personne.HOMME);
-        enseignant.setId("4a04efee-0aa4-4756-bbee-78602a3ee9dc");
+        enseignant = new Enseignant("Medles", "Mourad", Personne.FEMME);
+        enseignant.setId("095d24da-6529-4cba-a7a6-1f3d4db1024a");
         enseignant.setEmail("safsaf.abderraouf@gmail.com");
 
         auth = FirebaseAuth.getInstance();
         database = FirebaseDatabase.getInstance();
 
         // Enable disk persistence (Offline)
-        //database.setPersistenceEnabled(true);
+        database.setPersistenceEnabled(true);
     }
 
     public final static String  CYCLES = "/Cycles", SPECIALITE_PROMOS = "/Specialite_Promos",

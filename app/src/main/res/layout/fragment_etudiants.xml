@@ -19,6 +19,7 @@
             android:layout_gravity="top"
             android:fadeScrollbars="false"
             android:padding="5dp"
+            android:scrollbarAlwaysDrawVerticalTrack="true"
             android:scrollbars="vertical"
             app:layout_behavior="@string/appbar_scrolling_view_behavior" />
     </LinearLayout>

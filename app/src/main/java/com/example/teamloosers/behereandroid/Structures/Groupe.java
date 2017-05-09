@@ -10,7 +10,7 @@ import java.util.Map;
 /**
  * Created by redjohn on 08/03/17.
  */
-public class Groupe extends Ref implements Serializable {
+public class Groupe extends Ref implements Structurable {
 
     private String idSection, idPromo, idSpecialite, idFilliere, idCycle;
     private int nbEtudiants;

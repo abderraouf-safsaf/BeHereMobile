@@ -6,7 +6,7 @@ import java.util.Map;
 /**
  * Created by redjohn on 08/03/17.
  */
-public class Section extends Ref {
+public class Section extends Ref implements Structurable {
 
     private String idPromo, idSpecialite, idFilliere, idCycle;
     private int nbEtudiants;
@@ -21,6 +21,12 @@ public class Section extends Ref {
 
     public String getIdPromo() {
         return idPromo;
+    }
+
+    @Override
+    public String getIdSection() {
+
+        return getId();
     }
 
     public void setIdPromo(String idPromo) {

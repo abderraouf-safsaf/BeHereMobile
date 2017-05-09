@@ -1,15 +1,16 @@
 package com.example.teamloosers.behereandroid.Structures;
 
 
-import com.example.teamloosers.behereandroid.Utils;
+import android.support.annotation.NonNull;
+
+import com.example.teamloosers.behereandroid.Utils.Utils;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public class Seance extends Ref {
+public class Seance extends Ref implements Comparable {
 
     public static final String TD = "/Groupes", COURS = "/Sections";
     private String idSection, idGroupe;
@@ -103,5 +104,15 @@ public class Seance extends Ref {
         DatabaseReference strucutreRef = database.getReference(pathToEnseignant_Module);
 
         strucutreRef.updateChildren(this.getMap());
+    }
+
+    @Override
+    public int compareTo(@NonNull Object o) {
+
+        Seance seance = (Seance) o;
+        String currentDate = getDate();
+        String date = seance.getDate();
+
+        return currentDate.compareTo(date);
     }
 }

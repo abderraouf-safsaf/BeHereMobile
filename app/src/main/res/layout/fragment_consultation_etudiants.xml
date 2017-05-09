@@ -8,14 +8,16 @@
     android:gravity="top"
     android:orientation="vertical"
     android:padding="5dp"
+    android:weightSum="15"
     app:layout_anchorGravity="center"
     app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
     <TableLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_gravity="top"
-        android:gravity="center">
+        android:layout_weight="10"
+        android:gravity="top|center">
 
         <TableRow
             android:layout_width="match_parent"
@@ -38,7 +40,7 @@
 
         <TableRow
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:gravity="center">
 
             <TextView
@@ -53,7 +55,7 @@
 
         <TableRow
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:gravity="center">
 
             <TextView
@@ -70,7 +72,7 @@
 
         <TableRow
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:gravity="center">
 
             <TextView
@@ -87,47 +89,47 @@
 
         <TableRow
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:gravity="right"
             android:weightSum="10">
 
             <TextView
                 android:id="@+id/etudiantScoreTextView"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_weight="8"
+                android:layout_weight="6"
                 android:gravity="center"
                 android:text="0"
-                android:textSize="@dimen/score_text_size"
-                android:textStyle="bold" />
+                android:textSize="@dimen/score_text_size" />
 
             <ImageButton
                 android:id="@+id/minusImageButton"
-                android:layout_width="0dp"
+                android:layout_width="@dimen/minus_icon_width"
                 android:layout_height="@dimen/minus_icon_height"
                 android:layout_gravity="center"
-                android:layout_weight="1"
+                android:layout_weight="2"
                 android:adjustViewBounds="true"
                 android:background="@drawable/tw__transparent"
                 android:scaleType="fitCenter"
-                app:srcCompat="@drawable/minus_icon" />
+                app:srcCompat="@drawable/dislike_icon" />
 
             <ImageButton
                 android:id="@+id/plusImageButton"
-                android:layout_width="0dp"
+                android:layout_width="@dimen/plus_icon_width"
                 android:layout_height="@dimen/plus_icon_height"
                 android:layout_gravity="right"
-                android:layout_weight="1"
+                android:layout_marginRight="10dp"
+                android:layout_weight="2"
                 android:background="@drawable/tw__transparent"
                 android:scaleType="fitCenter"
-                app:srcCompat="@drawable/plus_icon" />
+                app:srcCompat="@drawable/like_icon" />
 
         </TableRow>
 
         <TableRow
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content">
 
             <TextView
                 android:id="@+id/textView"
@@ -150,14 +152,15 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/etudiantsAbsencesRecyclerView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
         android:layout_gravity="center"
         android:layout_margin="5dp"
+        android:layout_weight="5"
         android:padding="5dp"
         android:scrollIndicators="left"
         android:scrollbarAlwaysDrawHorizontalTrack="false"
-        android:scrollbarAlwaysDrawVerticalTrack="true"
 
+        android:scrollbarAlwaysDrawVerticalTrack="true"
         android:scrollbars="vertical"
         android:verticalScrollbarPosition="left"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />

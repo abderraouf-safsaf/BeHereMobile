@@ -1,12 +1,6 @@
 package com.example.teamloosers.behereandroid.Structures;
 
-import com.bumptech.glide.util.Util;
-import com.example.teamloosers.behereandroid.Utils;
-import com.google.firebase.database.DatabaseReference;
-
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by redjohn on 08/03/17.

@@ -21,7 +21,7 @@ import com.example.teamloosers.behereandroid.R;
 import com.example.teamloosers.behereandroid.Structures.Absence;
 import com.example.teamloosers.behereandroid.Structures.Etudiant;
 import com.example.teamloosers.behereandroid.Structures.Seance;
-import com.example.teamloosers.behereandroid.Utils;
+import com.example.teamloosers.behereandroid.Utils.Utils;
 
 import java.util.ArrayList;
 import java.util.HashMap;

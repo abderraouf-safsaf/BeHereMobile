@@ -3,8 +3,6 @@ package com.example.teamloosers.behereandroid.Activities;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -17,31 +15,28 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.teamloosers.behereandroid.FirebaseRecyclerAdapterViewer;
-import com.example.teamloosers.behereandroid.ItemViewHolder;
+import com.example.teamloosers.behereandroid.Utils.FirebaseRecyclerAdapterViewer;
+import com.example.teamloosers.behereandroid.Utils.ItemViewHolder;
 import com.example.teamloosers.behereandroid.R;
 import com.example.teamloosers.behereandroid.Structures.Absence;
 import com.example.teamloosers.behereandroid.Structures.Etudiant;
-import com.example.teamloosers.behereandroid.Structures.Groupe;
 import com.example.teamloosers.behereandroid.Structures.Module;
 import com.example.teamloosers.behereandroid.Structures.Seance;
-import com.example.teamloosers.behereandroid.Utils;
-import com.firebase.ui.FirebaseUI;
-import com.google.firebase.FirebaseApp;
+import com.example.teamloosers.behereandroid.Structures.Structurable;
+import com.example.teamloosers.behereandroid.Utils.Utils;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
-import org.w3c.dom.Text;
-
-public class SeanceAbsencesActivity extends AppCompatActivity {
+public class SeanceAbsencesActivity<T extends Structurable> extends AppCompatActivity {
 
     private Module module;
-    private Groupe groupe;
+    private T structure;
     private Seance seance;
 
+    private Toolbar toolbar;
     private RecyclerView seanceAbsencesRecyclerView;
 
     @Override
@@ -51,10 +46,10 @@ public class SeanceAbsencesActivity extends AppCompatActivity {
         setContentView(R.layout.activity_seance_absences);
 
         this.module = (Module) getIntent().getExtras().getSerializable("module");
-        this.groupe = (Groupe) getIntent().getExtras().getSerializable("groupe");
+        this.structure = (T) getIntent().getExtras().getSerializable("structure");
         this.seance = (Seance) getIntent().getExtras().getSerializable("seance");
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
 
@@ -73,6 +68,12 @@ public class SeanceAbsencesActivity extends AppCompatActivity {
     protected void onStart() {
 
         super.onStart();
+
+        String toolbarTitle = getString(R.string.seance_absences_toolbar_title);
+        toolbar.setTitle(toolbarTitle);
+        String toolbarSubTitle = String.format("%s: %s: %s", module.getDesignation(),
+                structure.getDesignation(), seance.getDate());
+        toolbar.setSubtitle(toolbarSubTitle);
 
         loadSeanceAbsences();
     }

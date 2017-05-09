@@ -1,6 +1,6 @@
 package com.example.teamloosers.behereandroid.Structures;
 
-import com.example.teamloosers.behereandroid.Utils;
+import com.example.teamloosers.behereandroid.Utils.Utils;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 

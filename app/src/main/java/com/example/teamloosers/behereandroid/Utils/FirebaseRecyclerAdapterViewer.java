@@ -1,9 +1,10 @@
-package com.example.teamloosers.behereandroid;
+package com.example.teamloosers.behereandroid.Utils;
 
-import android.view.View;
-import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 
+import com.example.teamloosers.behereandroid.R;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.Query;
@@ -18,6 +19,8 @@ public abstract class FirebaseRecyclerAdapterViewer<T, VH extends ItemViewHolder
         extends FirebaseRecyclerAdapter<T, VH> {
 
     private AdapterView.OnItemClickListener listener;
+    private int lastPosition = -1;
+
     /**
      * @param modelClass      Firebase will marshall the data at a location into
      *                        an instance of a class that you provide
@@ -57,6 +60,7 @@ public abstract class FirebaseRecyclerAdapterViewer<T, VH extends ItemViewHolder
     public void onBindViewHolder(VH viewHolder, int position) {
 
         super.onBindViewHolder(viewHolder, position);
+
         viewHolder.bind(viewHolder.itemView, listener);
     }
 

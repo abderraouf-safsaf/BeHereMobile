@@ -1,10 +1,8 @@
-package com.example.teamloosers.behereandroid;
+package com.example.teamloosers.behereandroid.Fragments;
 
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -23,13 +21,15 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.teamloosers.behereandroid.Utils.ItemViewHolder;
+import com.example.teamloosers.behereandroid.R;
 import com.example.teamloosers.behereandroid.Structures.Absence;
 import com.example.teamloosers.behereandroid.Structures.Etudiant;
 import com.example.teamloosers.behereandroid.Structures.Module;
+import com.example.teamloosers.behereandroid.Utils.Utils;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
@@ -105,24 +105,7 @@ public class ConsultationEtudiantFragment extends Fragment {
         prenomTextView.setText(etudiant.getPrenom());
         emailTextView.setText(etudiant.getEmail());
 
-        String pathToEtudiantScore = Utils.firebasePath(Utils.CYCLES, etudiant.getIdCycle(), etudiant.getIdFilliere(),
-                etudiant.getIdPromo(), etudiant.getIdSection(), etudiant.getIdGroupe(), etudiant.getId(), module.getId(),
-                Utils.SCORE);
-
-        Query scoreRef = Utils.database.getReference(pathToEtudiantScore);
-        scoreRef.keepSynced(true); // Keeping data fresh
-
-        scoreRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-
-                Long score = (Long) dataSnapshot.getValue();
-                score = (score == null)? 0: score;
-                etudiantScoreTextView.setText(String.valueOf(score));
-            }
-            @Override
-            public void onCancelled(DatabaseError databaseError) {  }
-        });
+        loadEtudiantScore(etudiantScoreTextView);
 
         plusImageButton.setOnClickListener(new View.OnClickListener() {
 
@@ -138,6 +121,41 @@ public class ConsultationEtudiantFragment extends Fragment {
                 decrementerScore(etudiant);
             }
         });
+    }
+    private void loadEtudiantScore(final TextView etudiantScoreTextView) {
+
+        String pathToEtudiantScore = Utils.firebasePath(Utils.CYCLES, etudiant.getIdCycle(), etudiant.getIdFilliere(),
+                etudiant.getIdPromo(), etudiant.getIdSection(), etudiant.getIdGroupe(), etudiant.getId(), module.getId(),
+                Utils.SCORE);
+
+        Query scoreRef = Utils.database.getReference(pathToEtudiantScore);
+        scoreRef.keepSynced(true); // Keeping data fresh
+
+        scoreRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                Long score = (Long) dataSnapshot.getValue();
+                score = (score == null)? 0: score;
+                displayScoreOnTextView(etudiantScoreTextView, score);
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {  }
+        });
+    }
+    private void displayScoreOnTextView(TextView etudiantNbAbsencesTextView, long etudiantScore) {
+
+        int textColor;
+
+        if (etudiantScore > 0)
+            textColor = ContextCompat.getColor(getContext(), R.color.score_positif);
+        else if (etudiantScore < 0)
+            textColor = ContextCompat.getColor(getContext(), R.color.score_negatif);
+        else
+            textColor = ContextCompat.getColor(getContext(), R.color.textSecondary);
+
+        etudiantNbAbsencesTextView.setText(String.format("%d", etudiantScore));
+        etudiantNbAbsencesTextView.setTextColor(textColor);
     }
     private void loadAbsecnces() {
 

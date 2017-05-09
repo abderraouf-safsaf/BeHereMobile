@@ -14,16 +14,14 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.TextView;
 
-import com.bumptech.glide.util.Util;
-import com.example.teamloosers.behereandroid.DatePickerFragment;
-import com.example.teamloosers.behereandroid.FirebaseRecyclerAdapterViewer;
-import com.example.teamloosers.behereandroid.ItemViewHolder;
+import com.example.teamloosers.behereandroid.Fragments.DatePickerFragment;
+import com.example.teamloosers.behereandroid.Structures.Structurable;
+import com.example.teamloosers.behereandroid.Utils.FirebaseRecyclerAdapterViewer;
+import com.example.teamloosers.behereandroid.Utils.ItemViewHolder;
 import com.example.teamloosers.behereandroid.R;
-import com.example.teamloosers.behereandroid.Structures.Etudiant;
-import com.example.teamloosers.behereandroid.Structures.Groupe;
 import com.example.teamloosers.behereandroid.Structures.Module;
 import com.example.teamloosers.behereandroid.Structures.Seance;
-import com.example.teamloosers.behereandroid.Utils;
+import com.example.teamloosers.behereandroid.Utils.Utils;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.Query;
@@ -31,10 +29,10 @@ import com.google.firebase.database.ValueEventListener;
 
 import jp.wasabeef.recyclerview.animators.SlideInRightAnimator;
 
-public class SeancesActivity extends AppCompatActivity {
+public class SeancesActivity<T extends Structurable> extends AppCompatActivity {
 
     private Module module;
-    private Groupe groupe;
+    private T structure;
     private String typeSeance;
 
     private RecyclerView seancesRecyclerView;
@@ -47,7 +45,7 @@ public class SeancesActivity extends AppCompatActivity {
 
 
         this.module = (Module) getIntent().getExtras().getSerializable("module");
-        this.groupe = (Groupe) getIntent().getExtras().getSerializable("groupe");
+        this.structure = (T) getIntent().getExtras().getSerializable("structure");
         this.typeSeance = getIntent().getExtras().getString("typeSeance");
 
         seancesRecyclerView = (RecyclerView) findViewById(R.id.seancesRecyclerView);
@@ -76,7 +74,7 @@ public class SeancesActivity extends AppCompatActivity {
 
                 Bundle args = new Bundle();
                 args.putSerializable("module", module);
-                args.putSerializable("groupe", groupe);
+                args.putSerializable("structure", structure);
                 nouvelSeanceDialog.setArguments(args);
 
                 nouvelSeanceDialog.show(getSupportFragmentManager(), "datePicker");
@@ -98,9 +96,9 @@ public class SeancesActivity extends AppCompatActivity {
         loadingProgressDialog.setCancelable(false);
         loadingProgressDialog.setMessage(getResources().getString(R.string.chargement_seances_loading_message));
 
-        String pathToGroupe = Utils.firebasePath(Utils.ENSEIGNANT_MODULE, Utils.enseignant.getId(),
-                module.getId(), typeSeance, groupe.getId());
-        Query myRef = Utils.database.getReference(pathToGroupe).orderByChild("idModule").
+        String pathToStructure = Utils.firebasePath(Utils.ENSEIGNANT_MODULE, Utils.enseignant.getId(),
+                module.getId(), typeSeance, structure.getId());
+        Query myRef = Utils.database.getReference(pathToStructure).orderByChild("idModule").
                 equalTo(module.getId());
         myRef.keepSynced(true); // Keeping data fresh
 
@@ -132,7 +130,7 @@ public class SeancesActivity extends AppCompatActivity {
                 Intent intent = new Intent(SeancesActivity.this, SeanceAbsencesActivity.class);
 
                 intent.putExtra("module", module);
-                intent.putExtra("groupe", groupe);
+                intent.putExtra("structure", structure);
                 intent.putExtra("seance", seancesAdapter.getItem(position));
 
                 startActivity(intent);
@@ -143,7 +141,7 @@ public class SeancesActivity extends AppCompatActivity {
     private void setNbAbsenceTextView(final TextView seanceNbAbsencesTextView, Seance seance) {
 
         String pathToSeance = Utils.firebasePath(Utils.ENSEIGNANT_MODULE, Utils.enseignant.getId(),
-                module.getId(),  seance.getTypeSeance(), groupe.getId(), seance.getId());
+                module.getId(),  seance.getTypeSeance(), structure.getId(), seance.getId());
 
         Query seanceRef = Utils.database.getReference(pathToSeance).orderByChild("idModule")
                 .equalTo(module.getId());

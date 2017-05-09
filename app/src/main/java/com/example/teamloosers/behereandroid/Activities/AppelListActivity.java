@@ -1,14 +1,10 @@
 package com.example.teamloosers.behereandroid.Activities;
 
 import android.app.ProgressDialog;
-import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
@@ -17,13 +13,9 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.text.Html;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -31,40 +23,36 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.teamloosers.behereandroid.DatePickerFragment;
-import com.example.teamloosers.behereandroid.FirebaseRecyclerAdapterViewer;
-import com.example.teamloosers.behereandroid.ItemViewHolder;
+import com.example.teamloosers.behereandroid.Fragments.DatePickerFragment;
+import com.example.teamloosers.behereandroid.Utils.FirebaseRecyclerAdapterViewer;
+import com.example.teamloosers.behereandroid.Utils.ItemViewHolder;
 import com.example.teamloosers.behereandroid.R;
 import com.example.teamloosers.behereandroid.Structures.Absence;
 import com.example.teamloosers.behereandroid.Structures.Etudiant;
-import com.example.teamloosers.behereandroid.Structures.Groupe;
 import com.example.teamloosers.behereandroid.Structures.Module;
 import com.example.teamloosers.behereandroid.Structures.Seance;
-import com.example.teamloosers.behereandroid.Utils;
+import com.example.teamloosers.behereandroid.Structures.Structurable;
+import com.example.teamloosers.behereandroid.Utils.Utils;
 import com.firebase.ui.database.ChangeEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
-import org.w3c.dom.Text;
-
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.HashMap;
 
-public class AppelListActivity extends AppCompatActivity implements DatePickerFragment.OnDateSelectedListener {
+public class AppelListActivity <T extends Structurable> extends AppCompatActivity implements DatePickerFragment.OnDateSelectedListener {
 
     private Module module;
-    private Groupe groupe;
+    private T structure;
     private Seance seance;
 
     private int annee, mois, jour;
 
     private CoordinatorLayout mainLayout;
+    private Toolbar toolbar;
     private RecyclerView etudiantAppelListRecyclerView;
     private Button validerAppelButton, modifierDateButton;
-    private TextView dateSeanceTextView;
     private FloatingActionButton validerAppelFloatButton;
 
     @Override
@@ -79,17 +67,17 @@ public class AppelListActivity extends AppCompatActivity implements DatePickerFr
         setContentView(R.layout.activity_appel_list);
 
         this.module = (Module) getIntent().getExtras().getSerializable("module");
-        this.groupe = (Groupe) getIntent().getExtras().getSerializable("groupe");
+        this.structure = (T) getIntent().getExtras().getSerializable("structure");
 
         Calendar calendar = Calendar.getInstance();
         annee = calendar.get(Calendar.YEAR);
         mois = calendar.get(Calendar.MONTH);
         jour = calendar.get(Calendar.DAY_OF_MONTH);
 
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
         etudiantAppelListRecyclerView = (RecyclerView) findViewById(R.id.etudiantsAppelListRecyclerView);
         validerAppelButton = (Button) findViewById(R.id.validerAppelButton);
         modifierDateButton = (Button) findViewById(R.id.modifierDateButton);
-        dateSeanceTextView = (TextView) findViewById(R.id.dateSeanceTextView);
         mainLayout = (CoordinatorLayout) findViewById(R.id.mainLayout);
 
         updateDateSeanceTextView();
@@ -126,13 +114,19 @@ public class AppelListActivity extends AppCompatActivity implements DatePickerFr
     }
 
     private void updateDateSeanceTextView() {
-        dateSeanceTextView.setText(String.format("%s/%s/%s", jour, mois, annee));
+        modifierDateButton.setText(String.format("%s/%s/%s", jour, mois, annee));
     }
 
     @Override
     protected void onStart() {
 
         super.onStart();
+
+        String toolbarTitle = getString(R.string.faire_appel_toolbar_title);
+        toolbar.setTitle(toolbarTitle);
+        String toolbarSubTitle = String.format("%s: %s", module.getDesignation(),
+                structure.getDesignation());
+        toolbar.setSubtitle(toolbarSubTitle);
 
         loadEtudiant();
     }
@@ -142,10 +136,10 @@ public class AppelListActivity extends AppCompatActivity implements DatePickerFr
         loadingProgressDialog.setCancelable(false);
         loadingProgressDialog.setMessage(getResources().getString(R.string.chargement_etudiants_loading_message));
 
-        String pathToGroupe = Utils.firebasePath(Utils.CYCLES, groupe.getIdCycle(), groupe.getIdFilliere(), groupe.getIdPromo(),
-                groupe.getIdSection(), groupe.getId());
+        String pathToGroupe = Utils.firebasePath(Utils.CYCLES, structure.getIdCycle(), structure.getIdFilliere(), structure.getIdPromo(),
+                structure.getIdSection(), structure.getId());
         Query myRef =  Utils.database.getReference(pathToGroupe).orderByChild("idCycle").equalTo(
-                groupe.getIdCycle());
+                structure.getIdCycle());
         myRef.keepSynced(true); // Keeping data fresh
 
         loadingProgressDialog.show();
@@ -215,11 +209,28 @@ public class AppelListActivity extends AppCompatActivity implements DatePickerFr
 
                 Long score = (Long) dataSnapshot.getValue();
                 score = (score == null)? 0: score;
-                etudiantScoreTextView.setText(String.valueOf(score));
+                displayScoreOnTextView(etudiantScoreTextView, score);
             }
             @Override
             public void onCancelled(DatabaseError databaseError) {  }
         });
+    }
+    private void displayScoreOnTextView(TextView etudiantNbAbsencesTextView, long etudiantScore) {
+
+        int textColor;
+
+        if (etudiantScore > 0)
+            textColor = ContextCompat.getColor(this, R.color.score_positif);
+        else if (etudiantScore < 0)
+            textColor = ContextCompat.getColor(this, R.color.score_negatif);
+        else
+            textColor = ContextCompat.getColor(this, R.color.textSecondary);
+
+        String prefix = (etudiantScore > 0)? "+": "";
+        etudiantNbAbsencesTextView.setText(String.format("%s%d",
+                prefix, etudiantScore));
+
+        etudiantNbAbsencesTextView.setTextColor(textColor);
     }
     private void incrementerScore(Etudiant etudiant) {
 
@@ -308,7 +319,7 @@ public class AppelListActivity extends AppCompatActivity implements DatePickerFr
         seance = new Seance(jour, mois, annee);
         seance.setId(Utils.generateId());
         seance.setIdEnseignant(Utils.enseignant.getId());
-        seance.setIdGroupe(groupe.getId());
+        seance.setIdGroupe(structure.getId());
         seance.setIdModule(module.getId());
         seance.setTypeSeance(Seance.TD);
         seance.ajouterSeance(Utils.database);

@@ -1,4 +1,4 @@
-package com.example.teamloosers.behereandroid;
+package com.example.teamloosers.behereandroid.Fragments;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -6,7 +6,9 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,13 +18,19 @@ import android.widget.TextView;
 
 import com.example.teamloosers.behereandroid.Activities.AppelListActivity;
 import com.example.teamloosers.behereandroid.Activities.SeanceAbsencesActivity;
-import com.example.teamloosers.behereandroid.Structures.Groupe;
+import com.example.teamloosers.behereandroid.Utils.FirebaseRecyclerAdapterViewer;
+import com.example.teamloosers.behereandroid.Utils.ItemViewHolder;
+import com.example.teamloosers.behereandroid.R;
 import com.example.teamloosers.behereandroid.Structures.Module;
 import com.example.teamloosers.behereandroid.Structures.Seance;
+import com.example.teamloosers.behereandroid.Structures.Structurable;
+import com.example.teamloosers.behereandroid.Utils.Utils;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+
+import java.util.Collections;
 
 import jp.wasabeef.recyclerview.animators.SlideInUpAnimator;
 
@@ -30,24 +38,22 @@ import jp.wasabeef.recyclerview.animators.SlideInUpAnimator;
  * Created by teamloosers on 06/05/17.
  */
 
-public class SeancesFragment extends Fragment {
+public class SeancesFragment<T extends Structurable> extends Fragment {
 
     private Module module;
-    private Groupe groupe;
+    private T structure;
     private String typeSeance;
 
     private RecyclerView seancesRecyclerView;
 
-    private FloatingActionButton nouveauAppelFloatButton;
-
     public SeancesFragment() {    }
 
-    public static SeancesFragment newInstance(Module module, Groupe groupe, String typeSeance) {
+    public static <T extends Structurable> SeancesFragment newInstance(Module module, T structure, String typeSeance) {
 
         SeancesFragment fragment = new SeancesFragment();
         Bundle args = new Bundle();
         args.putSerializable("module", module);
-        args.putSerializable("groupe", groupe);
+        args.putSerializable("structure", structure);
         args.putSerializable("typeSeance", typeSeance);
         fragment.setArguments(args);
         return fragment;
@@ -60,31 +66,23 @@ public class SeancesFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_seances, container, false);
 
         module = (Module) getArguments().getSerializable("module");
-        groupe = (Groupe) getArguments().getSerializable("groupe");
+        structure = (T) getArguments().getSerializable("structure");
         typeSeance = getArguments().getString("typeSeance");
 
         seancesRecyclerView = (RecyclerView) rootView.findViewById(R.id.seancesRecyclerView);
 
         SlideInUpAnimator animator = new SlideInUpAnimator();
-        animator.setAddDuration(100);
+        animator.setAddDuration(200);
         seancesRecyclerView.setItemAnimator(animator);
 
-        GridLayoutManager seancesGridLayoutManager = new GridLayoutManager(getContext(), 2);
-        seancesRecyclerView.setLayoutManager(seancesGridLayoutManager);
+        LinearLayoutManager seancesLinearLayoutManager = new LinearLayoutManager(getContext());
+        seancesRecyclerView.setLayoutManager(seancesLinearLayoutManager);
 
-        nouveauAppelFloatButton = (FloatingActionButton) rootView.findViewById(R.id.nouveauAppelFlatButton);
-        nouveauAppelFloatButton.setOnClickListener(new View.OnClickListener() {
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getContext(),
+                seancesLinearLayoutManager.getOrientation());
+        dividerItemDecoration.setDrawable(ContextCompat.getDrawable(getContext(), R.drawable.recyclerview_divider));
+        seancesRecyclerView.addItemDecoration(dividerItemDecoration);
 
-            @Override
-            public void onClick(View v) {
-
-                Intent appelListIntent = new Intent(getContext(), AppelListActivity.class);
-                appelListIntent.putExtra("module", module);
-                appelListIntent.putExtra("groupe", groupe);
-
-                startActivity(appelListIntent);
-            }
-        });
         return rootView;
     }
     @Override
@@ -100,10 +98,10 @@ public class SeancesFragment extends Fragment {
         loadingProgressDialog.setCancelable(false);
         loadingProgressDialog.setMessage(getResources().getString(R.string.chargement_seances_loading_message));
 
-        String pathToGroupe = Utils.firebasePath(Utils.ENSEIGNANT_MODULE, Utils.enseignant.getId(),
-                module.getId(), typeSeance, groupe.getId());
-        Query myRef = Utils.database.getReference(pathToGroupe).orderByChild("idModule").
-                equalTo(module.getId());
+        String pathToStructure = Utils.firebasePath(Utils.ENSEIGNANT_MODULE, Utils.enseignant.getId(),
+                module.getId(), typeSeance, structure.getId());
+        Query myRef = Utils.database.getReference(pathToStructure).orderByChild("date").
+                startAt(0);
         myRef.keepSynced(true); // Keeping data fresh
 
         loadingProgressDialog.show();
@@ -134,18 +132,19 @@ public class SeancesFragment extends Fragment {
                 Intent intent = new Intent(getContext(), SeanceAbsencesActivity.class);
 
                 intent.putExtra("module", module);
-                intent.putExtra("groupe", groupe);
+                intent.putExtra("structure", structure);
                 intent.putExtra("seance", seancesAdapter.getItem(position));
 
                 startActivity(intent);
             }
         });
+
         seancesRecyclerView.setAdapter(seancesAdapter);
     }
     private void setNbAbsenceTextView(final TextView seanceNbAbsencesTextView, Seance seance) {
 
         String pathToSeance = Utils.firebasePath(Utils.ENSEIGNANT_MODULE, Utils.enseignant.getId(),
-                module.getId(),  seance.getTypeSeance(), groupe.getId(), seance.getId());
+                module.getId(),  seance.getTypeSeance(), structure.getId(), seance.getId());
 
         Query seanceRef = Utils.database.getReference(pathToSeance).orderByChild("idModule")
                 .equalTo(module.getId());
@@ -169,10 +168,10 @@ public class SeancesFragment extends Fragment {
         switch (Integer.valueOf(String.format("%d", seanceNbAbsences))) {
 
             case 0:
-                textColor = ContextCompat.getColor(getContext(), R.color.white);
+                textColor = ContextCompat.getColor(getContext(), R.color.textSecondary);
                 break;
             case 1:
-                textColor = ContextCompat.getColor(getContext(), R.color.white);
+                textColor = ContextCompat.getColor(getContext(), R.color.textSecondary);
                 break;
             case 2:
                 textColor = ContextCompat.getColor(getContext(), R.color.deux_absences);
@@ -183,7 +182,7 @@ public class SeancesFragment extends Fragment {
         seanceNbAbsencesTextView.setTextColor(textColor);
     }
 
-    public static class SeanceViewHolder extends ItemViewHolder{
+    public static class SeanceViewHolder extends ItemViewHolder {
 
         TextView dateSeanceTextView, seanceNbAbsencesTextView;
         public SeanceViewHolder(View itemView) {

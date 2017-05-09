@@ -1,4 +1,4 @@
-package com.example.teamloosers.behereandroid;
+package com.example.teamloosers.behereandroid.Utils;
 
 import java.util.Date;
 import java.util.Properties;

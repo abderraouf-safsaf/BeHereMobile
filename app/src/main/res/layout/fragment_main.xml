@@ -27,6 +27,7 @@
             android:adjustViewBounds="true"
             android:background="@drawable/tw__transparent"
             android:scaleType="fitCenter"
+            android:visibility="visible"
             app:srcCompat="@drawable/left_arrow_icon" />
 
         <TextView
@@ -34,6 +35,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="9"
+            android:alpha="0.8"
             android:gravity="center"
             android:text="TextView"
             android:textSize="@dimen/module_designation_text_size"
@@ -48,6 +50,7 @@
             android:adjustViewBounds="true"
             android:background="@drawable/tw__transparent"
             android:scaleType="fitCenter"
+            android:visibility="visible"
             app:srcCompat="@drawable/right_arrow_icon" />
 
     </LinearLayout>
@@ -57,14 +60,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
-        android:text="@string/sections" />
+        android:text="@string/sections"
+        android:textColor="@color/textSecondary" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/sectionsRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_gravity="center"
-        android:layout_weight="3"
+        android:layout_weight="4"
         android:padding="5dp"
         android:scrollbars="vertical"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
@@ -74,14 +78,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
-        android:text="@string/groupes" />
+        android:text="@string/groupes"
+        android:textColor="@color/textSecondary" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/groupesRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_gravity="center"
-        android:layout_weight="6"
+        android:layout_weight="5"
         android:padding="5dp"
         android:scrollbars="vertical"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
