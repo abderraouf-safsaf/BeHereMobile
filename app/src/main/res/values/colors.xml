@@ -19,5 +19,6 @@
     <color name="deux_absences">#ff9811</color>
     <color name="score_positif">#009688</color>
     <color name="score_negatif">#BF360C</color>
+    <color name="absence_justifier_background_color">#E8F5E9</color>
 
 </resources>

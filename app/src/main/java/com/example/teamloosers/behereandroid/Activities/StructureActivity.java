@@ -3,6 +3,7 @@ package com.example.teamloosers.behereandroid.Activities;
 import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
@@ -26,8 +27,8 @@ public class StructureActivity <T extends Structurable> extends AppCompatActivit
     private T structure;
 
     private Toolbar toolbar;
-    private SectionsPagerAdapter mSectionsPagerAdapter;
-    private ViewPager mViewPager;
+    public SectionsPagerAdapter mSectionsPagerAdapter;
+    public ViewPager mViewPager;
     private FloatingActionButton nouveauAppelFloatButton;
 
     @Override
@@ -36,10 +37,13 @@ public class StructureActivity <T extends Structurable> extends AppCompatActivit
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_structure);
 
+
         module = (Module) getIntent().getExtras().getSerializable("module");
         structure = (T) getIntent().getExtras().getSerializable("structure");
         toolbar = (Toolbar) findViewById(R.id.toolbar);
+
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
@@ -65,16 +69,23 @@ public class StructureActivity <T extends Structurable> extends AppCompatActivit
     }
 
     @Override
+    public boolean onSupportNavigateUp() {
+
+        finish();
+        return true;
+    }
+
+    @Override
     protected void onStart() {
 
         super.onStart();
 
-        String toolbarTitle = String.format("%s: %s", module.getDesignation(),
+        String toolbarTitle = String.format("%s - %s", module.getDesignation(),
                 structure.getDesignation());
-        toolbar.setSubtitle(toolbarTitle);
+        getSupportActionBar().setTitle(toolbarTitle);
     }
 
-    public class SectionsPagerAdapter extends FragmentPagerAdapter {
+    public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
 
         public SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
@@ -107,5 +118,7 @@ public class StructureActivity <T extends Structurable> extends AppCompatActivit
             }
             return null;
         }
+
+
     }
 }

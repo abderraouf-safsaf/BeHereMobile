@@ -52,7 +52,7 @@
         android:layout_column="2"
         android:layout_columnWeight="0"
         android:layout_gravity="center"
-        android:layout_row="1"
+        android:layout_row="0"
         android:layout_rowWeight="1"
         android:checked="false"
         android:gravity="center"
@@ -72,7 +72,7 @@
         android:layout_column="2"
         android:layout_columnWeight="0"
         android:layout_gravity="left|center"
-        android:layout_row="0"
+        android:layout_row="1"
         android:layout_rowWeight="1"
         android:gravity="center"
         android:orientation="horizontal">
@@ -94,7 +94,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginLeft="5dp"
+            android:layout_marginLeft="2dp"
             android:gravity="center"
             android:text="@string/etudiant_absences_text_view"
             android:textColor="@color/textSecondary" />
@@ -105,7 +105,7 @@
         android:layout_height="wrap_content"
         android:layout_column="1"
         android:layout_columnWeight="0"
-        android:layout_gravity="center"
+        android:layout_gravity="left"
         android:layout_row="1"
         android:layout_rowWeight="1"
         android:gravity="center"
@@ -142,6 +142,7 @@
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:layout_weight="1"
+            android:adjustViewBounds="true"
             android:background="@drawable/tw__transparent"
             android:scaleType="fitCenter"
             app:srcCompat="@drawable/like_icon" />

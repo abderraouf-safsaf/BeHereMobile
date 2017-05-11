@@ -5,7 +5,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.ViewPager;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -18,6 +20,7 @@ import android.widget.TextView;
 
 import com.example.teamloosers.behereandroid.Activities.AppelListActivity;
 import com.example.teamloosers.behereandroid.Activities.SeanceAbsencesActivity;
+import com.example.teamloosers.behereandroid.Activities.StructureActivity;
 import com.example.teamloosers.behereandroid.Utils.FirebaseRecyclerAdapterViewer;
 import com.example.teamloosers.behereandroid.Utils.ItemViewHolder;
 import com.example.teamloosers.behereandroid.R;

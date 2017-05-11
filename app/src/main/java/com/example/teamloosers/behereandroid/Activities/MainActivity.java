@@ -2,8 +2,11 @@ package com.example.teamloosers.behereandroid.Activities;
 
 import com.example.teamloosers.behereandroid.Fragments.MainFragment;
 import com.example.teamloosers.behereandroid.R;
+import com.example.teamloosers.behereandroid.Structures.Enseignant;
 import com.example.teamloosers.behereandroid.Structures.Module;
 import com.example.teamloosers.behereandroid.Utils.Utils;
+import com.firebase.ui.auth.AuthUI;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.Query;
@@ -49,7 +52,10 @@ public class MainActivity extends AppCompatActivity
 
         checkEnseignantExistence();
 
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         toolbar.setTitle(String.format("M.%s %s", Utils.enseignant.getNom(), Utils.enseignant.getPrenom()));
         setSupportActionBar(toolbar);
 
@@ -74,7 +80,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void checkEnseignantExistence() {
-        if (Utils.auth.getCurrentUser() == null)    {
+        if (Utils.enseignant == null)    {
 
             startLoginActivity();
             finish();
@@ -85,10 +91,13 @@ public class MainActivity extends AppCompatActivity
 
         super.onStart();
 
-        enseignantNomPrenomTextView.setText(String.format("%s %s", Utils.enseignant.getNom(), Utils
-        .enseignant.getPrenom()));
-        enseignantEmailTextView.setText(Utils.enseignant.getEmail());
-        Picasso.with(this).load(Utils.auth.getCurrentUser().getPhotoUrl()).into(enseignantImageView);
+        if (FirebaseAuth.getInstance().getCurrentUser() != null)   {
+
+            enseignantNomPrenomTextView.setText(String.format("%s %s", Utils.enseignant.getNom(), Utils
+                    .enseignant.getPrenom()));
+            enseignantEmailTextView.setText(Utils.enseignant.getEmail());
+            Picasso.with(this).load(FirebaseAuth.getInstance().getCurrentUser().getPhotoUrl()).into(enseignantImageView);
+        }
     }
     @Override
     public void onBackPressed() {
@@ -110,9 +119,10 @@ public class MainActivity extends AppCompatActivity
             // Handle the camera action
         } else if (id == R.id.seDeconnecterItem) {
 
-            if (Utils.auth.getCurrentUser() != null)    {
+            if (FirebaseAuth.getInstance().getCurrentUser() != null)    {
 
-                Utils.auth.signOut();
+                AuthUI.getInstance().signOut(this);
+                Utils.enseignant = null;
                 startLoginActivity();
                 finish();
             }
@@ -159,6 +169,13 @@ public class MainActivity extends AppCompatActivity
 
         Intent loginIntent = new Intent(this, LoginActivity.class);
         startActivity(loginIntent);
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+
+        finish();
+        return true;
     }
 
     public class ModulesPageAdapter extends FragmentPagerAdapter {

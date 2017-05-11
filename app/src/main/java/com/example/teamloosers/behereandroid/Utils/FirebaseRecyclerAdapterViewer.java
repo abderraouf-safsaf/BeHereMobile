@@ -3,8 +3,11 @@ package com.example.teamloosers.behereandroid.Utils;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
+import android.widget.Filter;
+import android.widget.Filterable;
 
 import com.example.teamloosers.behereandroid.R;
+import com.example.teamloosers.behereandroid.Structures.Etudiant;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.Query;
@@ -16,10 +19,11 @@ import java.util.ArrayList;
  */
 
 public abstract class FirebaseRecyclerAdapterViewer<T, VH extends ItemViewHolder>
-        extends FirebaseRecyclerAdapter<T, VH> {
+        extends FirebaseRecyclerAdapter<T, VH>{
+
+    private ArrayList<T> deletedItems;
 
     private AdapterView.OnItemClickListener listener;
-    private int lastPosition = -1;
 
     /**
      * @param modelClass      Firebase will marshall the data at a location into
@@ -32,7 +36,9 @@ public abstract class FirebaseRecyclerAdapterViewer<T, VH extends ItemViewHolder
      *                        using some combination of {@code limit()}, {@code startAt()}, and {@code endAt()}.
      */
     public FirebaseRecyclerAdapterViewer(Class<T> modelClass, int modelLayout, Class<VH> viewHolderClass, Query ref) {
+
         super(modelClass, modelLayout, viewHolderClass, ref);
+
     }
 
     public ArrayList<T> getItems()  {
@@ -61,12 +67,15 @@ public abstract class FirebaseRecyclerAdapterViewer<T, VH extends ItemViewHolder
 
         super.onBindViewHolder(viewHolder, position);
 
-        viewHolder.bind(viewHolder.itemView, listener);
+        if (viewHolder.visible)
+            viewHolder.bind(viewHolder.itemView, listener);
     }
 
 
     public void setOnItemClickListener(AdapterView.OnItemClickListener listener) {
         this.listener = listener;
     }
+
     protected abstract void populateView(VH viewHolder, T model, int position);
+
 }

@@ -1,42 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+android:layout_width="match_parent"
+android:layout_height="wrap_content"
+android:layout_gravity="center"
+android:gravity="left"
+android:orientation="vertical"
+android:layout_marginBottom="10dp"
+android:layout_marginEnd="20dp"
+android:layout_marginLeft="20dp"
+android:layout_marginRight="20dp"
+android:layout_marginStart="20dp"
+android:layout_marginTop="10dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:orientation="horizontal"
+        android:weightSum="10">
+
+        <TextView
+            android:id="@+id/textView5"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="2"
+            android:gravity="center"
+            android:text="@string/date_seance_text_view_text"
+            android:textColor="@color/textSecondary"
+            android:textSize="@dimen/date_seance_text_view_size" />
+
+        <TextView
+            android:id="@+id/dateSeanceTextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="8"
+            android:gravity="left"
+            android:text="Date"
+            android:textColor="@color/textSecondary"
+            android:textSize="@dimen/etudiantNomPrenomTextSize" />
+    </LinearLayout>
+
+<LinearLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_gravity="center"
-    android:background="@drawable/tw__transparent"
-    android:gravity="left"
     android:orientation="horizontal"
-    android:paddingBottom="5dp"
-    android:paddingTop="5dp"
     android:weightSum="10">
 
     <TextView
-        android:id="@+id/dateSeanceTextView"
+        android:id="@+id/textView2"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginBottom="10dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="10dp"
-        android:layout_weight="8"
-        android:gravity="left"
-        android:text="Etudiant"
+        android:layout_weight="9"
+        android:gravity="right"
+        android:text="@string/nombre_absences_text_view_text"
         android:textColor="@color/textSecondary"
-        android:textSize="@dimen/etudiantNomPrenomTextSize" />
+        android:textSize="@dimen/nombre_absences_text_size" />
 
     <TextView
         android:id="@+id/seanceNbAbsencesTextView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_weight="2"
+        android:layout_weight="1"
         android:gravity="center"
         android:text="nb"
-        android:textColor="@color/textSecondary"
-        android:textSize="@dimen/etudiant_nb_absences_text_size"
-        android:textStyle="bold" />
+        android:textSize="@dimen/etudiant_nb_absences_text_size" />
+</LinearLayout>
 
 </LinearLayout>

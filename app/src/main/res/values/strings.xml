@@ -77,4 +77,9 @@
     <string name="faire_appel_toolbar_title">Nouveau appel</string>
     <string name="seance_absences_toolbar_title">Liste des absents</string>
     <string name="sautentifier_text_view_text">S\'authentifier:</string>
+    <string name="no_network_message">Veuillez vous connectez à l\'internet</string>
+    <string name="unknown_error">Une erreur s\'est produit</string>
+    <string name="erreur_back_button_pressed_message">Veuillez reésseyer de nouveau</string>
+    <string name="nombre_absences_text_view_text">Absences:</string>
+    <string name="date_seance_text_view_text">Date:</string>
 </resources>

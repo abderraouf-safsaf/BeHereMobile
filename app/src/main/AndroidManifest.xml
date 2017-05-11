@@ -11,21 +11,14 @@
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true"
         android:theme="@style/BeHere">
-        <activity
-            android:name=".Activities.ListEtudiantsActivity"
-            android:theme="@style/BeHere" />
         <activity
             android:name=".Activities.EtudiantsPresencesActivity"
             android:theme="@style/BeHere" />
         <activity
             android:name=".Activities.ConsultationEtudiantsActivity"
-            android:theme="@style/BeHere" />
-        <activity
-            android:name=".Activities.SeancesActivity"
             android:theme="@style/BeHere" />
         <activity
             android:name=".Activities.SeanceAbsencesActivity"

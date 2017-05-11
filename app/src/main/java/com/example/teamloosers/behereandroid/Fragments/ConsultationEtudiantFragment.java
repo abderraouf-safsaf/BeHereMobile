@@ -18,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -154,7 +155,10 @@ public class ConsultationEtudiantFragment extends Fragment {
         else
             textColor = ContextCompat.getColor(getContext(), R.color.textSecondary);
 
-        etudiantNbAbsencesTextView.setText(String.format("%d", etudiantScore));
+        String prefix = (etudiantScore > 0)? "+": "";
+        etudiantNbAbsencesTextView.setText(String.format("%s%d",
+                prefix, etudiantScore));
+
         etudiantNbAbsencesTextView.setTextColor(textColor);
     }
     private void loadAbsecnces() {
@@ -177,23 +181,41 @@ public class ConsultationEtudiantFragment extends Fragment {
             protected void populateViewHolder(AbsenceViewHolder viewHolder, final Absence absence, int position) {
 
                 viewHolder.absenceDateTextView.setText(absence.getDate());
-                viewHolder.supprimerAbsenceImageButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        AlertDialog.Builder alertDialog = new AlertDialog.Builder(getContext());
-                        alertDialog.setMessage(R.string.confirmer_suppression_absence_message);
-                        alertDialog.setPositiveButton(R.string.oui, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
+                if (!absence.isJustifier()) {
 
-                                absence.supprimerDb(Utils.database);
-                                Toast.makeText(getContext(), R.string.absence_supprimee_message, Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                        alertDialog.setNegativeButton(R.string.non, null);
-                        alertDialog.show();
-                    }
-                });
+                    viewHolder.consulterJustificationImageButton.setVisibility(View.GONE);
+
+                    viewHolder.supprimerAbsenceImageButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            AlertDialog.Builder alertDialog = new AlertDialog.Builder(getContext());
+                            alertDialog.setMessage(R.string.confirmer_suppression_absence_message);
+                            alertDialog.setPositiveButton(R.string.oui, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+
+                                    absence.supprimerDb();
+                                    Toast.makeText(getContext(), R.string.absence_supprimee_message, Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                            alertDialog.setNegativeButton(R.string.non, null);
+                            alertDialog.show();
+                        }
+                    });
+                }
+                else    { // Absence justifiee
+
+                    viewHolder.supprimerAbsenceImageButton.setVisibility(View.GONE);
+                    viewHolder.absenceLinearLayout.setBackgroundColor(ContextCompat.getColor(getContext(),
+                            R.color.absence_justifier_background_color));
+                    viewHolder.consulterJustificationImageButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+
+                            // TODO: consulter justification
+                        }
+                    });
+                }
             }
             @Override
             protected void onDataChanged() {
@@ -251,8 +273,9 @@ public class ConsultationEtudiantFragment extends Fragment {
     }
     public static class AbsenceViewHolder extends ItemViewHolder {
 
+        LinearLayout absenceLinearLayout;
         TextView absenceDateTextView;
-        ImageButton supprimerAbsenceImageButton;
+        ImageButton supprimerAbsenceImageButton, consulterJustificationImageButton;
 
         public AbsenceViewHolder(View itemView) {
 
@@ -260,6 +283,8 @@ public class ConsultationEtudiantFragment extends Fragment {
 
             absenceDateTextView = (TextView) itemView.findViewById(R.id.abseneDateTextView);
             supprimerAbsenceImageButton = (ImageButton) itemView.findViewById(R.id.supprimerAbsenceImageButton);
+            consulterJustificationImageButton = (ImageButton) itemView.findViewById(R.id.consulterJustificationImageButton);
+            absenceLinearLayout = (LinearLayout) itemView.findViewById(R.id.absenceLinearLayout);
         }
     }
     public static ConsultationEtudiantFragment newInstance(Etudiant etudiant, Module module) {

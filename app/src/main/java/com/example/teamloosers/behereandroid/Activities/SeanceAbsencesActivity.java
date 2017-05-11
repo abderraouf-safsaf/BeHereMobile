@@ -52,7 +52,6 @@ public class SeanceAbsencesActivity<T extends Structurable> extends AppCompatAct
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-
         seanceAbsencesRecyclerView = (RecyclerView) findViewById(R.id.seanceAbsencesRecyclerView);
         LinearLayoutManager seancesLinearLayoutManager = new LinearLayoutManager(this);
 
@@ -70,10 +69,10 @@ public class SeanceAbsencesActivity<T extends Structurable> extends AppCompatAct
         super.onStart();
 
         String toolbarTitle = getString(R.string.seance_absences_toolbar_title);
-        toolbar.setTitle(toolbarTitle);
+        getSupportActionBar().setTitle(toolbarTitle);
         String toolbarSubTitle = String.format("%s: %s: %s", module.getDesignation(),
                 structure.getDesignation(), seance.getDate());
-        toolbar.setSubtitle(toolbarSubTitle);
+        getSupportActionBar().setSubtitle(toolbarSubTitle);
 
         loadSeanceAbsences();
     }
@@ -140,7 +139,7 @@ public class SeanceAbsencesActivity<T extends Structurable> extends AppCompatAct
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
 
-                                absence.supprimerDb(Utils.database);
+                                absence.supprimerDb();
                                 Toast.makeText(SeanceAbsencesActivity.this, R.string.absence_supprimee_message, Toast.LENGTH_SHORT).show();
                             }
                         });
@@ -155,6 +154,13 @@ public class SeanceAbsencesActivity<T extends Structurable> extends AppCompatAct
 
             }
         });
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+
+        finish();
+        return true;
     }
 
     public static class SeanceAbsenceViewHolder extends ItemViewHolder {

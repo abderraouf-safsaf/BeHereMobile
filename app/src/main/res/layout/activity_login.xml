@@ -4,8 +4,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mainLinearLayout"
-    android:layout_width="368dp"
-    android:layout_height="551dp"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="20dp"
     tools:layout_editor_absoluteX="8dp"
@@ -41,7 +41,7 @@
         android:layout_gravity="center"
         android:layout_margin="20dp"
         android:background="@drawable/tw__transparent"
-        android:onClick="startLogin"
+        android:onClick="login"
         android:scaleType="fitCenter"
         app:srcCompat="@drawable/login_image_buuton" />
 

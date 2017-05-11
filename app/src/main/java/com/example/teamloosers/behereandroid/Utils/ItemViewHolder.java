@@ -10,6 +10,8 @@ import android.widget.AdapterView;
 
 public class ItemViewHolder extends RecyclerView.ViewHolder {
 
+    public Boolean visible = true;
+
     public ItemViewHolder(View itemView) {
 
         super(itemView);

@@ -78,4 +78,14 @@ public class Etudiant extends Personne {
         this.nbAbsences = nbAbsences;
     }
 
+    @Override
+    public boolean equals(Object obj) {
+
+        if (!(obj instanceof Etudiant))
+            return false;
+        else    {
+
+            return this.toString().equals(obj.toString());
+        }
+    }
 }

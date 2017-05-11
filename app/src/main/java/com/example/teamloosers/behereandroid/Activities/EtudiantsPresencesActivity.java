@@ -113,7 +113,8 @@ public class EtudiantsPresencesActivity extends AppCompatActivity {
                 absence.setIdSeance(seance.getId());
                 absence.setTypeSeance(seance.getTypeSeance());
                 absence.setDate(seance.getDate());
-                absence.ajouterDb(Utils.database);
+                absence.setJustifier(false);
+                absence.ajouterDb();
             }
         }
     }

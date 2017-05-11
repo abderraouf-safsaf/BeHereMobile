@@ -1,8 +1,11 @@
 package com.example.teamloosers.behereandroid.Structures;
 
 import com.example.teamloosers.behereandroid.Utils.Utils;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -16,6 +19,7 @@ public class Absence extends Ref {
     private String idSeance, idGroupe, idSection, idPromo, idSpecialite,
                     idFilliere, idCycle, idModule, idEnseignant, idEtudiant, typeSeance, date;
 
+    private Boolean justifier;
     public Absence()    {    }
 
     public String getIdSeance() {
@@ -114,6 +118,14 @@ public class Absence extends Ref {
         this.typeSeance = typeSeance;
     }
 
+    public Boolean isJustifier() {
+        return justifier;
+    }
+
+    public void setJustifier(Boolean justifier) {
+        this.justifier = justifier;
+    }
+
     public Map<String, Object> getMap() {
 
         Map<String, Object> mapdata = new HashMap<String, Object>();
@@ -131,22 +143,23 @@ public class Absence extends Ref {
         mapdata.put("idEtudiant", this.getIdEtudiant());
         mapdata.put("typeSeance", this.getTypeSeance());
         mapdata.put("date", this.getDate());
+        mapdata.put("justifier", this.isJustifier());
         return mapdata;
     }
 
-    public void ajouterDb(FirebaseDatabase database)    {
+    public void ajouterDb()    {
 
         String pathToEtudiant = Utils.firebasePath(Utils.CYCLES, this.getIdCycle(),
                 this.getIdFilliere(), this.getIdPromo(), this.getIdSection(),
                 this.getIdGroupe(), this.getIdEtudiant(), this.getIdModule(), this.getId());
-        DatabaseReference etudiantRef = database.getReference(pathToEtudiant);
+        DatabaseReference etudiantRef = Utils.database.getReference(pathToEtudiant);
         etudiantRef.setValue(this.getMap());
 
         String idStructure = (this.getTypeSeance().equals(Utils.SECTIONS))? this.getIdSection(): this.getIdGroupe();
         String pathToEnseignant_Module = Utils.firebasePath(Utils.ENSEIGNANT_MODULE,
                 this.getIdEnseignant(), this.getIdModule(), this.getTypeSeance(), idStructure, this.getIdSeance(),
                 this.getId());
-        DatabaseReference strucutreRef = database.getReference(pathToEnseignant_Module);
+        DatabaseReference strucutreRef = Utils.database.getReference(pathToEnseignant_Module);
 
         strucutreRef.updateChildren(this.getMap());
     }
@@ -157,19 +170,21 @@ public class Absence extends Ref {
         return this.getDate();
     }
 
-    public void supprimerDb(FirebaseDatabase database) {
+    public void supprimerDb() {
 
         String pathToEtudiant = Utils.firebasePath(Utils.CYCLES, this.getIdCycle(),
                 this.getIdFilliere(), this.getIdPromo(), this.getIdSection(),
                 this.getIdGroupe(), this.getIdEtudiant(), this.getIdModule(), this.getId());
-        DatabaseReference etudiantRef = database.getReference(pathToEtudiant);
+        DatabaseReference etudiantRef = Utils.database.getReference(pathToEtudiant);
+        etudiantRef.keepSynced(true); // Keeping data fresh
         etudiantRef.removeValue();
 
         String idStructure = (this.getTypeSeance().equals(Utils.SECTIONS))? this.getIdSection(): this.getIdGroupe();
         String pathToEnseignant_Module = Utils.firebasePath(Utils.ENSEIGNANT_MODULE,
                 this.getIdEnseignant(), this.getIdModule(), this.getTypeSeance(), idStructure, this.getIdSeance(),
                 this.getId());
-        DatabaseReference strucutreRef = database.getReference(pathToEnseignant_Module);
+        DatabaseReference strucutreRef = Utils.database.getReference(pathToEnseignant_Module);
+        strucutreRef.keepSynced(true); // Keeping data fresh
         strucutreRef.removeValue();
     }
 }

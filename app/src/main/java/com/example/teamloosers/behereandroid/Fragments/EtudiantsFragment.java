@@ -15,6 +15,8 @@ import android.widget.AdapterView;
 import android.widget.TextView;
 
 import com.example.teamloosers.behereandroid.Activities.ConsultationEtudiantsActivity;
+import com.example.teamloosers.behereandroid.Structures.Groupe;
+import com.example.teamloosers.behereandroid.Structures.Section;
 import com.example.teamloosers.behereandroid.Utils.FirebaseRecyclerAdapterViewer;
 import com.example.teamloosers.behereandroid.Utils.ItemViewHolder;
 import com.example.teamloosers.behereandroid.R;
@@ -37,6 +39,7 @@ public class EtudiantsFragment <T extends Structurable> extends Fragment {
 
     private Module module;
     private T structure;
+    private FirebaseRecyclerAdapterViewer<Etudiant, EtudiantViewHolder> etudiantsListAdapater;
 
     private RecyclerView etudiantsListRecyclerView;
 
@@ -83,9 +86,17 @@ public class EtudiantsFragment <T extends Structurable> extends Fragment {
 
         super.onStart();
 
-        loadEtudiants();
+        if (structure instanceof Groupe)
+            loadGroupeEtudiants();
+        else if (structure instanceof Section)
+            loadSectionsEtudiant();
     }
-    private void loadEtudiants() {
+
+    private void loadSectionsEtudiant() {
+        // TODO: load sections etudiant
+    }
+
+    private void loadGroupeEtudiants() {
 
         final ProgressDialog loadingProgressDialog = new ProgressDialog(getContext());
         loadingProgressDialog.setCancelable(false);
@@ -93,12 +104,12 @@ public class EtudiantsFragment <T extends Structurable> extends Fragment {
 
         String pathToStructure = Utils.firebasePath(Utils.CYCLES, structure.getIdCycle(), structure.getIdFilliere(), structure.getIdPromo(),
                 structure.getIdSection(), structure.getId());
-        Query myRef = Utils.database.getReference(pathToStructure).orderByChild("idCycle").
-                equalTo(structure.getIdCycle());
+        Query myRef = Utils.database.getReference(pathToStructure).orderByChild("nom")
+                .startAt("");
         myRef.keepSynced(true); // Keeping data fresh
 
         loadingProgressDialog.show();
-        final FirebaseRecyclerAdapterViewer<Etudiant, EtudiantViewHolder> etudiantsListAdapater = new FirebaseRecyclerAdapterViewer<Etudiant, EtudiantViewHolder>(
+        etudiantsListAdapater = new FirebaseRecyclerAdapterViewer<Etudiant, EtudiantViewHolder>(
                 Etudiant.class, R.layout.view_holder_etudiant, EtudiantViewHolder.class, myRef
         ) {
             @Override
@@ -186,6 +197,6 @@ public class EtudiantsFragment <T extends Structurable> extends Fragment {
             etudiantNomPrenomTextView = (TextView) itemView.findViewById(R.id.etudiantNomPrenomTextView);
             etudiantNbAbsencesTextView = (TextView) itemView.findViewById(R.id.etudiantNbAbsences);
         }
-
     }
+
 }

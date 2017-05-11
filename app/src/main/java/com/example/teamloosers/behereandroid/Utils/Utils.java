@@ -39,20 +39,18 @@ public class Utils {
     public static final Boolean BACKABLE = true, NOT_BACKABLE = false;
 
     public static FirebaseDatabase database;
-    public static FirebaseAuth auth;
 
     public static Enseignant enseignant;
     static {
 
-        enseignant = new Enseignant("Medles", "Mourad", Personne.FEMME);
+        /*enseignant = new Enseignant("Medles", "Mourad", Personne.FEMME);
         enseignant.setId("095d24da-6529-4cba-a7a6-1f3d4db1024a");
-        enseignant.setEmail("safsaf.abderraouf@gmail.com");
+        enseignant.setEmail("safsaf.abderraouf@gmail.com");*/
 
-        auth = FirebaseAuth.getInstance();
         database = FirebaseDatabase.getInstance();
 
         // Enable disk persistence (Offline)
-        database.setPersistenceEnabled(true);
+        //database.setPersistenceEnabled(true);
     }
 
     public final static String  CYCLES = "/Cycles", SPECIALITE_PROMOS = "/Specialite_Promos",

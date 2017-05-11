@@ -13,9 +13,11 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -80,6 +82,9 @@ public class AppelListActivity <T extends Structurable> extends AppCompatActivit
         modifierDateButton = (Button) findViewById(R.id.modifierDateButton);
         mainLayout = (CoordinatorLayout) findViewById(R.id.mainLayout);
 
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         updateDateSeanceTextView();
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
@@ -123,10 +128,10 @@ public class AppelListActivity <T extends Structurable> extends AppCompatActivit
         super.onStart();
 
         String toolbarTitle = getString(R.string.faire_appel_toolbar_title);
-        toolbar.setTitle(toolbarTitle);
+        getSupportActionBar().setTitle(toolbarTitle);
         String toolbarSubTitle = String.format("%s: %s", module.getDesignation(),
                 structure.getDesignation());
-        toolbar.setSubtitle(toolbarSubTitle);
+        getSupportActionBar().setSubtitle(toolbarSubTitle);
 
         loadEtudiant();
     }
@@ -158,7 +163,7 @@ public class AppelListActivity <T extends Structurable> extends AppCompatActivit
                 Bitmap imageResized = Bitmap.createScaledBitmap(image, etudiantImageWidth, etudiantImageHeight, true);
 
                 RoundedBitmapDrawable dr = RoundedBitmapDrawableFactory.create(null, imageResized);
-                dr.setCornerRadius(200);
+                dr.setCornerRadius(10);
                 viewHolder.etudiantSmallImageView.setImageDrawable(dr);
 
                 viewHolder.etudiantNomPrenomTextView.setText(String.format("%s %s", etudiant.getNom(),
@@ -349,10 +354,13 @@ public class AppelListActivity <T extends Structurable> extends AppCompatActivit
                 absence.setIdSeance(seance.getId());
                 absence.setTypeSeance(seance.getTypeSeance());
                 absence.setDate(seance.getDate());
-                absence.ajouterDb(Utils.database);
+                absence.setJustifier(false);
+                absence.ajouterDb();
             }
         }
     }
+
+
     @Override
     public void onDateSelected(int day, int month, int year) {
 
@@ -361,6 +369,13 @@ public class AppelListActivity <T extends Structurable> extends AppCompatActivit
         this.annee = year;
 
         updateDateSeanceTextView();
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+
+        finish();
+        return true;
     }
 
     public static class EtudiantPresenceViewHolder extends ItemViewHolder {
