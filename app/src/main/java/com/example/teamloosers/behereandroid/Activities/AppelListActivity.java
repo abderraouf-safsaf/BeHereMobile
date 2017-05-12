@@ -3,20 +3,16 @@ package com.example.teamloosers.behereandroid.Activities;
 import android.app.ProgressDialog;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.MenuItem;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -26,6 +22,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.teamloosers.behereandroid.Fragments.DatePickerFragment;
+import com.example.teamloosers.behereandroid.Structures.Groupe;
+import com.example.teamloosers.behereandroid.Structures.Section;
 import com.example.teamloosers.behereandroid.Utils.FirebaseRecyclerAdapterViewer;
 import com.example.teamloosers.behereandroid.Utils.ItemViewHolder;
 import com.example.teamloosers.behereandroid.R;
@@ -41,9 +39,12 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import java.security.acl.Group;
+import java.util.ArrayList;
 import java.util.Calendar;
 
-public class AppelListActivity <T extends Structurable> extends AppCompatActivity implements DatePickerFragment.OnDateSelectedListener {
+public class AppelListActivity <T extends Structurable> extends AppCompatActivity
+        implements DatePickerFragment.OnDateSelectedListener, View.OnClickListener {
 
     private Module module;
     private T structure;
@@ -51,75 +52,43 @@ public class AppelListActivity <T extends Structurable> extends AppCompatActivit
 
     private int annee, mois, jour;
 
-    private CoordinatorLayout mainLayout;
+    private SectionEtudiantsRecyclerAdapter etudiantsRecyclerAdapter;
+
+    private ProgressDialog loadingProgressDialog;
     private Toolbar toolbar;
     private RecyclerView etudiantAppelListRecyclerView;
     private Button validerAppelButton, modifierDateButton;
-    private FloatingActionButton validerAppelFloatButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
 
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        Utils.setActivityFullScreen(this);
 
         setContentView(R.layout.activity_appel_list);
 
         this.module = (Module) getIntent().getExtras().getSerializable("module");
         this.structure = (T) getIntent().getExtras().getSerializable("structure");
 
-        Calendar calendar = Calendar.getInstance();
-        annee = calendar.get(Calendar.YEAR);
-        mois = calendar.get(Calendar.MONTH);
-        jour = calendar.get(Calendar.DAY_OF_MONTH);
-
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         etudiantAppelListRecyclerView = (RecyclerView) findViewById(R.id.etudiantsAppelListRecyclerView);
         validerAppelButton = (Button) findViewById(R.id.validerAppelButton);
         modifierDateButton = (Button) findViewById(R.id.modifierDateButton);
-        mainLayout = (CoordinatorLayout) findViewById(R.id.mainLayout);
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        initializeDate();
 
         updateDateSeanceTextView();
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         etudiantAppelListRecyclerView.setLayoutManager(linearLayoutManager);
+        Utils.setRecyclerViewDecoration(etudiantAppelListRecyclerView);
 
-        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(etudiantAppelListRecyclerView.getContext(),
-                linearLayoutManager.getOrientation());
-        dividerItemDecoration.setDrawable(ContextCompat.getDrawable(this, R.drawable.recyclerview_divider));
-        etudiantAppelListRecyclerView.addItemDecoration(dividerItemDecoration);
-
-        modifierDateButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                DatePickerFragment changerDateDialog = new DatePickerFragment();
-                changerDateDialog.show(getSupportFragmentManager(), "datePickerDialog");
-            }
-        });
-
-        validerAppelButton.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-
-                instancierNouvelleSeance(jour, mois, annee);
-
-                ajouterAbsencesDb();
-                Toast.makeText(AppelListActivity.this, R.string.valider_appel_toast, Toast.LENGTH_SHORT).show();
-                finish();
-            }
-        });
-    }
-
-    private void updateDateSeanceTextView() {
-        modifierDateButton.setText(String.format("%s/%s/%s", jour, mois, annee));
+        modifierDateButton.setOnClickListener(this);
+        validerAppelButton.setOnClickListener(this);
     }
 
     @Override
@@ -127,32 +96,80 @@ public class AppelListActivity <T extends Structurable> extends AppCompatActivit
 
         super.onStart();
 
-        String toolbarTitle = getString(R.string.faire_appel_toolbar_title);
-        getSupportActionBar().setTitle(toolbarTitle);
-        String toolbarSubTitle = String.format("%s: %s", module.getDesignation(),
-                structure.getDesignation());
-        getSupportActionBar().setSubtitle(toolbarSubTitle);
+        Utils.setActionBarTitle(this, getString(R.string.faire_appel_toolbar_title));
+        Utils.setActionBarSubtitle(this,String.format("%s: %s", module.getDesignation(),
+                structure.getDesignation()));
 
-        loadEtudiant();
+        if (structure instanceof Groupe)
+            loadEtudiantGroupe();
+        else if (structure instanceof Section)
+            loadEtudiantSection();
     }
-    private void loadEtudiant() {
+
+    private void loadEtudiantSection() {
 
         final ProgressDialog loadingProgressDialog = new ProgressDialog(this);
         loadingProgressDialog.setCancelable(false);
         loadingProgressDialog.setMessage(getResources().getString(R.string.chargement_etudiants_loading_message));
 
+        final ArrayList<Etudiant> etudiantsList = new ArrayList<>();
+
+        String pathToStructure = Utils.firebasePath(Utils.CYCLES, structure.getIdCycle(), structure.getIdFilliere(), structure.getIdPromo(),
+                structure.getIdSection());
+
+        Query groupeQuery = Utils.database.getReference(pathToStructure).orderByChild("id")
+                .startAt("");
+        groupeQuery.keepSynced(true); // Keeping data fresh
+
+        loadingProgressDialog.show();
+        groupeQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                for (DataSnapshot snapshot: dataSnapshot.getChildren()) { // Groupes
+
+                    if (snapshot.hasChildren()) { // It's Groupe
+
+                        for (DataSnapshot snapshot2: snapshot.getChildren())    {
+
+                            if (snapshot2.hasChildren()) { // It's Etudiant
+
+                                Etudiant etudiant = snapshot2.getValue(Etudiant.class);
+                                etudiantsList.add(etudiant);
+                            }
+                        }
+                    }
+                }
+                etudiantsRecyclerAdapter = new SectionEtudiantsRecyclerAdapter(etudiantsList);
+                etudiantAppelListRecyclerView.setAdapter(etudiantsRecyclerAdapter);
+                loadingProgressDialog.dismiss();
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Utils.showSnackBar(AppelListActivity.this, Utils.DATABASE_ERR_MESSAGE);
+            }
+        });
+    }
+
+    private void loadEtudiantGroupe() {
+
+        loadingProgressDialog = new ProgressDialog(this);
+        loadingProgressDialog.setCancelable(false);
+        loadingProgressDialog.setMessage(getResources().getString(R.string
+                .chargement_etudiants_loading_message));
+
         String pathToGroupe = Utils.firebasePath(Utils.CYCLES, structure.getIdCycle(), structure.getIdFilliere(), structure.getIdPromo(),
                 structure.getIdSection(), structure.getId());
-        Query myRef =  Utils.database.getReference(pathToGroupe).orderByChild("idCycle").equalTo(
-                structure.getIdCycle());
+        Query myRef =  Utils.database.getReference(pathToGroupe).orderByChild("nom").startAt("");
         myRef.keepSynced(true); // Keeping data fresh
 
         loadingProgressDialog.show();
-        FirebaseRecyclerAdapterViewer<Etudiant, EtudiantPresenceViewHolder> etudiantAppelListAdapter = new FirebaseRecyclerAdapterViewer<Etudiant, EtudiantPresenceViewHolder>(
+        FirebaseRecyclerAdapterViewer<Etudiant, EtudiantPresenceViewHolder> etudiantAppelListAdapter =
+                new FirebaseRecyclerAdapterViewer<Etudiant, EtudiantPresenceViewHolder>(
                 Etudiant.class, R.layout.view_holder_etudiant_appel_presence, EtudiantPresenceViewHolder.class,
-                myRef
-        ) {
-            @Override
+                myRef) {
+
+                    @Override
             protected void populateView(EtudiantPresenceViewHolder viewHolder, final Etudiant etudiant, int position) {
 
                 viewHolder.etudiant = etudiant;
@@ -178,16 +195,17 @@ public class AppelListActivity <T extends Structurable> extends AppCompatActivit
 
                     @Override
                     public void onClick(View v) {
-                        incrementerScore(etudiant);
+                        addToEtudiantScore(etudiant, Etudiant.SCORE_PLUS);
                     }
                 });
                 viewHolder.dislikeImageButton.setOnClickListener(new View.OnClickListener() {
 
                     @Override
                     public void onClick(View v) {
-                        decrementerScore(etudiant);
+                        addToEtudiantScore(etudiant, Etudiant.SCORE_MOIN);
                     }
                 });
+
             }
             @Override
             protected void onChildChanged(ChangeEventListener.EventType type, int index, int oldIndex) {
@@ -196,10 +214,30 @@ public class AppelListActivity <T extends Structurable> extends AppCompatActivit
 
                 loadingProgressDialog.dismiss();
             }
+            @Override
+            protected void onCancelled(DatabaseError error) {
+
+                super.onCancelled(error);
+                Utils.showSnackBar(AppelListActivity.this, Utils.DATABASE_ERR_MESSAGE);
+                loadingProgressDialog.cancel();
+            }
         };
+
         etudiantAppelListRecyclerView.setAdapter(etudiantAppelListAdapter);
     }
-    private void loadEtudiantScore(Etudiant etudiant, final TextView etudiantScoreTextView    ) {
+
+    private void initializeDate() {
+
+        Calendar calendar = Calendar.getInstance();
+        annee = calendar.get(Calendar.YEAR);
+        mois = calendar.get(Calendar.MONTH) + 1;
+        jour = calendar.get(Calendar.DAY_OF_MONTH);
+    }
+    private void updateDateSeanceTextView() {
+
+        modifierDateButton.setText(String.format("%s/%s/%s", jour, mois, annee));
+    }
+    private void loadEtudiantScore(Etudiant etudiant, final TextView etudiantScoreTextView) {
 
         String pathToEtudiantScore = Utils.firebasePath(Utils.CYCLES, etudiant.getIdCycle(), etudiant.getIdFilliere(),
                 etudiant.getIdPromo(), etudiant.getIdSection(), etudiant.getIdGroupe(), etudiant.getId(), module.getId(),
@@ -217,7 +255,9 @@ public class AppelListActivity <T extends Structurable> extends AppCompatActivit
                 displayScoreOnTextView(etudiantScoreTextView, score);
             }
             @Override
-            public void onCancelled(DatabaseError databaseError) {  }
+            public void onCancelled(DatabaseError databaseError) {
+                Utils.showSnackBar(AppelListActivity.this, Utils.DATABASE_ERR_MESSAGE);
+            }
         });
     }
     private void displayScoreOnTextView(TextView etudiantNbAbsencesTextView, long etudiantScore) {
@@ -237,7 +277,7 @@ public class AppelListActivity <T extends Structurable> extends AppCompatActivit
 
         etudiantNbAbsencesTextView.setTextColor(textColor);
     }
-    private void incrementerScore(Etudiant etudiant) {
+    private void addToEtudiantScore(Etudiant etudiant, final int toAdd) {
 
         String pathToEtudiantScore = Utils.firebasePath(Utils.CYCLES, etudiant.getIdCycle(), etudiant.getIdFilliere(),
                 etudiant.getIdPromo(), etudiant.getIdSection(), etudiant.getIdGroupe(), etudiant.getId(), module.getId(),
@@ -251,32 +291,13 @@ public class AppelListActivity <T extends Structurable> extends AppCompatActivit
             public void onDataChange(DataSnapshot dataSnapshot) {
 
                 Long score = (Long) dataSnapshot.getValue();
-                Long newScore = (score == null)? 1: score + 1;
+                Long newScore = (score == null)? toAdd: score + toAdd;
                 dataSnapshot.getRef().setValue(newScore);
             }
             @Override
-            public void onCancelled(DatabaseError databaseError) {  }
-        });
-    }
-    private void decrementerScore(Etudiant etudiant)    {
-
-        String pathToEtudiantScore = Utils.firebasePath(Utils.CYCLES, etudiant.getIdCycle(), etudiant.getIdFilliere(),
-                etudiant.getIdPromo(), etudiant.getIdSection(), etudiant.getIdGroupe(), etudiant.getId(), module.getId(),
-                Utils.SCORE);
-
-        Query scoreRef = Utils.database.getReference(pathToEtudiantScore);
-        scoreRef.keepSynced(true); // Keeping data fresh
-
-        scoreRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-
-                Long score = (Long) dataSnapshot.getValue();
-                Long newScore = (score == null)? 1: score - 1;
-                dataSnapshot.getRef().setValue(newScore);
+            public void onCancelled(DatabaseError databaseError) {
+                Utils.showSnackBar(AppelListActivity.this, Utils.DATABASE_ERR_MESSAGE);
             }
-            @Override
-            public void onCancelled(DatabaseError databaseError) {  }
         });
     }
     private void setNbAbsenceTextView(final TextView etudiantNbAbsencesTextView, Etudiant etudiant) {
@@ -285,11 +306,12 @@ public class AppelListActivity <T extends Structurable> extends AppCompatActivit
                 etudiant.getIdPromo(), etudiant.getIdSection(), etudiant.getIdGroupe(),
                 etudiant.getId(), module.getId());
 
-        Query etudiantRef = Utils.database.getReference(pathToEtudiant).orderByChild("idModule")
-                .equalTo(module.getId());
+        String typeSeance = (structure instanceof Groupe)? Seance.TD: Seance.COURS;
+        Query etudiantRef = Utils.database.getReference(pathToEtudiant).orderByChild("typeSeance")
+                .equalTo(typeSeance);
         etudiantRef.keepSynced(true); // Keeping data fresh
 
-        etudiantRef.addListenerForSingleValueEvent(new ValueEventListener() {
+        etudiantRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
@@ -297,7 +319,10 @@ public class AppelListActivity <T extends Structurable> extends AppCompatActivit
                 displayNbAbsencesInTextView(etudiantNbAbsencesTextView, etudiantNbAbsences);
             }
             @Override
-            public void onCancelled(DatabaseError databaseError) {  }
+            public void onCancelled(DatabaseError databaseError) {
+
+                Utils.showSnackBar(AppelListActivity.this, Utils.DATABASE_ERR_MESSAGE);
+            }
         });
     }
     private void displayNbAbsencesInTextView(TextView etudiantNbAbsencesTextView, long etudiantNbAbsences) {
@@ -325,8 +350,12 @@ public class AppelListActivity <T extends Structurable> extends AppCompatActivit
         seance.setId(Utils.generateId());
         seance.setIdEnseignant(Utils.enseignant.getId());
         seance.setIdGroupe(structure.getId());
+        seance.setIdSection(structure.getIdSection());
         seance.setIdModule(module.getId());
-        seance.setTypeSeance(Seance.TD);
+        if (structure instanceof Group)
+            seance.setTypeSeance(Seance.TD);
+        else if (structure instanceof Section)
+            seance.setTypeSeance(Seance.COURS);
         seance.ajouterSeance(Utils.database);
     }
     private void ajouterAbsencesDb() {
@@ -341,31 +370,35 @@ public class AppelListActivity <T extends Structurable> extends AppCompatActivit
 
             if (!isPresent) {
 
-                Absence absence = new Absence();
-                absence.setId(Utils.generateId());
-                absence.setIdCycle(etudiant.getIdCycle());
-                absence.setIdFilliere(etudiant.getIdFilliere());
-                absence.setIdPromo(etudiant.getIdPromo());
-                absence.setIdSection(etudiant.getIdSection());
-                absence.setIdGroupe(etudiant.getIdGroupe());
-                absence.setIdEtudiant(etudiant.getId());
-                absence.setIdEnseignant(seance.getIdEnseignant());
-                absence.setIdModule(seance.getIdModule());
-                absence.setIdSeance(seance.getId());
-                absence.setTypeSeance(seance.getTypeSeance());
-                absence.setDate(seance.getDate());
-                absence.setJustifier(false);
+                Absence absence = newAbsence(etudiant);
                 absence.ajouterDb();
             }
         }
     }
+    private Absence newAbsence(Etudiant etudiant) {
 
+        Absence absence = new Absence();
+        absence.setId(Utils.generateId());
+        absence.setIdCycle(etudiant.getIdCycle());
+        absence.setIdFilliere(etudiant.getIdFilliere());
+        absence.setIdPromo(etudiant.getIdPromo());
+        absence.setIdSection(etudiant.getIdSection());
+        absence.setIdGroupe(etudiant.getIdGroupe());
+        absence.setIdEtudiant(etudiant.getId());
+        absence.setIdEnseignant(seance.getIdEnseignant());
+        absence.setIdModule(seance.getIdModule());
+        absence.setIdSeance(seance.getId());
+        absence.setTypeSeance(seance.getTypeSeance());
+        absence.setDate(seance.getDate());
+        absence.setJustifier(false);
 
+        return absence;
+    }
     @Override
     public void onDateSelected(int day, int month, int year) {
 
         this.jour = day;
-        this.mois = month;
+        this.mois = month + 1;
         this.annee = year;
 
         updateDateSeanceTextView();
@@ -378,6 +411,87 @@ public class AppelListActivity <T extends Structurable> extends AppCompatActivit
         return true;
     }
 
+    @Override
+    public void onClick(View v) {
+
+        if (v == modifierDateButton)    {
+
+            DatePickerFragment changerDateDialog = new DatePickerFragment();
+            changerDateDialog.show(getSupportFragmentManager(), "datePickerDialog");
+        }
+        else if (v == validerAppelButton)   {
+            instancierNouvelleSeance(jour, mois, annee);
+
+            ajouterAbsencesDb();
+            Toast.makeText(AppelListActivity.this, R.string.valider_appel_toast, Toast.LENGTH_SHORT).show();
+            finish();
+        }
+    }
+    public class SectionEtudiantsRecyclerAdapter extends RecyclerView.Adapter<EtudiantPresenceViewHolder> {
+
+        private ArrayList<Etudiant> etudiantsList;
+
+        private AdapterView.OnItemClickListener listener;
+
+        public SectionEtudiantsRecyclerAdapter(ArrayList<Etudiant> etudiantsList) {
+
+            this.etudiantsList = etudiantsList;
+        }
+
+        @Override
+        public EtudiantPresenceViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+
+            View view = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.view_holder_etudiant_appel_presence, parent, false);
+            return new EtudiantPresenceViewHolder(view);
+        }
+        @Override
+        public void onBindViewHolder(final EtudiantPresenceViewHolder holder, int position) {
+
+            final Etudiant etudiant = etudiantsList.get(position);
+
+            holder.etudiant = etudiant;
+            int etudiantImageHeight = getResources().getDimensionPixelSize(R.dimen.etudiant_small_image_height);
+            int etudiantImageWidth = getResources().getDimensionPixelSize(R.dimen.etudiant_small_image_width);
+            Bitmap image = Utils.decodeToImage(etudiant.getImageBase64());
+            Bitmap imageResized = Bitmap.createScaledBitmap(image, etudiantImageWidth, etudiantImageHeight, true);
+
+            RoundedBitmapDrawable dr = RoundedBitmapDrawableFactory.create(null, imageResized);
+            dr.setCornerRadius(10);
+            holder.etudiantSmallImageView.setImageDrawable(dr);
+
+            holder.etudiantNomPrenomTextView.setText(String.format("%s %s", etudiant.getNom(),
+                    etudiant.getPrenom()));
+
+            setNbAbsenceTextView(holder.etudiantNbAbsencesTextView, etudiant);
+            holder.presenceSwitch.setChecked(true);
+
+            loadEtudiantScore(etudiant, holder.etudiantScoreTextView);
+
+            holder.likeImageButton.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+                    addToEtudiantScore(etudiant, Etudiant.SCORE_PLUS);
+                }
+            });
+            holder.dislikeImageButton.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+                    addToEtudiantScore(etudiant, Etudiant.SCORE_MOIN);
+                }
+            });
+        }
+        @Override
+        public int getItemCount() {
+
+            return etudiantsList.size();
+        }
+        public void setOnItemClickListener(AdapterView.OnItemClickListener listener) {
+            this.listener = listener;
+        }
+    }
     public static class EtudiantPresenceViewHolder extends ItemViewHolder {
 
         Etudiant etudiant;

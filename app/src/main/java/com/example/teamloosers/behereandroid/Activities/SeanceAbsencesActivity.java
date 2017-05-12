@@ -36,6 +36,7 @@ public class SeanceAbsencesActivity<T extends Structurable> extends AppCompatAct
     private T structure;
     private Seance seance;
 
+    private ProgressDialog loadingProgressDialog;
     private Toolbar toolbar;
     private RecyclerView seanceAbsencesRecyclerView;
 
@@ -57,10 +58,7 @@ public class SeanceAbsencesActivity<T extends Structurable> extends AppCompatAct
 
         seanceAbsencesRecyclerView.setLayoutManager(seancesLinearLayoutManager);
 
-        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(seanceAbsencesRecyclerView.getContext(),
-                seancesLinearLayoutManager.getOrientation());
-        dividerItemDecoration.setDrawable(ContextCompat.getDrawable(this, R.drawable.recyclerview_divider));
-        seanceAbsencesRecyclerView.addItemDecoration(dividerItemDecoration);
+        Utils.setRecyclerViewDecoration(seanceAbsencesRecyclerView);
     }
 
     @Override
@@ -68,18 +66,16 @@ public class SeanceAbsencesActivity<T extends Structurable> extends AppCompatAct
 
         super.onStart();
 
-        String toolbarTitle = getString(R.string.seance_absences_toolbar_title);
-        getSupportActionBar().setTitle(toolbarTitle);
-        String toolbarSubTitle = String.format("%s: %s: %s", module.getDesignation(),
-                structure.getDesignation(), seance.getDate());
-        getSupportActionBar().setSubtitle(toolbarSubTitle);
+        Utils.setActionBarTitle(this, getString(R.string.seance_absences_toolbar_title));
+        Utils.setActionBarSubtitle(this, String.format("%s: %s: %s", module.getDesignation(),
+                structure.getDesignation(), seance.getDate()));
 
         loadSeanceAbsences();
     }
 
     private void loadSeanceAbsences() {
 
-        final ProgressDialog loadingProgressDialog = new ProgressDialog(this);
+        loadingProgressDialog = new ProgressDialog(this);
         loadingProgressDialog.setCancelable(false);
         loadingProgressDialog.setMessage(getResources().getString(R.string.chargement_absences_loading_message));
 
@@ -87,8 +83,8 @@ public class SeanceAbsencesActivity<T extends Structurable> extends AppCompatAct
                 seance.getIdSection(): seance.getIdGroupe();
         String pathToSeance = Utils.firebasePath(Utils.ENSEIGNANT_MODULE, Utils.enseignant.getId(),
                 module.getId(), seance.getTypeSeance(), structureId, seance.getId());
-        Query myQuery = Utils.database.getReference(pathToSeance).orderByChild("typeSeance").
-                equalTo(seance.getTypeSeance());
+        Query myQuery = Utils.database.getReference(pathToSeance).orderByChild("date")
+                .startAt(0);
 
         myQuery.keepSynced(true); // Keeping data fresh
 
@@ -101,13 +97,19 @@ public class SeanceAbsencesActivity<T extends Structurable> extends AppCompatAct
 
                 setViewHolderWithAbsenceInformation(viewHolder, absence);
             }
-
             @Override
             protected void onDataChanged() {
 
                 super.onDataChanged();
 
                 loadingProgressDialog.dismiss();
+            }
+
+            @Override
+            protected void onCancelled(DatabaseError error) {
+
+                super.onCancelled(error);
+                Utils.showSnackBar(SeanceAbsencesActivity.this, Utils.DATABASE_ERR_MESSAGE);
             }
         };
 
@@ -151,7 +153,7 @@ public class SeanceAbsencesActivity<T extends Structurable> extends AppCompatAct
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
+                Utils.showSnackBar(SeanceAbsencesActivity.this, Utils.DATABASE_ERR_MESSAGE);
             }
         });
     }
@@ -174,7 +176,6 @@ public class SeanceAbsencesActivity<T extends Structurable> extends AppCompatAct
 
             nomPrenomEtudiantTextView = (TextView) itemView.findViewById(R.id.nomPrenomEtudiantTextView);
             supprimerAbsenceImageButton = (ImageButton) itemView.findViewById(R.id.supprimerAbsenceImageButton);
-
         }
     }
 }

@@ -47,6 +47,7 @@ public class SeancesFragment<T extends Structurable> extends Fragment {
     private T structure;
     private String typeSeance;
 
+    private ProgressDialog loadingProgressDialog;
     private RecyclerView seancesRecyclerView;
 
     public SeancesFragment() {    }
@@ -81,10 +82,7 @@ public class SeancesFragment<T extends Structurable> extends Fragment {
         LinearLayoutManager seancesLinearLayoutManager = new LinearLayoutManager(getContext());
         seancesRecyclerView.setLayoutManager(seancesLinearLayoutManager);
 
-        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getContext(),
-                seancesLinearLayoutManager.getOrientation());
-        dividerItemDecoration.setDrawable(ContextCompat.getDrawable(getContext(), R.drawable.recyclerview_divider));
-        seancesRecyclerView.addItemDecoration(dividerItemDecoration);
+        Utils.setRecyclerViewDecoration(seancesRecyclerView);
 
         return rootView;
     }
@@ -97,7 +95,7 @@ public class SeancesFragment<T extends Structurable> extends Fragment {
     }
     private void loadSeances() {
 
-        final ProgressDialog loadingProgressDialog = new ProgressDialog(getContext());
+        loadingProgressDialog = new ProgressDialog(getContext());
         loadingProgressDialog.setCancelable(false);
         loadingProgressDialog.setMessage(getResources().getString(R.string.chargement_seances_loading_message));
 
@@ -115,17 +113,22 @@ public class SeancesFragment<T extends Structurable> extends Fragment {
             protected void populateView(SeanceViewHolder viewHolder, Seance seance, int position) {
 
                 String dateSeance = seance.getDate();
-
                 viewHolder.dateSeanceTextView.setText(dateSeance);
                 setNbAbsenceTextView(viewHolder.seanceNbAbsencesTextView, seance);
             }
-
             @Override
             protected void onDataChanged() {
 
                 super.onDataChanged();
 
                 loadingProgressDialog.dismiss();
+            }
+
+            @Override
+            protected void onCancelled(DatabaseError error) {
+
+                super.onCancelled(error);
+                Utils.showSnackBar(getActivity(), Utils.DATABASE_ERR_MESSAGE);
             }
         };
         seancesAdapter.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -161,7 +164,9 @@ public class SeancesFragment<T extends Structurable> extends Fragment {
                 displayNbAbsencesInTextView(seanceNbAbsencesTextView, seanceNbAbsences);
             }
             @Override
-            public void onCancelled(DatabaseError databaseError) {  }
+            public void onCancelled(DatabaseError databaseError) {
+                Utils.showSnackBar(getActivity(), Utils.DATABASE_ERR_MESSAGE);
+            }
         });
     }
 

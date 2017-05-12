@@ -24,7 +24,6 @@ public class DatePickerFragment extends DialogFragment implements DatePickerDial
 
         mListener = (OnDateSelectedListener) getActivity();
     }
-
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
@@ -35,7 +34,6 @@ public class DatePickerFragment extends DialogFragment implements DatePickerDial
 
         return new DatePickerDialog(getActivity(), this, year, month, day);
     }
-
     @Override
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
 
@@ -44,6 +42,6 @@ public class DatePickerFragment extends DialogFragment implements DatePickerDial
 
     public interface OnDateSelectedListener {
 
-        public void onDateSelected(int day, int month, int year);
+        void onDateSelected(int day, int month, int year);
     }
 }

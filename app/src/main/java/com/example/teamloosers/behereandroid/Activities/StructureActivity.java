@@ -17,11 +17,13 @@ import android.view.View;
 import com.example.teamloosers.behereandroid.R;
 import com.example.teamloosers.behereandroid.Fragments.EtudiantsFragment;
 import com.example.teamloosers.behereandroid.Fragments.SeancesFragment;
+import com.example.teamloosers.behereandroid.Structures.Groupe;
 import com.example.teamloosers.behereandroid.Structures.Module;
 import com.example.teamloosers.behereandroid.Structures.Seance;
 import com.example.teamloosers.behereandroid.Structures.Structurable;
 
-public class StructureActivity <T extends Structurable> extends AppCompatActivity {
+public class StructureActivity <T extends Structurable> extends AppCompatActivity
+        implements View.OnClickListener{
 
     private Module module;
     private T structure;
@@ -36,7 +38,6 @@ public class StructureActivity <T extends Structurable> extends AppCompatActivit
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_structure);
-
 
         module = (Module) getIntent().getExtras().getSerializable("module");
         structure = (T) getIntent().getExtras().getSerializable("structure");
@@ -54,27 +55,14 @@ public class StructureActivity <T extends Structurable> extends AppCompatActivit
         tabLayout.setupWithViewPager(mViewPager);
 
         nouveauAppelFloatButton = (FloatingActionButton) findViewById(R.id.nouveauAppelFlatButton);
-        nouveauAppelFloatButton.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-
-                Intent appelListIntent = new Intent(StructureActivity.this, AppelListActivity.class);
-                appelListIntent.putExtra("module", module);
-                appelListIntent.putExtra("structure", structure);
-
-                startActivity(appelListIntent);
-            }
-        });
+        nouveauAppelFloatButton.setOnClickListener(this);
     }
-
     @Override
     public boolean onSupportNavigateUp() {
 
         finish();
         return true;
     }
-
     @Override
     protected void onStart() {
 
@@ -85,36 +73,50 @@ public class StructureActivity <T extends Structurable> extends AppCompatActivit
         getSupportActionBar().setTitle(toolbarTitle);
     }
 
+    @Override
+    public void onClick(View v) {
+
+        if (v == nouveauAppelFloatButton) {
+
+            Intent appelListIntent = new Intent(StructureActivity.this, AppelListActivity.class);
+            appelListIntent.putExtra("module", module);
+            appelListIntent.putExtra("structure", structure);
+
+            startActivity(appelListIntent);
+        }
+    }
+
     public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
 
         public SectionsPagerAdapter(FragmentManager fm) {
+
             super(fm);
         }
-
         @Override
         public Fragment getItem(int position) {
 
             if (position == 0)
-                return SeancesFragment.newInstance(module, structure, Seance.TD);
-            else if (position == 1)
                 return EtudiantsFragment.newInstance(module, structure);
+            else if (position == 1) {
+
+                String typeSeance = (structure instanceof Groupe)? Seance.TD: Seance.COURS;
+                return SeancesFragment.newInstance(module, structure, typeSeance);
+            }
             else
                 return null;
         }
-
         @Override
         public int getCount() {
 
             return 2;
         }
-
         @Override
         public CharSequence getPageTitle(int position) {
             switch (position) {
                 case 0:
-                    return getString(R.string.seance_tab_title);
-                case 1:
                     return getString(R.string.etudiants_tab_title);
+                case 1:
+                    return getString(R.string.seance_tab_title);
             }
             return null;
         }

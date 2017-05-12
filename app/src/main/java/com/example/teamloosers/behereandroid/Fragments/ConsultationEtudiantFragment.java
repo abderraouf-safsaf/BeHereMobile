@@ -37,7 +37,7 @@ import com.google.firebase.database.ValueEventListener;
 /**
  * Created by teamloosers on 01/05/17.
  */
-public class ConsultationEtudiantFragment extends Fragment {
+public class ConsultationEtudiantFragment extends Fragment implements View.OnClickListener {
 
     private Module module;
     private Etudiant etudiant;
@@ -76,11 +76,8 @@ public class ConsultationEtudiantFragment extends Fragment {
         LinearLayoutManager absenceLinearLayoutManager = new LinearLayoutManager(getContext());
         etudiantsAbsencesRecyclerView.setLayoutManager(absenceLinearLayoutManager);
 
+        Utils.setRecyclerViewDecoration(etudiantsAbsencesRecyclerView);
 
-        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(etudiantsAbsencesRecyclerView.getContext(),
-                absenceLinearLayoutManager.getOrientation());
-        dividerItemDecoration.setDrawable(ContextCompat.getDrawable(getContext(), R.drawable.recyclerview_divider));
-        etudiantsAbsencesRecyclerView.addItemDecoration(dividerItemDecoration);
         return rootView;
     }
     @Override
@@ -97,9 +94,9 @@ public class ConsultationEtudiantFragment extends Fragment {
         int etudiantImageWidth = getResources().getDimensionPixelSize(R.dimen.etudiantImageWidth);
         Bitmap image = Utils.decodeToImage(etudiant.getImageBase64());
         Bitmap imageResized = Bitmap.createScaledBitmap(image, etudiantImageWidth, etudiantImageHeight, true);
-
         RoundedBitmapDrawable dr = RoundedBitmapDrawableFactory.create(null, imageResized);
         dr.setCornerRadius(200);
+
         etudiantImageView.setImageDrawable(dr);
 
         nomTextView.setText(etudiant.getNom());
@@ -107,21 +104,6 @@ public class ConsultationEtudiantFragment extends Fragment {
         emailTextView.setText(etudiant.getEmail());
 
         loadEtudiantScore(etudiantScoreTextView);
-
-        plusImageButton.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                incrementerScore(etudiant);
-            }
-        });
-        minusImageButton.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                decrementerScore(etudiant);
-            }
-        });
     }
     private void loadEtudiantScore(final TextView etudiantScoreTextView) {
 
@@ -141,7 +123,9 @@ public class ConsultationEtudiantFragment extends Fragment {
                 displayScoreOnTextView(etudiantScoreTextView, score);
             }
             @Override
-            public void onCancelled(DatabaseError databaseError) {  }
+            public void onCancelled(DatabaseError databaseError) {
+                Utils.showSnackBar(getActivity(), Utils.DATABASE_ERR_MESSAGE);
+            }
         });
     }
     private void displayScoreOnTextView(TextView etudiantNbAbsencesTextView, long etudiantScore) {
@@ -167,7 +151,7 @@ public class ConsultationEtudiantFragment extends Fragment {
                 etudiant.getIdPromo(), etudiant.getIdSection(), etudiant.getIdGroupe(), etudiant.getId(), module.getId());
 
         Query etudiantRef = Utils.database.getReference(pathToEtudiant).orderByChild("idModule")
-                .equalTo(module.getId());
+                .startAt("");
         etudiantRef.keepSynced(true); // Keeping data fresh
 
         final ProgressDialog loadingProgressDialog = new ProgressDialog(getContext());
@@ -221,15 +205,22 @@ public class ConsultationEtudiantFragment extends Fragment {
             protected void onDataChanged() {
 
                 super.onDataChanged();
-
                 loadingProgressDialog.dismiss();
+            }
+
+            @Override
+            protected void onCancelled(DatabaseError error) {
+
+                super.onCancelled(error);
+                Utils.showSnackBar(getActivity(), Utils.DATABASE_ERR_MESSAGE);
+                loadingProgressDialog.cancel();
             }
         };
 
         etudiantsAbsencesRecyclerView.setAdapter(absencesListAdapter);
     }
 
-    private void incrementerScore(Etudiant etudiant) {
+    private void addToEtudiantScore(Etudiant etudiant, final int toAdd) {
 
         String pathToEtudiantScore = Utils.firebasePath(Utils.CYCLES, etudiant.getIdCycle(), etudiant.getIdFilliere(),
                 etudiant.getIdPromo(), etudiant.getIdSection(), etudiant.getIdGroupe(), etudiant.getId(), module.getId(),
@@ -243,34 +234,28 @@ public class ConsultationEtudiantFragment extends Fragment {
             public void onDataChange(DataSnapshot dataSnapshot) {
 
                 Long score = (Long) dataSnapshot.getValue();
-                Long newScore = (score == null)? 1: score + 1;
+                Long newScore = (score == null)? toAdd: score + toAdd;
                 dataSnapshot.getRef().setValue(newScore);
             }
             @Override
-            public void onCancelled(DatabaseError databaseError) {  }
-        });
-    }
-    private void decrementerScore(Etudiant etudiant)    {
-
-        String pathToEtudiantScore = Utils.firebasePath(Utils.CYCLES, etudiant.getIdCycle(), etudiant.getIdFilliere(),
-                etudiant.getIdPromo(), etudiant.getIdSection(), etudiant.getIdGroupe(), etudiant.getId(), module.getId(),
-                Utils.SCORE);
-
-        Query scoreRef = Utils.database.getReference(pathToEtudiantScore);
-        scoreRef.keepSynced(true); // Keeping data fresh
-
-        scoreRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-
-                Long score = (Long) dataSnapshot.getValue();
-                Long newScore = (score == null)? 1: score - 1;
-                dataSnapshot.getRef().setValue(newScore);
+            public void onCancelled(DatabaseError databaseError) {
+                Utils.showSnackBar(getActivity(), Utils.DATABASE_ERR_MESSAGE);
             }
-            @Override
-            public void onCancelled(DatabaseError databaseError) {  }
         });
     }
+    @Override
+    public void onClick(View v) {
+
+        if (v == plusImageButton)   {
+
+            addToEtudiantScore(etudiant, Etudiant.SCORE_PLUS);
+        }
+        else if (v == minusImageButton) {
+
+            addToEtudiantScore(etudiant, Etudiant.SCORE_MOIN);
+        }
+    }
+
     public static class AbsenceViewHolder extends ItemViewHolder {
 
         LinearLayout absenceLinearLayout;

@@ -7,6 +7,7 @@ import java.util.ArrayList;
  */
 public class Etudiant extends Personne {
 
+    public static final int SCORE_PLUS = 1, SCORE_MOIN = -1;
     public String idGroupe, idSection, idPromo, idSpecialite, idFilliere, idCycle, imageBase64;
     public int nbAbsences = 0;
 

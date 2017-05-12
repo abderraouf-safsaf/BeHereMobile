@@ -10,51 +10,6 @@
     tools:layout_editor_absoluteX="8dp"
     tools:layout_editor_absoluteY="8dp">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:gravity="center"
-        android:orientation="horizontal"
-        android:weightSum="10">
-
-        <ImageButton
-            android:id="@+id/leftImageButton"
-            android:layout_width="0dp"
-            android:layout_height="@dimen/right_arrow_button_height"
-            android:layout_gravity="center"
-            android:layout_weight="0.5"
-            android:adjustViewBounds="true"
-            android:background="@drawable/tw__transparent"
-            android:scaleType="fitCenter"
-            android:visibility="visible"
-            app:srcCompat="@drawable/left_arrow_icon" />
-
-        <TextView
-            android:id="@+id/moduleDesignationTextView"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="9"
-            android:alpha="0.8"
-            android:gravity="center"
-            android:text="TextView"
-            android:textSize="@dimen/module_designation_text_size"
-            android:visibility="visible" />
-
-        <ImageButton
-            android:id="@+id/rightImageButton"
-            android:layout_width="0dp"
-            android:layout_height="@dimen/left_arrow_button_height"
-            android:layout_gravity="center"
-            android:layout_weight="0.5"
-            android:adjustViewBounds="true"
-            android:background="@drawable/tw__transparent"
-            android:scaleType="fitCenter"
-            android:visibility="visible"
-            app:srcCompat="@drawable/right_arrow_icon" />
-
-    </LinearLayout>
-
     <TextView
         android:id="@+id/sectionsTextView"
         android:layout_width="match_parent"

@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.example.teamloosers.behereandroid.Activities.ConsultationEtudiantsActivity;
 import com.example.teamloosers.behereandroid.Structures.Groupe;
+import com.example.teamloosers.behereandroid.Structures.Seance;
 import com.example.teamloosers.behereandroid.Structures.Section;
 import com.example.teamloosers.behereandroid.Utils.FirebaseRecyclerAdapterViewer;
 import com.example.teamloosers.behereandroid.Utils.ItemViewHolder;
@@ -29,6 +30,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
+
 import jp.wasabeef.recyclerview.animators.SlideInRightAnimator;
 
 /**
@@ -40,10 +43,11 @@ public class EtudiantsFragment <T extends Structurable> extends Fragment {
     private Module module;
     private T structure;
     private FirebaseRecyclerAdapterViewer<Etudiant, EtudiantViewHolder> etudiantsListAdapater;
-
+    private SectionEtudiantsRecyclerAdapter etudiantsRecyclerAdapter;
     private RecyclerView etudiantsListRecyclerView;
 
-    public EtudiantsFragment() {    }
+    public EtudiantsFragment() {
+    }
 
     public static <T extends Structurable> EtudiantsFragment newInstance(Module module, T structure) {
 
@@ -73,10 +77,7 @@ public class EtudiantsFragment <T extends Structurable> extends Fragment {
         animator.setAddDuration(300);
         etudiantsListRecyclerView.setItemAnimator(animator);
 
-        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(etudiantsListRecyclerView.getContext(),
-                linearLayoutManager.getOrientation());
-        dividerItemDecoration.setDrawable(ContextCompat.getDrawable(getContext(), R.drawable.recyclerview_divider));
-        etudiantsListRecyclerView.addItemDecoration(dividerItemDecoration);
+        Utils.setRecyclerViewDecoration(etudiantsListRecyclerView);
 
         return rootView;
     }
@@ -93,7 +94,60 @@ public class EtudiantsFragment <T extends Structurable> extends Fragment {
     }
 
     private void loadSectionsEtudiant() {
-        // TODO: load sections etudiant
+
+        final ProgressDialog loadingProgressDialog = new ProgressDialog(getContext());
+        loadingProgressDialog.setCancelable(false);
+        loadingProgressDialog.setMessage(getResources().getString(R.string.chargement_etudiants_loading_message));
+
+        final ArrayList<Etudiant> etudiantsList = new ArrayList<>();
+
+        String pathToStructure = Utils.firebasePath(Utils.CYCLES, structure.getIdCycle(), structure.getIdFilliere(), structure.getIdPromo(),
+                structure.getIdSection());
+
+        Query groupeQuery = Utils.database.getReference(pathToStructure).orderByChild("id")
+                .startAt("");
+        groupeQuery.keepSynced(true); // Keeping data fresh
+
+        loadingProgressDialog.show();
+        groupeQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                for (DataSnapshot snapshot: dataSnapshot.getChildren()) { // Groupes
+
+                    if (snapshot.hasChildren()) { // It's Groupe
+
+                        for (DataSnapshot snapshot2: snapshot.getChildren())    {
+
+                            if (snapshot2.hasChildren()) { // It's Etudiant
+
+                                Etudiant etudiant = snapshot2.getValue(Etudiant.class);
+                                etudiantsList.add(etudiant);
+                            }
+                        }
+                    }
+                }
+                etudiantsRecyclerAdapter = new SectionEtudiantsRecyclerAdapter(etudiantsList);
+                etudiantsRecyclerAdapter.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                        Intent intent = new Intent(getContext(), ConsultationEtudiantsActivity.class);
+                        intent.putExtra("etudiantsList", etudiantsRecyclerAdapter.getItems());
+                        intent.putExtra("currentEtudiantPosition", position);
+                        intent.putExtra("module", module);
+
+                        startActivity(intent);
+                    }
+                });
+                etudiantsListRecyclerView.setAdapter(etudiantsRecyclerAdapter);
+                loadingProgressDialog.dismiss();
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Utils.showSnackBar(getActivity(), Utils.DATABASE_ERR_MESSAGE);
+            }
+        });
     }
 
     private void loadGroupeEtudiants() {
@@ -129,6 +183,13 @@ public class EtudiantsFragment <T extends Structurable> extends Fragment {
                 loadingProgressDialog.dismiss();
             }
 
+            @Override
+            protected void onCancelled(DatabaseError error) {
+
+                super.onCancelled(error);
+                Utils.showSnackBar(getActivity(), Utils.DATABASE_ERR_MESSAGE);
+                loadingProgressDialog.cancel();
+            }
         };
         etudiantsListAdapater.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -151,8 +212,9 @@ public class EtudiantsFragment <T extends Structurable> extends Fragment {
                 etudiant.getIdPromo(), etudiant.getIdSection(), etudiant.getIdGroupe(),
                 etudiant.getId(), module.getId());
 
-        Query etudiantRef = Utils.database.getReference(pathToEtudiant).orderByChild("idModule")
-                .equalTo(module.getId());
+        String typeSeance = (structure instanceof Groupe)? Seance.TD: Seance.COURS;
+        Query etudiantRef = Utils.database.getReference(pathToEtudiant).orderByChild("typeSeance")
+                .equalTo(typeSeance);
         etudiantRef.keepSynced(true); // Keeping data fresh
 
         etudiantRef.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -162,8 +224,11 @@ public class EtudiantsFragment <T extends Structurable> extends Fragment {
                 long etudiantNbAbsences = dataSnapshot.getChildrenCount();
                 displayNbAbsencesInTextView(etudiantNbAbsencesTextView, etudiantNbAbsences);
             }
+
             @Override
-            public void onCancelled(DatabaseError databaseError) {  }
+            public void onCancelled(DatabaseError databaseError) {
+                Utils.showSnackBar(getActivity(), Utils.DATABASE_ERR_MESSAGE);
+            }
         });
     }
 
@@ -181,11 +246,59 @@ public class EtudiantsFragment <T extends Structurable> extends Fragment {
             case 2:
                 textColor = ContextCompat.getColor(getContext(), R.color.deux_absences);
                 break;
-            default: textColor = ContextCompat.getColor(getContext(), R.color.plus_deux_absences);
+            default:
+                textColor = ContextCompat.getColor(getContext(), R.color.plus_deux_absences);
         }
         etudiantNbAbsencesTextView.setText(String.format("%d", etudiantNbAbsences));
         etudiantNbAbsencesTextView.setTextColor(textColor);
     }
+
+    public class SectionEtudiantsRecyclerAdapter extends RecyclerView.Adapter<EtudiantViewHolder> {
+
+        private ArrayList<Etudiant> etudiantsList;
+
+        private AdapterView.OnItemClickListener listener;
+
+        public SectionEtudiantsRecyclerAdapter(ArrayList<Etudiant> etudiantsList) {
+
+            this.etudiantsList = etudiantsList;
+        }
+
+        @Override
+        public EtudiantViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+
+            View view = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.view_holder_etudiant, parent, false);
+            return new EtudiantViewHolder(view);
+        }
+        @Override
+        public void onBindViewHolder(final EtudiantViewHolder holder, int position) {
+
+            Etudiant etudiant = etudiantsList.get(position);
+            String nomEtPrenom = String.format("%s %s", etudiant.getNom(), etudiant.getPrenom());
+
+            holder.etudiantNomPrenomTextView.setText(nomEtPrenom);
+            setNbAbsenceTextView(holder.etudiantNbAbsencesTextView, etudiant);
+
+            if (holder.visible)
+                holder.bind(holder.itemView, listener);
+        }
+        @Override
+        public int getItemCount() {
+
+            return etudiantsList.size();
+        }
+
+        public void setOnItemClickListener(AdapterView.OnItemClickListener listener) {
+
+            this.listener = listener;
+        }
+        public ArrayList<Etudiant> getItems()   {
+
+            return this.etudiantsList;
+        }
+    }
+
     public static class EtudiantViewHolder extends ItemViewHolder {
 
         TextView etudiantNomPrenomTextView, etudiantNbAbsencesTextView;
@@ -197,6 +310,6 @@ public class EtudiantsFragment <T extends Structurable> extends Fragment {
             etudiantNomPrenomTextView = (TextView) itemView.findViewById(R.id.etudiantNomPrenomTextView);
             etudiantNbAbsencesTextView = (TextView) itemView.findViewById(R.id.etudiantNbAbsences);
         }
-    }
 
+    }
 }

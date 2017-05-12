@@ -21,6 +21,7 @@ import com.example.teamloosers.behereandroid.Structures.Groupe;
 import com.example.teamloosers.behereandroid.Structures.Module;
 import com.example.teamloosers.behereandroid.Structures.Section;
 import com.example.teamloosers.behereandroid.Utils.Utils;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.Query;
 
 /**
@@ -31,8 +32,8 @@ public class MainFragment extends Fragment {
 
     private Module module;
 
+    private ProgressDialog loadingProgressDialog;
     private RecyclerView groupesRecyclerView, sectionsRecyclerView;
-    private TextView moduleDesignationTextView;
 
     public MainFragment() {  }
 
@@ -43,7 +44,6 @@ public class MainFragment extends Fragment {
 
         module = (Module) getArguments().getSerializable("module");
     }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -52,7 +52,6 @@ public class MainFragment extends Fragment {
 
         sectionsRecyclerView = (RecyclerView) rootView.findViewById(R.id.sectionsRecyclerView);
         groupesRecyclerView = (RecyclerView) rootView.findViewById(R.id.groupesRecyclerView);
-        moduleDesignationTextView = (TextView) rootView.findViewById(R.id.moduleDesignationTextView);
 
         sectionsRecyclerView.setHasFixedSize(true);
         groupesRecyclerView.setHasFixedSize(true);
@@ -71,17 +70,17 @@ public class MainFragment extends Fragment {
 
         super.onStart();
 
-        moduleDesignationTextView.setText(module.getDesignation());
         loadSections();
         loadGroupes();
     }
     private void loadSections() {
 
-        final ProgressDialog loadingProgressDialog = new ProgressDialog(getContext());
+        loadingProgressDialog = new ProgressDialog(getContext());
         loadingProgressDialog.setCancelable(false);
         loadingProgressDialog.setMessage(getResources().getString(R.string.chargement_sections_loading_message));
 
-        String sectionsPath = Utils.firebasePath(Utils.ENSEIGNANT_MODULE, Utils.enseignant.getId(), module.getId(), Utils.SECTIONS);
+        String sectionsPath = Utils.firebasePath(Utils.ENSEIGNANT_MODULE, Utils.enseignant.getId(),
+                module.getId(), Utils.SECTIONS);
 
         Query sectionQuery = Utils.database.getReference(sectionsPath);
 
@@ -89,6 +88,7 @@ public class MainFragment extends Fragment {
 
         final FirebaseRecyclerAdapterViewer<Section, StructureViewHolder> adapter = new FirebaseRecyclerAdapterViewer<Section, StructureViewHolder>(Section.class,
                 R.layout.view_holder_structure, StructureViewHolder.class, sectionQuery) {
+
             @Override
             protected void populateView(StructureViewHolder viewHolder, final Section section, int position) {
 
@@ -100,6 +100,14 @@ public class MainFragment extends Fragment {
                 super.onDataChanged();
 
                 loadingProgressDialog.dismiss();
+            }
+
+            @Override
+            protected void onCancelled(DatabaseError error) {
+
+                super.onCancelled(error);
+                Utils.showSnackBar(getActivity(), Utils.DATABASE_ERR_MESSAGE);
+                loadingProgressDialog.cancel();
             }
         };
         adapter.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -113,10 +121,10 @@ public class MainFragment extends Fragment {
                 startActivity(groupeIntent);
             }
         });
+
         sectionsRecyclerView.setAdapter(adapter);
     }
     private void loadGroupes()  {
-
 
         final ProgressDialog loadingProgressDialog = new ProgressDialog(getContext());
         loadingProgressDialog.setCancelable(false);
@@ -141,6 +149,14 @@ public class MainFragment extends Fragment {
                 super.onDataChanged();
 
                 loadingProgressDialog.dismiss();
+            }
+
+            @Override
+            protected void onCancelled(DatabaseError error) {
+
+                super.onCancelled(error);
+                Utils.showSnackBar(getActivity(), Utils.DATABASE_ERR_MESSAGE);
+                loadingProgressDialog.cancel();
             }
         };
         adapter.setOnItemClickListener(new AdapterView.OnItemClickListener() {

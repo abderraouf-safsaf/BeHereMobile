@@ -18,7 +18,7 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="appbar_padding_top">8dp</dimen>
-    <dimen name="module_designation_text_size">24sp</dimen>
+    <dimen name="module_designation_text_size">7sp</dimen>
     <dimen name="absence_date_text_size">18sp</dimen>
     <dimen name="presence_switch_text_size">30sp</dimen>
     <dimen name="presence_nometprenom_text_size">18sp</dimen>
@@ -61,5 +61,5 @@
     <dimen name="date_seance_text_size">20sp</dimen>
     <dimen name="consulter_absence_image_button_height">20dp</dimen>
     <dimen name="nombre_absences_text_size">16sp</dimen>
-    <dimen name="date_seance_text_view_size">16sp</dimen>
+    <dimen name="date_seance_text_view_size">15sp</dimen>
 </resources>

@@ -4,9 +4,16 @@ import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.RecyclerView;
 import android.util.Base64;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.teamloosers.behereandroid.R;
@@ -30,14 +37,16 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.UUID;
 
+import jp.wasabeef.recyclerview.animators.SlideInUpAnimator;
+
 /**
  * Created by redjohn on 16/04/17.
  */
 
 public class Utils {
 
-    public static final Boolean BACKABLE = true, NOT_BACKABLE = false;
-
+    public static final String DATABASE_ERR_MESSAGE = "Une érreur s'est produit lors de la connexion" +
+            "à la base de donnée";
     public static FirebaseDatabase database;
 
     public static Enseignant enseignant;
@@ -156,11 +165,12 @@ public class Utils {
 
         return decodedByte;
     }
-    public static void showSnackBar(View view, String message) {
+    public static void showSnackBar(Activity activity, String message) {
 
-        Snackbar snackbar = Snackbar.make(view, message, Snackbar.LENGTH_LONG);
+        View rootView = activity.getWindow().getDecorView().getRootView();
+        Snackbar snackbar = Snackbar.make(rootView, message, Snackbar.LENGTH_LONG);
         TextView snackbarTextView = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
-        snackbarTextView.setTextColor(ContextCompat.getColor(view.getContext(), R.color.white));
+        snackbarTextView.setTextColor(ContextCompat.getColor(rootView.getContext(), R.color.white));
         snackbar.show();
     }
     public static void envoyerNotification(final Activity activity, final Etudiant etudiant, final String message)   {
@@ -217,6 +227,26 @@ public class Utils {
                         }
                     }
                 });
+    }
+    public static void setActivityFullScreen(Activity activity) {
 
+        activity.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        activity.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+    }
+    public static void setRecyclerViewDecoration(RecyclerView recyclerView) {
+
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(),
+                LinearLayout.VERTICAL);
+        dividerItemDecoration.setDrawable(ContextCompat.getDrawable(recyclerView.getContext(), R.drawable.recyclerview_divider));
+        recyclerView.addItemDecoration(dividerItemDecoration);
+    }
+    public static void setActionBarTitle(AppCompatActivity activity, String title) {
+
+        activity.getSupportActionBar().setTitle(title);
+    }
+    public static void setActionBarSubtitle(AppCompatActivity activity, String title) {
+
+        activity.getSupportActionBar().setSubtitle(title);
     }
 }

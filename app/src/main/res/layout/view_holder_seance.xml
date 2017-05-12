@@ -24,10 +24,10 @@ android:layout_marginTop="10dp">
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_weight="2"
+            android:layout_weight="1.5"
             android:gravity="center"
             android:text="@string/date_seance_text_view_text"
-            android:textColor="@color/textSecondary"
+            android:textColor="@color/colorAccent"
             android:textSize="@dimen/date_seance_text_view_size" />
 
         <TextView
@@ -35,11 +35,11 @@ android:layout_marginTop="10dp">
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_weight="8"
+            android:layout_weight="8.5"
             android:gravity="left"
             android:text="Date"
             android:textColor="@color/textSecondary"
-            android:textSize="@dimen/etudiantNomPrenomTextSize" />
+            android:textSize="@dimen/date_seance_text_size" />
     </LinearLayout>
 
 <LinearLayout

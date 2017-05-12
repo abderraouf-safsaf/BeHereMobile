@@ -4,6 +4,7 @@ import com.example.teamloosers.behereandroid.Fragments.MainFragment;
 import com.example.teamloosers.behereandroid.R;
 import com.example.teamloosers.behereandroid.Structures.Enseignant;
 import com.example.teamloosers.behereandroid.Structures.Module;
+import com.example.teamloosers.behereandroid.Utils.LoginServices;
 import com.example.teamloosers.behereandroid.Utils.Utils;
 import com.firebase.ui.auth.AuthUI;
 import com.google.firebase.auth.FirebaseAuth;
@@ -20,7 +21,10 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.view.PagerTitleStrip;
 import android.support.v4.view.ViewPager;
+import android.util.TypedValue;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -40,26 +44,29 @@ public class MainActivity extends AppCompatActivity
 
     private ArrayList<Module> modulesList = new ArrayList<>();
 
+    private ProgressDialog progressDialog;
+    private Toolbar toolbar;
     private ImageView enseignantImageView;
     private TextView enseignantNomPrenomTextView, enseignantEmailTextView;
+    private PagerTitleStrip modulePagerTitleStrip;
     private ModulesPageAdapter mPageAdapter;
     private ViewPager mViewPager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
 
         checkEnseignantExistence();
 
-
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        toolbar.setTitle(String.format("M.%s %s", Utils.enseignant.getNom(), Utils.enseignant.getPrenom()));
-        setSupportActionBar(toolbar);
+        setContentView(R.layout.activity_main);
 
         mViewPager = (ViewPager) findViewById(R.id.container);
+
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle(String.format("M.%s %s", Utils.enseignant.getNom(), Utils.enseignant.getPrenom()));
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -69,38 +76,36 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
         View header = navigationView.getHeaderView(0);
 
         enseignantNomPrenomTextView = (TextView) header.findViewById(R.id.enseignantNomPrenomTextView);
         enseignantEmailTextView = (TextView) header.findViewById(R.id.enseignantEmailTextView);
         enseignantImageView = (ImageView) header.findViewById(R.id.enseignantImageView);
 
+        modulePagerTitleStrip = (PagerTitleStrip) findViewById(R.id.modulePagerTitleStrip);
+        modulePagerTitleStrip.setTextColor(ContextCompat.getColor(this, R.color.textSecondary));
+        modulePagerTitleStrip.setTextSize(TypedValue.COMPLEX_UNIT_SP,
+                getResources().getDimension(R.dimen.module_designation_text_size));
+
         loadEnseignantModules();
     }
 
-    private void checkEnseignantExistence() {
-        if (Utils.enseignant == null)    {
-
-            startLoginActivity();
-            finish();
-        }
-    }
     @Override
     protected void onStart() {
 
         super.onStart();
 
-        if (FirebaseAuth.getInstance().getCurrentUser() != null)   {
+        if (LoginServices.isEnseignantLoggedIn())   {
 
             enseignantNomPrenomTextView.setText(String.format("%s %s", Utils.enseignant.getNom(), Utils
                     .enseignant.getPrenom()));
             enseignantEmailTextView.setText(Utils.enseignant.getEmail());
-            Picasso.with(this).load(FirebaseAuth.getInstance().getCurrentUser().getPhotoUrl()).into(enseignantImageView);
+            Picasso.with(this).load(LoginServices.getCurrentUser().getPhotoUrl()).into(enseignantImageView);
         }
     }
     @Override
     public void onBackPressed() {
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
@@ -108,24 +113,19 @@ public class MainActivity extends AppCompatActivity
             super.onBackPressed();
         }
     }
-
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
+
         int id = item.getItemId();
+            if (id == R.id.seDeconnecterItem) {
 
-        if (id == R.id.parametresItem) {
-            // Handle the camera action
-        } else if (id == R.id.seDeconnecterItem) {
+                if (LoginServices.getCurrentUser() != null)    {
 
-            if (FirebaseAuth.getInstance().getCurrentUser() != null)    {
-
-                AuthUI.getInstance().signOut(this);
-                Utils.enseignant = null;
-                startLoginActivity();
-                finish();
-            }
+                    LoginServices.signOut(this);
+                    startLoginActivity();
+                    finish();
+                }
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -135,13 +135,13 @@ public class MainActivity extends AppCompatActivity
 
     private void loadEnseignantModules()    {
 
-        final ProgressDialog progressDialog = new ProgressDialog(this);
+        progressDialog = new ProgressDialog(this);
         progressDialog.setCancelable(false);
         progressDialog.setMessage(getResources().getString(R.string.chargement_modules_loading_message));
 
         String pathToEnseignant = Utils.firebasePath(Utils.ENSEIGNANT_MODULE, Utils.enseignant.getId());
 
-        Query query = Utils.database.getReference(pathToEnseignant).orderByChild("semestre").startAt(0);
+        Query query = Utils.database.getReference(pathToEnseignant).orderByChild("id").startAt("");
 
         query.keepSynced(true); // Keeping data fresh
 
@@ -156,13 +156,15 @@ public class MainActivity extends AppCompatActivity
                     modulesList.add(module);
                 }
 
-                mPageAdapter = new ModulesPageAdapter(getSupportFragmentManager(), modulesList, MainActivity.this);
+                mPageAdapter = new ModulesPageAdapter(getSupportFragmentManager(), modulesList);
                 mViewPager.setAdapter(mPageAdapter);
 
                 progressDialog.dismiss();
             }
             @Override
-            public void onCancelled(DatabaseError databaseError) {  }
+            public void onCancelled(DatabaseError databaseError) {
+                Utils.showSnackBar(MainActivity.this, Utils.DATABASE_ERR_MESSAGE);
+            }
         });
     }
     private void startLoginActivity() {
@@ -170,39 +172,40 @@ public class MainActivity extends AppCompatActivity
         Intent loginIntent = new Intent(this, LoginActivity.class);
         startActivity(loginIntent);
     }
-
     @Override
     public boolean onSupportNavigateUp() {
 
         finish();
         return true;
     }
+    private void checkEnseignantExistence() {
 
+        if (!LoginServices.isEnseignantLoggedIn())    {
+
+            startLoginActivity();
+            finish();
+        }
+    }
     public class ModulesPageAdapter extends FragmentPagerAdapter {
 
         private ArrayList<Module> modulesList;
-        private Context context;
 
-        public ModulesPageAdapter(FragmentManager fm, ArrayList<Module> modulesList, Context context) {
+        public ModulesPageAdapter(FragmentManager fm, ArrayList<Module> modulesList) {
 
             super(fm);
 
             this.modulesList = modulesList;
-            this.context = context;
         }
-
         @Override
         public Fragment getItem(int position) {
 
             return MainFragment.newInstance(modulesList.get(position));
         }
-
         @Override
         public int getCount() {
 
             return modulesList.size();
         }
-
         @Override
         public CharSequence getPageTitle(int position) {
 
