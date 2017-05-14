@@ -3,10 +3,6 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/parametresItem"
-            android:icon="@drawable/ic_menu_manage"
-            android:title="@string/parametres" />
-        <item
             android:id="@+id/aideItem"
             android:icon="@drawable/ic_menu_slideshow"
             android:title="@string/aide" />

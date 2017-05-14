@@ -16,7 +16,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_gravity="top"
-        android:layout_weight="10"
+        android:layout_weight="11"
         android:gravity="top|center">
 
         <TableRow
@@ -47,6 +47,7 @@
                 android:id="@+id/nomTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
                 android:gravity="center"
                 android:text="TextView"
                 android:textSize="@dimen/etudiantNomTextSize"
@@ -155,7 +156,7 @@
         android:layout_height="0dp"
         android:layout_gravity="center"
         android:layout_margin="5dp"
-        android:layout_weight="5"
+        android:layout_weight="4"
         android:padding="5dp"
         android:scrollIndicators="left"
         android:scrollbarAlwaysDrawHorizontalTrack="false"

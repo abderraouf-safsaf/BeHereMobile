@@ -78,6 +78,9 @@ public class ConsultationEtudiantFragment extends Fragment implements View.OnCli
 
         Utils.setRecyclerViewDecoration(etudiantsAbsencesRecyclerView);
 
+        plusImageButton.setOnClickListener(this);
+        minusImageButton.setOnClickListener(this);
+
         return rootView;
     }
     @Override

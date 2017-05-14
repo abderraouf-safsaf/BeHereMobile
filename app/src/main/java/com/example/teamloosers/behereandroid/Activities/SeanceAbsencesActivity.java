@@ -53,6 +53,8 @@ public class SeanceAbsencesActivity<T extends Structurable> extends AppCompatAct
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         seanceAbsencesRecyclerView = (RecyclerView) findViewById(R.id.seanceAbsencesRecyclerView);
         LinearLayoutManager seancesLinearLayoutManager = new LinearLayoutManager(this);
 

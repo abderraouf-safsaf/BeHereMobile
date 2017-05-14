@@ -37,13 +37,10 @@
         </activity>
         <activity
             android:name=".Activities.MainActivity"
-            android:theme="@style/BeHere">
-        </activity>
+            android:theme="@style/BeHere"></activity>
         <activity
             android:name=".Activities.StructureActivity"
-            android:theme="@style/BeHere">
-
-        </activity>
+            android:theme="@style/BeHere"></activity>
     </application>
 
 </manifest>
