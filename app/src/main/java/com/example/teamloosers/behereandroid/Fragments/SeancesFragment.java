@@ -112,7 +112,8 @@ public class SeancesFragment<T extends Structurable> extends Fragment {
             @Override
             protected void populateView(SeanceViewHolder viewHolder, Seance seance, int position) {
 
-                String dateSeance = seance.getDate();
+                String dateSeance = String.format("%s - %s:%s", seance.getDate(),
+                        seance.getHeureDebut(), seance.getMinuteDebut());
                 viewHolder.dateSeanceTextView.setText(dateSeance);
                 setNbAbsenceTextView(viewHolder.seanceNbAbsencesTextView, seance);
             }

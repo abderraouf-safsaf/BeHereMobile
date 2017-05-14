@@ -64,20 +64,30 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right|center"
-                android:layout_weight="7"
+                android:layout_weight="4"
                 android:background="@drawable/tw__transparent"
-                android:gravity="center|start"
-                android:paddingLeft="40dp"
+                android:gravity="center"
+                android:paddingLeft="0dp"
                 android:text="@string/modifier_date_button_text"
                 android:textColor="@color/colorAccent"
                 android:textSize="@dimen/date_seance_text_size" />
+
+            <Button
+                android:id="@+id/modifierHeureButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:background="@drawable/tw__transparent"
+                android:text="Heure"
+                android:textColor="@color/colorAccent"
+                android:textSize="@dimen/heure_debut_button_text_size" />
 
             <Button
                 android:id="@+id/validerAppelButton"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right|center"
-                android:layout_weight="3"
+                android:layout_weight="4"
                 android:background="@drawable/tw__transparent"
                 android:gravity="center"
                 android:text="@string/valider_appel_button"

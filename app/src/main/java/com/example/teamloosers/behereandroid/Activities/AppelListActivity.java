@@ -1,6 +1,7 @@
 package com.example.teamloosers.behereandroid.Activities;
 
 import android.app.ProgressDialog;
+import android.app.TimePickerDialog;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
@@ -19,6 +20,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.example.teamloosers.behereandroid.Fragments.DatePickerFragment;
@@ -50,14 +52,14 @@ public class AppelListActivity <T extends Structurable> extends AppCompatActivit
     private T structure;
     private Seance seance;
 
-    private int annee, mois, jour;
+    private int annee, mois, jour, heureDebut, minuteDebut;
 
     private SectionEtudiantsRecyclerAdapter etudiantsRecyclerAdapter;
 
     private ProgressDialog loadingProgressDialog;
     private Toolbar toolbar;
     private RecyclerView etudiantAppelListRecyclerView;
-    private Button validerAppelButton, modifierDateButton;
+    private Button validerAppelButton, modifierDateButton, modifierHeureButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +77,7 @@ public class AppelListActivity <T extends Structurable> extends AppCompatActivit
         etudiantAppelListRecyclerView = (RecyclerView) findViewById(R.id.etudiantsAppelListRecyclerView);
         validerAppelButton = (Button) findViewById(R.id.validerAppelButton);
         modifierDateButton = (Button) findViewById(R.id.modifierDateButton);
+        modifierHeureButton = (Button) findViewById(R.id.modifierHeureButton);
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -82,6 +85,7 @@ public class AppelListActivity <T extends Structurable> extends AppCompatActivit
         initializeDate();
 
         updateDateSeanceTextView();
+        updateHeureSeanceTextView();
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         etudiantAppelListRecyclerView.setLayoutManager(linearLayoutManager);
@@ -89,6 +93,7 @@ public class AppelListActivity <T extends Structurable> extends AppCompatActivit
 
         modifierDateButton.setOnClickListener(this);
         validerAppelButton.setOnClickListener(this);
+        modifierHeureButton.setOnClickListener(this);
     }
 
     @Override
@@ -232,10 +237,17 @@ public class AppelListActivity <T extends Structurable> extends AppCompatActivit
         annee = calendar.get(Calendar.YEAR);
         mois = calendar.get(Calendar.MONTH) + 1;
         jour = calendar.get(Calendar.DAY_OF_MONTH);
+
+        heureDebut = calendar.get(Calendar.HOUR_OF_DAY);
+        minuteDebut = calendar.get(Calendar.MINUTE);
     }
     private void updateDateSeanceTextView() {
 
         modifierDateButton.setText(String.format("%s/%s/%s", jour, mois, annee));
+    }
+    private void updateHeureSeanceTextView()    {
+
+        modifierHeureButton.setText(String.format("%s:%s", heureDebut, minuteDebut));
     }
     private void loadEtudiantScore(Etudiant etudiant, final TextView etudiantScoreTextView) {
 
@@ -344,15 +356,16 @@ public class AppelListActivity <T extends Structurable> extends AppCompatActivit
         etudiantNbAbsencesTextView.setText(String.format("%d", etudiantNbAbsences));
         etudiantNbAbsencesTextView.setTextColor(textColor);
     }
-    private void instancierNouvelleSeance(int jour, int mois, int annee) {
+    private void instancierNouvelleSeance(int jour, int mois, int annee, int heureDebut,
+                                          int minuteDebut) {
 
-        seance = new Seance(jour, mois, annee);
+        seance = new Seance(jour, mois, annee, heureDebut, minuteDebut);
         seance.setId(Utils.generateId());
         seance.setIdEnseignant(Utils.enseignant.getId());
         seance.setIdGroupe(structure.getId());
         seance.setIdSection(structure.getIdSection());
         seance.setIdModule(module.getId());
-        if (structure instanceof Group)
+        if (structure instanceof Groupe)
             seance.setTypeSeance(Seance.TD);
         else if (structure instanceof Section)
             seance.setTypeSeance(Seance.COURS);
@@ -420,11 +433,30 @@ public class AppelListActivity <T extends Structurable> extends AppCompatActivit
             changerDateDialog.show(getSupportFragmentManager(), "datePickerDialog");
         }
         else if (v == validerAppelButton)   {
-            instancierNouvelleSeance(jour, mois, annee);
+            instancierNouvelleSeance(jour, mois, annee, heureDebut, minuteDebut);
 
             ajouterAbsencesDb();
             Toast.makeText(AppelListActivity.this, R.string.valider_appel_toast, Toast.LENGTH_SHORT).show();
             finish();
+        }
+        if (v == modifierHeureButton)   {
+
+            final Calendar c = Calendar.getInstance();
+            int hour = c.get(Calendar.HOUR_OF_DAY);
+            int minute = c.get(Calendar.MINUTE);
+
+            TimePickerDialog timePickerDialog = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
+                @Override
+                public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+
+                    heureDebut = hourOfDay;
+                    minuteDebut = minute;
+
+                    updateHeureSeanceTextView();
+                }
+            }, hour, minute, false);
+
+            timePickerDialog.show();
         }
     }
     public class SectionEtudiantsRecyclerAdapter extends RecyclerView.Adapter<EtudiantPresenceViewHolder> {
@@ -488,6 +520,7 @@ public class AppelListActivity <T extends Structurable> extends AppCompatActivit
 
             return etudiantsList.size();
         }
+
         public void setOnItemClickListener(AdapterView.OnItemClickListener listener) {
             this.listener = listener;
         }

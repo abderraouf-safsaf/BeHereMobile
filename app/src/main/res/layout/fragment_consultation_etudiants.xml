@@ -7,7 +7,7 @@
     android:layout_gravity="top"
     android:gravity="top"
     android:orientation="vertical"
-    android:padding="5dp"
+    android:padding="10dp"
     android:weightSum="15"
     app:layout_anchorGravity="center"
     app:layout_behavior="@string/appbar_scrolling_view_behavior">
@@ -17,7 +17,8 @@
         android:layout_height="0dp"
         android:layout_gravity="top"
         android:layout_weight="11"
-        android:gravity="top|center">
+        android:gravity="top|center"
+        android:padding="5dp">
 
         <TableRow
             android:layout_width="match_parent"
@@ -155,12 +156,13 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_gravity="center"
-        android:layout_margin="5dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
         android:layout_weight="4"
         android:padding="5dp"
+
         android:scrollIndicators="left"
         android:scrollbarAlwaysDrawHorizontalTrack="false"
-
         android:scrollbarAlwaysDrawVerticalTrack="true"
         android:scrollbars="vertical"
         android:verticalScrollbarPosition="left"

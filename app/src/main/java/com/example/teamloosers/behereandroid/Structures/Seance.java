@@ -18,12 +18,15 @@ public class Seance extends Ref implements Comparable {
     private String idModule;
     private String typeSeance;
     private String date;
+    private String heureDebut, minuteDebut;
 
     public Seance(){    }
 
-    public Seance(int jour, int mois, int annee)   {
+    public Seance(int jour, int mois, int annee, int heureDebut, int minuteDebut)   {
 
         this.date = String.format("%d/%d/%d", jour, mois, annee);
+        this.heureDebut = String.valueOf(heureDebut);
+        this.minuteDebut = String.valueOf(minuteDebut);
     }
 
     public String getIdSection() {
@@ -80,6 +83,22 @@ public class Seance extends Ref implements Comparable {
         this.typeSeance = typeSeance;
     }
 
+    public String getHeureDebut() {
+        return heureDebut;
+    }
+
+    public void setHeureDebut(String heureDebut) {
+        this.heureDebut = heureDebut;
+    }
+
+    public String getMinuteDebut() {
+        return minuteDebut;
+    }
+
+    public void setMinuteDebut(String minuteDebut) {
+        this.minuteDebut = minuteDebut;
+    }
+
     public Map<String, Object> getMap(){
 
         Map<String, Object> mapdata = new LinkedHashMap<String, Object>();
@@ -91,11 +110,11 @@ public class Seance extends Ref implements Comparable {
         mapdata.put("idModule", getIdModule());
         mapdata.put("typeSeance", getTypeSeance());
         mapdata.put("date", getDate());
+        mapdata.put("heureDebut", getHeureDebut());
+        mapdata.put("minuteDebut", getMinuteDebut());
 
         return mapdata;
     }
-
-
     public void ajouterSeance(FirebaseDatabase database) {
 
         String idStructure = (this.getTypeSeance().equals(Utils.SECTIONS))? this.getIdSection(): this.getIdGroupe();
@@ -105,7 +124,6 @@ public class Seance extends Ref implements Comparable {
 
         strucutreRef.updateChildren(this.getMap());
     }
-
     @Override
     public int compareTo(@NonNull Object o) {
 
