@@ -56,7 +56,6 @@
         android:shadowDx="10"
         android:shadowDy="10"
         android:showText="true"
-        android:splitTrack="false"
         android:switchPadding="30dp"
         android:textAppearance="@style/TextAppearance.Design.Counter"
         android:textOff="A"

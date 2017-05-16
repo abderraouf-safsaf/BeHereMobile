@@ -44,11 +44,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
-import java.security.acl.Group;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
-import java.util.Map;
 
 public class AppelListActivity <T extends Structurable> extends AppCompatActivity
         implements DatePickerFragment.OnDateSelectedListener, View.OnClickListener {
@@ -73,7 +71,7 @@ public class AppelListActivity <T extends Structurable> extends AppCompatActivit
 
         super.onCreate(savedInstanceState);
 
-        Utils.setActivityFullScreen(this);
+        Utils.makeActivityFullScreen(this);
 
         setContentView(R.layout.activity_appel_list);
 
@@ -89,7 +87,7 @@ public class AppelListActivity <T extends Structurable> extends AppCompatActivit
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        initializeDate();
+        initializeDateAndTime();
 
         updateDateSeanceTextView();
         updateHeureSeanceTextView();
@@ -154,6 +152,9 @@ public class AppelListActivity <T extends Structurable> extends AppCompatActivit
         return super.onOptionsItemSelected(item);
     }
 
+    /*
+        Get the current student in an ArrayList from the RecyclerView
+     */
     private ArrayList<Etudiant> getEtudiantsList() {
 
         ArrayList<Etudiant> etudiantsList = new ArrayList();
@@ -169,6 +170,10 @@ public class AppelListActivity <T extends Structurable> extends AppCompatActivit
 
         return etudiantsList;
     }
+
+    /*
+        Load all section students from database to etudiantsAppelListRecyclerView
+     */
     private void loadEtudiantSection() {
 
         final ProgressDialog loadingProgressDialog = new ProgressDialog(this);
@@ -214,6 +219,9 @@ public class AppelListActivity <T extends Structurable> extends AppCompatActivit
         });
     }
 
+    /*
+        Load all group students from database to etudiantsAppelListRecyclerView
+     */
     private void loadEtudiantGroupe() {
 
         loadingProgressDialog = new ProgressDialog(this);
@@ -239,7 +247,7 @@ public class AppelListActivity <T extends Structurable> extends AppCompatActivit
 
                 int etudiantImageHeight = getResources().getDimensionPixelSize(R.dimen.etudiant_small_image_height);
                 int etudiantImageWidth = getResources().getDimensionPixelSize(R.dimen.etudiant_small_image_width);
-                Bitmap image = Utils.decodeToImage(etudiant.getImageBase64());
+                Bitmap image = Utils.decode64BaseImageToBmp(etudiant.getImageBase64());
                 Bitmap imageResized = Bitmap.createScaledBitmap(image, etudiantImageWidth, etudiantImageHeight, true);
 
                 RoundedBitmapDrawable dr = RoundedBitmapDrawableFactory.create(null, imageResized);
@@ -289,7 +297,10 @@ public class AppelListActivity <T extends Structurable> extends AppCompatActivit
         etudiantAppelListRecyclerView.setAdapter(etudiantAppelListAdapter);
     }
 
-    private void initializeDate() {
+    /*
+        Initialize date and time fields to current date
+     */
+    private void initializeDateAndTime() {
 
         Calendar calendar = Calendar.getInstance();
         annee = calendar.get(Calendar.YEAR);
@@ -299,14 +310,25 @@ public class AppelListActivity <T extends Structurable> extends AppCompatActivit
         heureDebut = calendar.get(Calendar.HOUR_OF_DAY);
         minuteDebut = calendar.get(Calendar.MINUTE);
     }
+
+    /*
+        Update date textview from date fields
+     */
     private void updateDateSeanceTextView() {
 
         modifierDateButton.setText(String.format("%s/%s/%s", jour, mois, annee));
     }
+    /*
+        Update time textview from date fields
+     */
     private void updateHeureSeanceTextView()    {
 
         modifierHeureButton.setText(String.format("%s:%s", heureDebut, minuteDebut));
     }
+
+    /*
+        Get student score from database to textview
+     */
     private void loadEtudiantScore(Etudiant etudiant, final TextView etudiantScoreTextView) {
 
         String pathToEtudiantScore = Utils.firebasePath(Utils.CYCLES, etudiant.getIdCycle(), etudiant.getIdFilliere(),
@@ -330,6 +352,10 @@ public class AppelListActivity <T extends Structurable> extends AppCompatActivit
             }
         });
     }
+
+    /*
+        Displaying student score in textview according to specific colors
+     */
     private void displayScoreOnTextView(TextView etudiantNbAbsencesTextView, long etudiantScore) {
 
         int textColor;
@@ -347,6 +373,10 @@ public class AppelListActivity <T extends Structurable> extends AppCompatActivit
 
         etudiantNbAbsencesTextView.setTextColor(textColor);
     }
+
+    /*
+        Add a "toAdd" value to student score in database
+     */
     private void addToEtudiantScore(Etudiant etudiant, final int toAdd) {
 
         String pathToEtudiantScore = Utils.firebasePath(Utils.CYCLES, etudiant.getIdCycle(), etudiant.getIdFilliere(),
@@ -370,6 +400,10 @@ public class AppelListActivity <T extends Structurable> extends AppCompatActivit
             }
         });
     }
+
+    /*
+        Load student nb absences from database to text view
+     */
     private void setNbAbsenceTextView(final TextView etudiantNbAbsencesTextView, Etudiant etudiant) {
 
         String pathToEtudiant = Utils.firebasePath(Utils.CYCLES, etudiant.getIdCycle(), etudiant.getIdFilliere(),
@@ -395,6 +429,10 @@ public class AppelListActivity <T extends Structurable> extends AppCompatActivit
             }
         });
     }
+
+    /*
+        Display student nb absences in textview according to specific colors
+     */
     private void displayNbAbsencesInTextView(TextView etudiantNbAbsencesTextView, long etudiantNbAbsences) {
 
         int textColor;
@@ -429,6 +467,10 @@ public class AppelListActivity <T extends Structurable> extends AppCompatActivit
             seance.setTypeSeance(Seance.COURS);
         seance.ajouterSeance(Utils.database);
     }
+
+    /*
+        Add all absences to database
+     */
     private void ajouterAbsencesDb() {
 
         for (int i = 0; i < etudiantAppelListRecyclerView.getChildCount(); i++)  {
@@ -446,6 +488,10 @@ public class AppelListActivity <T extends Structurable> extends AppCompatActivit
             }
         }
     }
+
+    /*
+        Instanciate a new absence object
+     */
     private Absence newAbsence(Etudiant etudiant) {
 
         Absence absence = new Absence();
@@ -465,6 +511,10 @@ public class AppelListActivity <T extends Structurable> extends AppCompatActivit
 
         return absence;
     }
+
+    /*
+        A specific methode implemented to treat date changes from DateDialogPicker
+     */
     @Override
     public void onDateSelected(int day, int month, int year) {
 
@@ -543,7 +593,7 @@ public class AppelListActivity <T extends Structurable> extends AppCompatActivit
             holder.etudiant = etudiant;
             int etudiantImageHeight = getResources().getDimensionPixelSize(R.dimen.etudiant_small_image_height);
             int etudiantImageWidth = getResources().getDimensionPixelSize(R.dimen.etudiant_small_image_width);
-            Bitmap image = Utils.decodeToImage(etudiant.getImageBase64());
+            Bitmap image = Utils.decode64BaseImageToBmp(etudiant.getImageBase64());
             Bitmap imageResized = Bitmap.createScaledBitmap(image, etudiantImageWidth, etudiantImageHeight, true);
 
             RoundedBitmapDrawable dr = RoundedBitmapDrawableFactory.create(null, imageResized);

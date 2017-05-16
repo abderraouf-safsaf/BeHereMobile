@@ -16,7 +16,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_gravity="top"
-        android:layout_weight="9"
+        android:layout_weight="8"
         android:gravity="top|center"
         android:padding="5dp">
 
@@ -93,21 +93,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="right"
+            android:paddingTop="20dp"
             android:weightSum="10">
-
-            <TextView
-                android:id="@+id/etudiantScoreTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_weight="6"
-                android:gravity="center"
-                android:text="0"
-                android:textSize="@dimen/score_text_size" />
 
             <ImageButton
                 android:id="@+id/minusImageButton"
-                android:layout_width="@dimen/minus_icon_width"
+                android:layout_width="0dp"
                 android:layout_height="@dimen/minus_icon_height"
                 android:layout_gravity="center"
                 android:layout_weight="2"
@@ -116,9 +107,19 @@
                 android:scaleType="fitCenter"
                 app:srcCompat="@drawable/dislike_icon" />
 
+            <TextView
+                android:id="@+id/etudiantScoreTextView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="6"
+                android:gravity="center"
+                android:text="0"
+                android:textSize="@dimen/score_text_size" />
+
             <ImageButton
                 android:id="@+id/plusImageButton"
-                android:layout_width="@dimen/plus_icon_width"
+                android:layout_width="0dp"
                 android:layout_height="@dimen/plus_icon_height"
                 android:layout_gravity="right"
                 android:layout_marginRight="10dp"
@@ -134,7 +135,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_weight="2"
         android:gravity="center"
         android:orientation="horizontal">
 

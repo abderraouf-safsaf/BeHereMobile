@@ -127,6 +127,10 @@ public class MainActivity extends AppCompatActivity
                     finish();
                 }
         }
+        else if (id == R.id.aideItem)   {
+
+                Utils.showSnackBar(this, getString(R.string.app_name));
+            }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);

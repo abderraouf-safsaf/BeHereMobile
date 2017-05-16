@@ -2,6 +2,7 @@ package com.example.teamloosers.behereandroid.Fragments;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -173,19 +174,23 @@ public class SeancesFragment<T extends Structurable> extends Fragment {
 
     private void displayNbAbsencesInTextView(TextView seanceNbAbsencesTextView, long seanceNbAbsences) {
 
-        int textColor;
-        switch (Integer.valueOf(String.format("%d", seanceNbAbsences))) {
+        int textColor = Color.BLACK;
 
-            case 0:
-                textColor = ContextCompat.getColor(getContext(), R.color.textSecondary);
-                break;
-            case 1:
-                textColor = ContextCompat.getColor(getContext(), R.color.textSecondary);
-                break;
-            case 2:
-                textColor = ContextCompat.getColor(getContext(), R.color.deux_absences);
-                break;
-            default: textColor = ContextCompat.getColor(getContext(), R.color.plus_deux_absences);
+        if (getContext() != null)   {
+
+            switch (Integer.valueOf(String.format("%d", seanceNbAbsences))) {
+
+                case 0:
+                    textColor = ContextCompat.getColor(getContext(), R.color.textSecondary);
+                    break;
+                case 1:
+                    textColor = ContextCompat.getColor(getContext(), R.color.textSecondary);
+                    break;
+                case 2:
+                    textColor = ContextCompat.getColor(getContext(), R.color.deux_absences);
+                    break;
+                default: textColor = ContextCompat.getColor(getContext(), R.color.plus_deux_absences);
+            }
         }
         seanceNbAbsencesTextView.setText(String.format("%d", seanceNbAbsences));
         seanceNbAbsencesTextView.setTextColor(textColor);

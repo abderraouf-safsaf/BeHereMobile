@@ -2,6 +2,7 @@ package com.example.teamloosers.behereandroid.Fragments;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -234,20 +235,23 @@ public class EtudiantsFragment <T extends Structurable> extends Fragment {
 
     private void displayNbAbsencesInTextView(TextView etudiantNbAbsencesTextView, long etudiantNbAbsences) {
 
-        int textColor;
-        switch (Integer.valueOf(String.format("%d", etudiantNbAbsences))) {
+        int textColor = Color.BLACK;
+        if (getContext() != null)   {
 
-            case 0:
-                textColor = ContextCompat.getColor(getContext(), R.color.textSecondary);
-                break;
-            case 1:
-                textColor = ContextCompat.getColor(getContext(), R.color.textSecondary);
-                break;
-            case 2:
-                textColor = ContextCompat.getColor(getContext(), R.color.deux_absences);
-                break;
-            default:
-                textColor = ContextCompat.getColor(getContext(), R.color.plus_deux_absences);
+            switch (Integer.valueOf(String.format("%d", etudiantNbAbsences))) {
+
+                case 0:
+                    textColor = ContextCompat.getColor(getContext(), R.color.textSecondary);
+                    break;
+                case 1:
+                    textColor = ContextCompat.getColor(getContext(), R.color.textSecondary);
+                    break;
+                case 2:
+                    textColor = ContextCompat.getColor(getContext(), R.color.deux_absences);
+                    break;
+                default:
+                    textColor = ContextCompat.getColor(getContext(), R.color.plus_deux_absences);
+            }
         }
         etudiantNbAbsencesTextView.setText(String.format("%d", etudiantNbAbsences));
         etudiantNbAbsencesTextView.setTextColor(textColor);

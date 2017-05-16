@@ -11,7 +11,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -23,7 +22,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.teamloosers.behereandroid.Activities.StructureActivity;
 import com.example.teamloosers.behereandroid.Utils.ItemViewHolder;
 import com.example.teamloosers.behereandroid.R;
 import com.example.teamloosers.behereandroid.Structures.Absence;
@@ -97,9 +95,9 @@ public class ConsultationEtudiantFragment extends Fragment implements View.OnCli
 
         int etudiantImageHeight = getResources().getDimensionPixelSize(R.dimen.etudiantImageHeight);
         int etudiantImageWidth = getResources().getDimensionPixelSize(R.dimen.etudiantImageWidth);
-        Bitmap image = Utils.decodeToImage(etudiant.getImageBase64());
-        Bitmap imageResized = Bitmap.createScaledBitmap(image, etudiantImageWidth, etudiantImageHeight, true);
-        RoundedBitmapDrawable dr = RoundedBitmapDrawableFactory.create(null, imageResized);
+        Bitmap image = Utils.decode64BaseImageToBmp(etudiant.getImageBase64());
+        //Bitmap imageResized = Bitmap.createScaledBitmap(image, etudiantImageWidth, etudiantImageHeight, true);
+        RoundedBitmapDrawable dr = RoundedBitmapDrawableFactory.create(null, image);
         dr.setCornerRadius(200);
 
         etudiantImageView.setImageDrawable(dr);

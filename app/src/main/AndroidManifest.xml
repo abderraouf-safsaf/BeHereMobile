@@ -13,19 +13,8 @@
         android:supportsRtl="true"
         android:theme="@style/BeHere">
         <activity
-            android:name=".Activities.EtudiantsPresencesActivity"
-            android:theme="@style/BeHere" />
-        <activity
-            android:name=".Activities.ConsultationEtudiantsActivity"
-            android:theme="@style/BeHere" />
-        <activity
-            android:name=".Activities.SeanceAbsencesActivity"
-            android:theme="@style/BeHere" />
-        <activity
-            android:name=".Activities.AppelListActivity"
-            android:theme="@style/BeHere" />
-        <activity
             android:name=".Activities.LoginActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/BeHere">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -35,12 +24,30 @@
         </activity>
         <activity
             android:name=".Activities.MainActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/BeHere" />
+        <activity
+            android:name=".Activities.ConsultationEtudiantsActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/BeHere" />
+        <activity
+            android:name=".Activities.EtudiantsPresencesActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/BeHere" />
+        <activity
+            android:name=".Activities.SeanceAbsencesActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/BeHere" />
+        <activity
+            android:name=".Activities.AppelListActivity"
             android:theme="@style/BeHere" />
         <activity
             android:name=".Activities.StructureActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/BeHere" />
         <activity
             android:name=".Activities.AppelUpParUnActivity"
+            android:screenOrientation="portrait"
             android:label="@string/title_activity_appel_up_par_un"
             android:theme="@style/BeHere"></activity>
     </application>

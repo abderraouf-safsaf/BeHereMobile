@@ -2,13 +2,12 @@ package com.example.teamloosers.behereandroid.Fragments;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
-import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,7 +17,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.teamloosers.behereandroid.Activities.AppelListActivity;
 import com.example.teamloosers.behereandroid.Activities.AppelUpParUnActivity;
 import com.example.teamloosers.behereandroid.R;
 import com.example.teamloosers.behereandroid.Structures.Absence;
@@ -89,7 +87,7 @@ public class AppelUnParUnFragment extends Fragment implements View.OnClickListen
 
         int etudiantImageHeight = getResources().getDimensionPixelSize(R.dimen.etudiantImageHeight);
         int etudiantImageWidth = getResources().getDimensionPixelSize(R.dimen.etudiantImageWidth);
-        Bitmap image = Utils.decodeToImage(etudiant.getImageBase64());
+        Bitmap image = Utils.decode64BaseImageToBmp(etudiant.getImageBase64());
         Bitmap imageResized = Bitmap.createScaledBitmap(image, etudiantImageWidth, etudiantImageHeight, true);
         RoundedBitmapDrawable dr = RoundedBitmapDrawableFactory.create(null, imageResized);
         dr.setCornerRadius(200);
@@ -127,14 +125,17 @@ public class AppelUnParUnFragment extends Fragment implements View.OnClickListen
     }
     private void displayScoreOnTextView(TextView etudiantScoreTextView, long etudiantScore) {
 
-        int textColor;
+        int textColor = Color.BLACK;
 
-        if (etudiantScore > 0)
-            textColor = ContextCompat.getColor(getContext(), R.color.score_positif);
-        else if (etudiantScore < 0)
-            textColor = ContextCompat.getColor(getContext(), R.color.score_negatif);
-        else
-            textColor = ContextCompat.getColor(getContext(), R.color.textSecondary);
+        if (getContext() != null)   {
+
+            if (etudiantScore > 0)
+                textColor = ContextCompat.getColor(getContext(), R.color.score_positif);
+            else if (etudiantScore < 0)
+                textColor = ContextCompat.getColor(getContext(), R.color.score_negatif);
+            else
+                textColor = ContextCompat.getColor(getContext(), R.color.textSecondary);
+        }
 
         String prefix = (etudiantScore > 0)? "+": "";
         etudiantScoreTextView.setText(String.format("%s%d",
@@ -171,11 +172,11 @@ public class AppelUnParUnFragment extends Fragment implements View.OnClickListen
 
         if (v == minusImageButton)  {
 
-            addToEtudiantScore(etudiant, Etudiant.SCORE_PLUS);
+            addToEtudiantScore(etudiant, Etudiant.SCORE_MOIN);
         }
         else if (v == plusImageButton)  {
 
-            addToEtudiantScore(etudiant, Etudiant.SCORE_MOIN);
+            addToEtudiantScore(etudiant, Etudiant.SCORE_PLUS);
         }
         if (v == absentImageButton) {
 
@@ -191,9 +192,7 @@ public class AppelUnParUnFragment extends Fragment implements View.OnClickListen
     private void showNextEtudiantFragment() {
 
         ViewPager viewPager = parentActivity.getmViewPager();
-
-        System.out.println("Current item = " + viewPager.getCurrentItem() + " Child count = "
-        + parentActivity.getmSectionsPagerAdapter().getCount());
+        
         if (viewPager.getCurrentItem() == parentActivity.getmSectionsPagerAdapter().getCount() - 1)    {
 
             Intent etudiantsPresencesIntent = new Intent();

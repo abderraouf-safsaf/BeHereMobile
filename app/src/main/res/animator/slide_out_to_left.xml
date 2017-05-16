@@ -1,6 +1,0 @@
-<objectAnimator android:fromXDelta="0%"
-    android:toXDelta="-100%"
-    android:fromYDelta="0%"
-    android:toYDelta="0%"
-    android:duration="100"
-    xmlns:android="http://schemas.android.com/apk/res/android" />

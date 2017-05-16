@@ -52,6 +52,9 @@ public class Utils {
     public static Enseignant enseignant;
     static {
 
+        /*
+            Create an instance from database
+         */
         database = FirebaseDatabase.getInstance();
 
         // Enable disk persistence (Offline)
@@ -67,6 +70,9 @@ public class Utils {
             PHOTO_URL_ATTRIBUT = "imageBase64",
             SCORE = "/score";
 
+    /*
+        Generate a path by concatenate nodes ID
+     */
     public static String firebasePath(String ... noeuds)   {
 
         String path = "";
@@ -76,91 +82,28 @@ public class Utils {
         }
         return path;
     }
-    public static <P extends Identifiable, C extends Identifiable> ArrayList<C>
-    getChildrenFromDataSnapshot(DataSnapshot dataSnapshot, Class<P> parentClass, Class<C> childClass) {
-
-        P parentObject = null; C childObject = null;
-
-        ArrayList<DataSnapshot> dataList = getListFromIterable(dataSnapshot.getChildren());
-        try {
-
-            if (!Modifier.isAbstract(parentClass.getModifiers()))
-                parentObject = parentClass.newInstance();
-            childObject = childClass.newInstance();
-        } catch (Exception e)   {   }
-        if (!Modifier.isAbstract(parentClass.getModifiers()))
-            deleteAttributsFromArrayList(dataList, parentObject.getMap());
-
-        ArrayList<C> childrenList = new ArrayList<>();
-
-        C obj = null;
-        for (DataSnapshot dataSnap: dataList)   {
-
-            HashMap<String, Object> attributs = getOnlyAttributs(dataSnap,
-                    childObject.getMap());
-            try {
-                obj = (C) childClass.newInstance();
-            } catch (Exception e)   {   }
-
-            obj.setAttributs(attributs);
-            childrenList.add(obj);
-        }
-        return childrenList;
-    }
-    private static <E> ArrayList<E> getListFromIterable(Iterable<E> iter) {
-
-        ArrayList<E> list = new ArrayList<E>();
-        for (E item : iter) {
-
-            list.add(item);
-        }
-        return list;
-    }
-    private static void deleteAttributsFromArrayList(ArrayList<DataSnapshot> dataList,
-                                                     Map<String, Object> attributsMap) {
-
-        Iterator<DataSnapshot> snapshotIterator= dataList.iterator();
-
-        while (snapshotIterator.hasNext())  {
-
-            DataSnapshot element = snapshotIterator.next();
-            if (attributsMap.containsKey(element.getKey()))
-                snapshotIterator.remove();
-        }
-    }
-    private static HashMap<String, Object> getOnlyAttributs(DataSnapshot snapshot,
-                                                            Map<String, Object> atrributsMap)    {
-
-        HashMap<String, Object> attributsHashMap = new HashMap<>();
-
-
-        for (DataSnapshot attribut: snapshot.getChildren())    {
-
-            if(atrributsMap.containsKey(attribut.getKey()))
-                attributsHashMap.put(attribut.getKey(), attribut.getValue());
-        }
-        return attributsHashMap;
-    }
+    /*
+        Generate unique ID using built-in class UUID
+     */
     public static String generateId()   {
 
         return UUID.randomUUID().toString();
     }
-    public static String generateId(Ref obj)   {
 
-        String designation = obj.getDesignation();
-        designation = designation.replaceAll("\\s+","");
-
-        String id = String.format("%s_%s", designation, UUID.randomUUID().toString());
-        return id;
-    }
-
-    public static Bitmap decodeToImage(String imageString) {
+    /*
+        Decode image from 64-base to a BMP image
+     */
+    public static Bitmap decode64BaseImageToBmp(String imageString) {
 
         byte[] decodedString = Base64.decode(imageString, Base64.DEFAULT);
         Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
 
         return decodedByte;
     }
+
+    /*
+        Show a snackbar (Toast-like) in activity
+     */
     public static void showSnackBar(Activity activity, String message) {
 
         View rootView = activity.getWindow().getDecorView().getRootView();
@@ -169,6 +112,11 @@ public class Utils {
         snackbarTextView.setTextColor(ContextCompat.getColor(rootView.getContext(), R.color.white));
         snackbar.show();
     }
+
+    /*
+        Send notification e-mail to a student
+        Sender E-mail adress and password are obtained from Firebase Remote Config service
+     */
     public static void envoyerNotification(final Activity activity, final Etudiant etudiant, final String message)   {
 
         final FirebaseRemoteConfig mRemoteConfig = FirebaseRemoteConfig.getInstance();
@@ -224,12 +172,20 @@ public class Utils {
                     }
                 });
     }
-    public static void setActivityFullScreen(Activity activity) {
+
+    /*
+        Make the activity Full screen
+     */
+    public static void makeActivityFullScreen(Activity activity) {
 
         activity.requestWindowFeature(Window.FEATURE_NO_TITLE);
         activity.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
     }
+
+    /*
+        Make lines between items in RecycerView using R.drawable.recyclerview_divider xml file
+     */
     public static void setRecyclerViewDecoration(RecyclerView recyclerView) {
 
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(),
@@ -237,6 +193,10 @@ public class Utils {
         dividerItemDecoration.setDrawable(ContextCompat.getDrawable(recyclerView.getContext(), R.drawable.recyclerview_divider));
         recyclerView.addItemDecoration(dividerItemDecoration);
     }
+
+    /*
+        Setting activity ActionBar title and subtitle
+     */
     public static void setActionBarTitle(AppCompatActivity activity, String title) {
 
         activity.getSupportActionBar().setTitle(title);
