@@ -20,5 +20,7 @@
     <color name="score_positif">#009688</color>
     <color name="score_negatif">#BF360C</color>
     <color name="absence_justifier_background_color">#E8F5E9</color>
+    <color name="valider_appel_background_color">#fffde7</color>
+    <color name="login_background_color">#ef9a9a</color>
 
 </resources>

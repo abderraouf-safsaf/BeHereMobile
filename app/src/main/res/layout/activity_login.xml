@@ -6,6 +6,8 @@
     android:id="@+id/mainLinearLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorPrimary"
+    android:gravity="center"
     android:orientation="vertical"
     android:padding="20dp"
     tools:layout_editor_absoluteX="8dp"
@@ -17,13 +19,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:adjustViewBounds="true"
         android:background="@drawable/tw__transparent"
         android:scaleType="fitCenter"
-        app:srcCompat="@drawable/esisba_logo" />
+        app:srcCompat="@drawable/esi_logo" />
 
     <Space
         android:layout_width="match_parent"
-        android:layout_height="100dp" />
+        android:layout_height="20dp" />
 
     <TextView
         android:id="@+id/textView3"
@@ -32,7 +35,8 @@
         android:layout_gravity="center"
         android:gravity="center"
         android:text="@string/sautentifier_text_view_text"
-        android:textColor="@color/textSecondary" />
+        android:textColor="@color/white"
+        android:textSize="@dimen/sautentifier_text_view_text_size" />
 
     <ImageButton
         android:id="@+id/imageButton"

@@ -3,6 +3,7 @@ package com.example.teamloosers.behereandroid.Fragments;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -22,6 +23,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.teamloosers.behereandroid.Activities.StructureActivity;
 import com.example.teamloosers.behereandroid.Utils.ItemViewHolder;
 import com.example.teamloosers.behereandroid.R;
 import com.example.teamloosers.behereandroid.Structures.Absence;
@@ -131,22 +133,25 @@ public class ConsultationEtudiantFragment extends Fragment implements View.OnCli
             }
         });
     }
-    private void displayScoreOnTextView(TextView etudiantNbAbsencesTextView, long etudiantScore) {
+    private void displayScoreOnTextView(TextView etudiantScoreTextView, long etudiantScore) {
 
-        int textColor;
+        int textColor = Color.BLACK;
 
-        if (etudiantScore > 0)
-            textColor = ContextCompat.getColor(getContext(), R.color.score_positif);
-        else if (etudiantScore < 0)
-            textColor = ContextCompat.getColor(getContext(), R.color.score_negatif);
-        else
-            textColor = ContextCompat.getColor(getContext(), R.color.textSecondary);
+        if (getContext() != null) {
+
+            if (etudiantScore > 0)
+                textColor = ContextCompat.getColor(getContext(), R.color.score_positif);
+            else if (etudiantScore < 0)
+                textColor = ContextCompat.getColor(getContext(), R.color.score_negatif);
+            else
+                textColor = ContextCompat.getColor(getContext(), R.color.textSecondary);
+        }
 
         String prefix = (etudiantScore > 0)? "+": "";
-        etudiantNbAbsencesTextView.setText(String.format("%s%d",
+        etudiantScoreTextView.setText(String.format("%s%d",
                 prefix, etudiantScore));
 
-        etudiantNbAbsencesTextView.setTextColor(textColor);
+        etudiantScoreTextView.setTextColor(textColor);
     }
     private void loadAbsecnces() {
 

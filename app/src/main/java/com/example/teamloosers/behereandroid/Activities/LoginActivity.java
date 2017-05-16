@@ -36,6 +36,8 @@ public class LoginActivity extends AppCompatActivity implements DialogInterface.
 
         super.onCreate(savedInstanceState);
 
+        Utils.setActivityFullScreen(this);
+
         setContentView(R.layout.activity_login);
     }
     @Override

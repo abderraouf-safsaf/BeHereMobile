@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">BeHere</string>
-    <string name="sections">Sections:</string>
-    <string name="groupes">Groupes:</string>
+    <string name="cours">Cours:</string>
+    <string name="tdtp">TD/TP:</string>
     <string name="title_activity_etudiants_list">EtudiantsListActivity</string>
     <string name="action_settings">Settings</string>
     <string name="chargement_sections_loading_message">Chargement de sections</string>
@@ -70,7 +70,7 @@
     <string name="etudiants_tab_title">Etudiants</string>
     <string name="liste_des_seances_text">Liste des séances:</string>
     <string name="absences_text_view">Absences:</string>
-    <string name="etudiant_absences_text_view">absences</string>
+    <string name="etudiant_absences_text_view">Absences:</string>
     <string name="valider_appel_button">Valider</string>
     <string name="modifier_date_button_text">Date</string>
     <string name="chargement_modules_loading_message">Chargement de modules</string>
@@ -82,4 +82,6 @@
     <string name="erreur_back_button_pressed_message">Veuillez reésseyer de nouveau</string>
     <string name="nombre_absences_text_view_text">Absences:</string>
     <string name="date_seance_text_view_text">Date:</string>
+    <string name="title_activity_appel_up_par_un">AppelUpParUnActivity</string>
+    <string name="appel_un_par_un_menu_title">test</string>
 </resources>

@@ -2,6 +2,7 @@ package com.example.teamloosers.behereandroid.Activities;
 
 import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
@@ -12,6 +13,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -44,9 +47,13 @@ import com.google.firebase.database.ValueEventListener;
 import java.security.acl.Group;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
 
 public class AppelListActivity <T extends Structurable> extends AppCompatActivity
         implements DatePickerFragment.OnDateSelectedListener, View.OnClickListener {
+
+    public static final int APPEL_UN_PAR_UN_RC = 1;
 
     private Module module;
     private T structure;
@@ -111,6 +118,57 @@ public class AppelListActivity <T extends Structurable> extends AppCompatActivit
             loadEtudiantSection();
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        getMenuInflater().inflate(R.menu.menu_appel_list, menu);
+        return true;
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        int id = item.getItemId();
+
+        if (id == R.id.appelUnParUnMenuItem) {
+
+            HashMap<Etudiant, Boolean> etudiantsPresenceMap = new HashMap<>();
+
+            for (Etudiant etudiant: getEtudiantsList()) {
+
+                etudiantsPresenceMap.put(etudiant, Absence.PRESENT);
+            }
+
+            instancierNouvelleSeance(jour, mois, annee, heureDebut, minuteDebut);
+
+            Intent appelUnParUnIntent = new Intent(this, AppelUpParUnActivity.class);
+            appelUnParUnIntent.putExtra("module", module);
+            appelUnParUnIntent.putExtra("seance", seance);
+            appelUnParUnIntent.putExtra("etudiantsPresenceMap", etudiantsPresenceMap);
+
+            startActivity(appelUnParUnIntent);
+
+            finish();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    private ArrayList<Etudiant> getEtudiantsList() {
+
+        ArrayList<Etudiant> etudiantsList = new ArrayList();
+
+        for (int i = 0; i < etudiantAppelListRecyclerView.getChildCount(); i++) {
+
+            EtudiantPresenceViewHolder etudiantPresenceViewHolder = (EtudiantPresenceViewHolder) etudiantAppelListRecyclerView
+                    .findViewHolderForLayoutPosition(i);
+
+            Etudiant etudiant = etudiantPresenceViewHolder.etudiant;
+            etudiantsList.add(etudiant);
+        }
+
+        return etudiantsList;
+    }
     private void loadEtudiantSection() {
 
         final ProgressDialog loadingProgressDialog = new ProgressDialog(this);

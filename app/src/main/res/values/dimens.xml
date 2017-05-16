@@ -63,4 +63,9 @@
     <dimen name="nombre_absences_text_size">16sp</dimen>
     <dimen name="date_seance_text_view_size">15sp</dimen>
     <dimen name="heure_debut_button_text_size">18sp</dimen>
+    <dimen name="cours_image_view_height">30dp</dimen>
+    <dimen name="td_tp_image_view_height">30dp</dimen>
+    <dimen name="cours_text_view_text_size">18sp</dimen>
+    <dimen name="td_tp_text_view_text_size">18sp</dimen>
+    <dimen name="sautentifier_text_view_text_size">20sp</dimen>
 </resources>

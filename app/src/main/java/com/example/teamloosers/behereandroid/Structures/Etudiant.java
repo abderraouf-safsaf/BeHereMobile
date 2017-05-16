@@ -89,4 +89,10 @@ public class Etudiant extends Personne {
             return this.toString().equals(obj.toString());
         }
     }
+
+    @Override
+    public int hashCode() {
+
+        return getNom().hashCode();
+    }
 }

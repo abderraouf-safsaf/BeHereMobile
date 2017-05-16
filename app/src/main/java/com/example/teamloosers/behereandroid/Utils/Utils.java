@@ -45,21 +45,17 @@ import jp.wasabeef.recyclerview.animators.SlideInUpAnimator;
 
 public class Utils {
 
-    public static final String DATABASE_ERR_MESSAGE = "Une érreur s'est produit lors de la connexion" +
+    public static final String DATABASE_ERR_MESSAGE = "Une erreur s'est produit lors de la connexion" +
             "à la base de donnée";
     public static FirebaseDatabase database;
 
     public static Enseignant enseignant;
     static {
 
-        /*enseignant = new Enseignant("Medles", "Mourad", Personne.FEMME);
-        enseignant.setId("095d24da-6529-4cba-a7a6-1f3d4db1024a");
-        enseignant.setEmail("safsaf.abderraouf@gmail.com");*/
-
         database = FirebaseDatabase.getInstance();
 
         // Enable disk persistence (Offline)
-        //database.setPersistenceEnabled(true);
+        database.setPersistenceEnabled(true);
     }
 
     public final static String  CYCLES = "/Cycles", SPECIALITE_PROMOS = "/Specialite_Promos",

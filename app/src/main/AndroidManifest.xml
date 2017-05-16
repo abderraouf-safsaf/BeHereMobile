@@ -7,8 +7,8 @@
 
     <application
         android:allowBackup="true"
-        android:label="@string/app_name"
         android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true"
         android:theme="@style/BeHere">
@@ -35,9 +35,13 @@
         </activity>
         <activity
             android:name=".Activities.MainActivity"
-            android:theme="@style/BeHere"></activity>
+            android:theme="@style/BeHere" />
         <activity
             android:name=".Activities.StructureActivity"
+            android:theme="@style/BeHere" />
+        <activity
+            android:name=".Activities.AppelUpParUnActivity"
+            android:label="@string/title_activity_appel_up_par_un"
             android:theme="@style/BeHere"></activity>
     </application>
 

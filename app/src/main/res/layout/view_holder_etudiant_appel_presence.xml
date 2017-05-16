@@ -4,15 +4,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_gravity="center"
     android:alignmentMode="alignBounds"
     android:columnCount="3"
-    android:columnOrderPreserved="false"
     android:orientation="horizontal"
     android:paddingBottom="5dp"
     android:paddingTop="5dp"
     android:rowCount="2"
-    android:rowOrderPreserved="false"
     android:useDefaultMargins="false">
 
     <ImageView
@@ -78,6 +75,16 @@
         android:orientation="horizontal">
 
         <TextView
+            android:id="@+id/textView4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="2dp"
+            android:gravity="center"
+            android:text="@string/etudiant_absences_text_view"
+            android:textColor="@color/textSecondary" />
+
+        <TextView
             android:id="@+id/etudiantNbAbsencesTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -89,15 +96,6 @@
             android:text="nb"
             android:textSize="@dimen/etudiant_nb_absences_text_size" />
 
-        <TextView
-            android:id="@+id/textView4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginLeft="2dp"
-            android:gravity="center"
-            android:text="@string/etudiant_absences_text_view"
-            android:textColor="@color/textSecondary" />
     </LinearLayout>
 
     <LinearLayout
