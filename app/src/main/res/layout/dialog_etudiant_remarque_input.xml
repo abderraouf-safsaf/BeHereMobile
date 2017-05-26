@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:paddingBottom="10dp"
+    android:paddingEnd="5dp"
+    android:paddingLeft="5dp"
+    android:paddingRight="5dp"
+    android:paddingStart="5dp"
+    android:paddingTop="10dp">
+
+    <TextView
+        android:id="@+id/textView7"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="10dp"
+        android:gravity="left|center"
+        android:text="@string/remarque"
+        android:textColor="@color/textSecondary"
+        android:textSize="@dimen/remarque_text_view_text_size" />
+
+    <EditText
+        android:id="@+id/etudiantRemarqueEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:drawablePadding="10dp"
+        android:drawableStart="@drawable/remark_drawable_icon"
+        android:ems="10"
+        android:hint="@string/remarque_edit_text_hint"
+        android:inputType="textMultiLine"
+        android:minLines="3"
+        tools:ignore="LabelFor" />
+
+    <requestFocus />
+</LinearLayout>

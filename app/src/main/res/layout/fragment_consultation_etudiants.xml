@@ -8,7 +8,7 @@
     android:gravity="top"
     android:orientation="vertical"
     android:padding="10dp"
-    android:weightSum="15"
+    android:weightSum="20"
     app:layout_anchorGravity="center"
     app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
@@ -16,7 +16,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_gravity="top"
-        android:layout_weight="11"
+        android:layout_weight="15"
         android:gravity="top|center"
         android:padding="5dp">
 
@@ -75,18 +75,32 @@
         <TableRow
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center">
+            android:gravity="center"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:weightSum="10">
 
             <TextView
                 android:id="@+id/emailTextView"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_margin="5dp"
+                android:layout_weight="8"
                 android:gravity="center"
                 android:text="TextView"
                 android:textColor="@color/textSecondary"
                 android:textSize="@dimen/etudiantEmailTextSize" />
+
+            <ImageButton
+                android:id="@+id/sendMessageImageButton"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/send_message_icon_height"
+                android:layout_gravity="center"
+                android:layout_weight="2"
+                android:background="@drawable/tw__transparent"
+                android:scaleType="fitCenter"
+                app:srcCompat="@drawable/send_message_icon" />
         </TableRow>
 
         <TableRow
@@ -96,7 +110,7 @@
             android:gravity="center"
             android:paddingBottom="5dp"
             android:paddingTop="10dp"
-            android:weightSum="10">
+            android:weightSum="11">
 
             <ImageButton
                 android:id="@+id/minusImageButton"
@@ -117,6 +131,7 @@
                 android:layout_weight="3"
                 android:gravity="center"
                 android:text="0"
+                android:textColor="@color/textSecondary"
                 android:textSize="@dimen/score_text_size" />
 
             <ImageButton
@@ -159,11 +174,14 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_gravity="center"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp"
-        android:layout_weight="4"
-        android:padding="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_weight="5"
 
+        android:paddingEnd="10dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingStart="10dp"
         android:scrollIndicators="left"
         android:scrollbarAlwaysDrawHorizontalTrack="false"
         android:scrollbarAlwaysDrawVerticalTrack="true"

@@ -19,7 +19,7 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="appbar_padding_top">8dp</dimen>
     <dimen name="module_designation_text_size">7sp</dimen>
-    <dimen name="absence_date_text_size">18sp</dimen>
+    <dimen name="absence_date_text_size">16sp</dimen>
     <dimen name="presence_switch_text_size">30sp</dimen>
     <dimen name="presence_nometprenom_text_size">18sp</dimen>
     <dimen name="send_mail_image_button_height">40dp</dimen>
@@ -39,10 +39,10 @@
     <dimen name="appel_image_height">40dp</dimen>
     <dimen name="changer_date_float_button_height">60dp</dimen>
     <dimen name="changer_date_float_button_width">60dp</dimen>
-    <dimen name="plus_icon_height">30dp</dimen>
+    <dimen name="plus_icon_height">25dp</dimen>
     <dimen name="plus_icon_width">30dp</dimen>
     <dimen name="minus_icon_width">30dp</dimen>
-    <dimen name="minus_icon_height">30dp</dimen>
+    <dimen name="minus_icon_height">25dp</dimen>
     <dimen name="etudiant_nb_absences_text_size">18sp</dimen>
     <dimen name="score_text_size">18sp</dimen>
     <dimen name="seance_text_size">18sp</dimen>
@@ -68,4 +68,8 @@
     <dimen name="cours_text_view_text_size">18sp</dimen>
     <dimen name="td_tp_text_view_text_size">18sp</dimen>
     <dimen name="sautentifier_text_view_text_size">20sp</dimen>
+    <dimen name="module_absence_text_view_text_size">16sp</dimen>
+    <dimen name="send_message_icon_height">30dp</dimen>
+    <dimen name="remarque_text_view_text_size">18sp</dimen>
+    <dimen name="type_seance_text_view_text_size">16sp</dimen>
 </resources>

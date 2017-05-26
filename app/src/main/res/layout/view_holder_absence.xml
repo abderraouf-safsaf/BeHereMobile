@@ -8,7 +8,37 @@
     android:layout_gravity="center"
     android:gravity="center"
     android:orientation="horizontal"
-    android:weightSum="10">
+    android:weightSum="20">
+
+    <TextView
+        android:id="@+id/typeSeanceTextView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="10dp"
+        android:layout_marginEnd="1dp"
+        android:layout_marginLeft="2dp"
+        android:layout_marginStart="2dp"
+        android:layout_marginTop="10dp"
+        android:layout_weight="3"
+        android:gravity="left|center"
+        android:maxLines="1"
+        android:text="type seance"
+        android:textColor="@color/textSecondary"
+        android:textSize="@dimen/type_seance_text_view_text_size" />
+
+    <TextView
+        android:id="@+id/moduleTextView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_weight="7"
+        android:gravity="left|center"
+        android:text="module"
+        android:textColor="@color/textSecondary"
+        android:textSize="@dimen/module_absence_text_view_text_size" />
 
     <TextView
         android:id="@+id/abseneDateTextView"
@@ -16,13 +46,9 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginBottom="10dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginStart="20dp"
         android:layout_marginTop="10dp"
-        android:layout_weight="8"
-        android:gravity="left"
+        android:layout_weight="6"
+        android:gravity="left|center"
         android:text="TextView"
         android:textColor="@color/textSecondary"
         android:textSize="@dimen/absence_date_text_size" />
@@ -31,7 +57,8 @@
         android:id="@+id/supprimerAbsenceImageButton"
         android:layout_width="0dp"
         android:layout_height="@dimen/delete_button_height"
-        android:layout_weight="1"
+        android:layout_gravity="center"
+        android:layout_weight="2"
         android:adjustViewBounds="true"
         android:background="@android:color/transparent"
         android:padding="0dp"
@@ -42,7 +69,8 @@
         android:id="@+id/consulterJustificationImageButton"
         android:layout_width="0dp"
         android:layout_height="@dimen/consulter_absence_image_button_height"
-        android:layout_weight="1"
+        android:layout_gravity="center"
+        android:layout_weight="2"
         android:background="@drawable/tw__transparent"
         android:scaleType="fitCenter"
         app:srcCompat="@drawable/consulter_justification_icon" />

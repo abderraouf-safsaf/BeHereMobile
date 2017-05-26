@@ -29,9 +29,10 @@
         android:layout_height="@dimen/envoyer_email_float_button_height"
         android:layout_gravity="bottom|left"
         android:layout_margin="@dimen/fab_margin"
-        app:fabSize="mini"
+        app:backgroundTint="@color/colorAccent"
+        app:fabSize="normal"
         app:layout_anchor="@+id/container"
         app:layout_anchorGravity="top|right"
-        app:srcCompat="@android:drawable/ic_dialog_email" />
+        app:srcCompat="@drawable/remark_icon" />
 
 </android.support.design.widget.CoordinatorLayout>

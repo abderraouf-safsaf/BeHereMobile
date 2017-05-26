@@ -68,7 +68,7 @@ public class Utils {
             PROMO_MODULES = "/Promo_Modules",
             GROUPES = "/Groupes", SECTIONS = "/Sections",
             PHOTO_URL_ATTRIBUT = "imageBase64",
-            SCORE = "/score";
+            SCORE = "/score", REMARQUE = "/remarque";
 
     /*
         Generate a path by concatenate nodes ID

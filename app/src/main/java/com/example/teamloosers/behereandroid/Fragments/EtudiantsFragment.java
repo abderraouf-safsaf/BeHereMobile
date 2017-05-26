@@ -2,10 +2,13 @@ package com.example.teamloosers.behereandroid.Fragments;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -13,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.teamloosers.behereandroid.Activities.ConsultationEtudiantsActivity;
@@ -170,6 +174,15 @@ public class EtudiantsFragment <T extends Structurable> extends Fragment {
             @Override
             protected void populateView(EtudiantViewHolder viewHolder, Etudiant etudiant, int position) {
 
+                int etudiantImageHeight = getResources().getDimensionPixelSize(R.dimen.etudiant_small_image_height);
+                int etudiantImageWidth = getResources().getDimensionPixelSize(R.dimen.etudiant_small_image_width);
+                Bitmap image = Utils.decode64BaseImageToBmp(etudiant.getImageBase64());
+                Bitmap imageResized = Bitmap.createScaledBitmap(image, etudiantImageWidth, etudiantImageHeight, true);
+
+                RoundedBitmapDrawable dr = RoundedBitmapDrawableFactory.create(null, imageResized);
+                dr.setCornerRadius(10);
+                viewHolder.etudiantSmallImageView.setImageDrawable(dr);
+
                 String nomEtPrenom = String.format("%s %s", etudiant.getNom(), etudiant.getPrenom());
                 viewHolder.etudiantNomPrenomTextView.setText(nomEtPrenom);
 
@@ -305,12 +318,14 @@ public class EtudiantsFragment <T extends Structurable> extends Fragment {
 
     public static class EtudiantViewHolder extends ItemViewHolder {
 
+        ImageView etudiantSmallImageView;
         TextView etudiantNomPrenomTextView, etudiantNbAbsencesTextView;
 
         public EtudiantViewHolder(View itemView) {
 
             super(itemView);
 
+            etudiantSmallImageView = (ImageView) itemView.findViewById(R.id.etudiantSmallImageView);
             etudiantNomPrenomTextView = (TextView) itemView.findViewById(R.id.etudiantNomPrenomTextView);
             etudiantNbAbsencesTextView = (TextView) itemView.findViewById(R.id.etudiantNbAbsences);
         }

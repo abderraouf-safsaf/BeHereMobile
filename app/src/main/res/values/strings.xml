@@ -24,7 +24,7 @@
     <string name="etudiant_liste_text">Liste des étudiants:</string>
     <string name="title_activity_consultation_etudiants">ConsultationEtudiantsActivity</string>
     <string name="email_intent_title">Selectionnez une application de messagerie</string>
-    <string name="liste_absence_text_view">Dates des absences:</string>
+    <string name="liste_absence_text_view">Absences :</string>
     <string name="etudiant_image_view_description">Photo de l\'étudiant</string>
     <string name="title_activity_main2">Main2Activity</string>
 
@@ -84,4 +84,7 @@
     <string name="date_seance_text_view_text">Date:</string>
     <string name="title_activity_appel_up_par_un">AppelUpParUnActivity</string>
     <string name="appel_un_par_un_menu_title">test</string>
+    <string name="annuler">Annuler</string>
+    <string name="remarque">Remarque :</string>
+    <string name="remarque_edit_text_hint">Entrer une remarque</string>
 </resources>

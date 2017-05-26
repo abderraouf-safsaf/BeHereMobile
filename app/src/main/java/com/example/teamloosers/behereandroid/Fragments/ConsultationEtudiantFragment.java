@@ -2,6 +2,7 @@ package com.example.teamloosers.behereandroid.Fragments;
 
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -22,6 +23,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.teamloosers.behereandroid.Structures.Seance;
 import com.example.teamloosers.behereandroid.Utils.ItemViewHolder;
 import com.example.teamloosers.behereandroid.R;
 import com.example.teamloosers.behereandroid.Structures.Absence;
@@ -31,6 +33,7 @@ import com.example.teamloosers.behereandroid.Utils.Utils;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
@@ -43,7 +46,7 @@ public class ConsultationEtudiantFragment extends Fragment implements View.OnCli
     private Etudiant etudiant;
 
     private ImageView etudiantImageView;
-    private ImageButton plusImageButton, minusImageButton;
+    private ImageButton sendMessageImageButton, plusImageButton, minusImageButton;
     private TextView nomTextView, prenomTextView, emailTextView, etudiantScoreTextView;
     private RecyclerView etudiantsAbsencesRecyclerView;
 
@@ -64,6 +67,7 @@ public class ConsultationEtudiantFragment extends Fragment implements View.OnCli
         View rootView = inflater.inflate(R.layout.fragment_consultation_etudiants, container, false);
 
         etudiantImageView = (ImageView) rootView.findViewById(R.id.etudiantImageView);
+        sendMessageImageButton = (ImageButton) rootView.findViewById(R.id.sendMessageImageButton);
         plusImageButton = (ImageButton) rootView.findViewById(R.id.plusImageButton);
         minusImageButton = (ImageButton) rootView.findViewById(R.id.minusImageButton);
         etudiantScoreTextView = (TextView) rootView.findViewById(R.id.etudiantScoreTextView);
@@ -80,6 +84,7 @@ public class ConsultationEtudiantFragment extends Fragment implements View.OnCli
 
         plusImageButton.setOnClickListener(this);
         minusImageButton.setOnClickListener(this);
+        sendMessageImageButton.setOnClickListener(this);
 
         return rootView;
     }
@@ -170,7 +175,10 @@ public class ConsultationEtudiantFragment extends Fragment implements View.OnCli
             @Override
             protected void populateViewHolder(AbsenceViewHolder viewHolder, final Absence absence, int position) {
 
+                setTypeSeanceTextView(viewHolder.typeSeanceTextView, absence);
+                setModuleTextViewFromAbsence(viewHolder.moduleTextView, absence);
                 viewHolder.absenceDateTextView.setText(absence.getDate());
+
                 if (!absence.isJustifier()) {
 
                     viewHolder.consulterJustificationImageButton.setVisibility(View.GONE);
@@ -225,7 +233,32 @@ public class ConsultationEtudiantFragment extends Fragment implements View.OnCli
 
         etudiantsAbsencesRecyclerView.setAdapter(absencesListAdapter);
     }
+    private void setTypeSeanceTextView(TextView typeSeanceTextView, Absence absence) {
 
+        String typeSeance = (absence.getTypeSeance().equals(Seance.COURS))? "Cours :": "TD :";
+        typeSeanceTextView.setText(typeSeance);
+    }
+    private void setModuleTextViewFromAbsence(final TextView moduleTextView, Absence absence) {
+
+        String pathToModule = Utils.firebasePath(Utils.MODULE_ENSEIGNANTS, absence.getIdModule());
+
+        Query query = Utils.database.getReference(pathToModule);
+        query.keepSynced(true); // Keeping data fresh
+
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                Module module = dataSnapshot.getValue(Module.class);
+                if (module != null)
+                    moduleTextView.setText(module.getDesignation());
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Utils.showSnackBar(getActivity(), Utils.DATABASE_ERR_MESSAGE);
+            }
+        });
+    }
     private void addToEtudiantScore(Etudiant etudiant, final int toAdd) {
 
         String pathToEtudiantScore = Utils.firebasePath(Utils.CYCLES, etudiant.getIdCycle(), etudiant.getIdFilliere(),
@@ -260,19 +293,29 @@ public class ConsultationEtudiantFragment extends Fragment implements View.OnCli
 
             addToEtudiantScore(etudiant, Etudiant.SCORE_MOIN);
         }
+        else if (v == sendMessageImageButton)   {
+
+            Intent emailIntent = new Intent(Intent.ACTION_SEND);
+            emailIntent.setType("plain/text");
+            emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{etudiant.getEmail()});
+
+            startActivity(Intent.createChooser(emailIntent, getResources().getString(R.string.email_intent_title)));
+        }
     }
 
     public static class AbsenceViewHolder extends ItemViewHolder {
 
         LinearLayout absenceLinearLayout;
-        TextView absenceDateTextView;
+        TextView typeSeanceTextView, moduleTextView, absenceDateTextView;
         ImageButton supprimerAbsenceImageButton, consulterJustificationImageButton;
 
         public AbsenceViewHolder(View itemView) {
 
             super(itemView);
 
+            typeSeanceTextView = (TextView) itemView.findViewById(R.id.typeSeanceTextView);
             absenceDateTextView = (TextView) itemView.findViewById(R.id.abseneDateTextView);
+            moduleTextView = (TextView) itemView.findViewById(R.id.moduleTextView);
             supprimerAbsenceImageButton = (ImageButton) itemView.findViewById(R.id.supprimerAbsenceImageButton);
             consulterJustificationImageButton = (ImageButton) itemView.findViewById(R.id.consulterJustificationImageButton);
             absenceLinearLayout = (LinearLayout) itemView.findViewById(R.id.absenceLinearLayout);
