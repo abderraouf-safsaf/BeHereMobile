@@ -39,7 +39,7 @@ android:layout_marginTop="10dp">
             android:gravity="left"
             android:text="Date"
             android:textColor="@color/textSecondary"
-            android:textSize="@dimen/date_seance_text_size" />
+            android:textSize="@dimen/date_seance_button_text_size" />
     </LinearLayout>
 
 <LinearLayout

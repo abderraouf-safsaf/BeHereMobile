@@ -20,9 +20,12 @@ import com.example.teamloosers.behereandroid.R;
 import com.example.teamloosers.behereandroid.Structures.Groupe;
 import com.example.teamloosers.behereandroid.Structures.Module;
 import com.example.teamloosers.behereandroid.Structures.Section;
+import com.example.teamloosers.behereandroid.Utils.SpotlightSequence;
 import com.example.teamloosers.behereandroid.Utils.Utils;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.Query;
+
+import jp.wasabeef.recyclerview.animators.SlideInRightAnimator;
 
 /**
  * Created by teamloosers on 01/05/17.
@@ -59,8 +62,16 @@ public class MainFragment extends Fragment {
         GridLayoutManager sectionsLayoutManager = new GridLayoutManager(getContext(), 2);
         sectionsRecyclerView.setLayoutManager(sectionsLayoutManager);
 
+        SlideInRightAnimator animatorSection = new SlideInRightAnimator();
+        animatorSection.setAddDuration(getResources().getInteger(R.integer.animation_duration));
+        sectionsRecyclerView.setItemAnimator(animatorSection);
+
         GridLayoutManager groupesLayoutManager = new GridLayoutManager(getContext(), 2);
         groupesRecyclerView.setLayoutManager(groupesLayoutManager);
+
+        SlideInRightAnimator animatorGroupe = new SlideInRightAnimator();
+        animatorGroupe.setAddDuration(getResources().getInteger(R.integer.animation_duration));
+        sectionsRecyclerView.setItemAnimator(animatorGroupe);
 
         return rootView;
     }

@@ -60,39 +60,55 @@
             android:orientation="horizontal"
             android:weightSum="10">
 
+            <TextView
+                android:id="@+id/dateTextView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginRight="5dp"
+                android:layout_weight="3"
+                android:gravity="right|center"
+                android:text="date"
+                android:textColor="@color/textSecondary"
+                android:textSize="@dimen/date_text_view_text_size" />
+
+            <TextView
+                android:id="@+id/heureTextView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="2"
+                android:gravity="left|center"
+                android:text="heure"
+                android:textColor="@color/textSecondary"
+                android:textSize="@dimen/date_seance_button_text_size" />
+
             <Button
                 android:id="@+id/modifierDateButton"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right|center"
-                android:layout_weight="4"
+                android:layout_weight="2.5"
                 android:background="@drawable/tw__transparent"
+                android:drawableStart="@drawable/calendar"
                 android:gravity="center"
                 android:paddingLeft="0dp"
                 android:text="@string/modifier_date_button_text"
-                android:textColor="@color/colorAccent"
-                android:textSize="@dimen/date_seance_text_size" />
+                android:textColor="@color/colorPrimary"
+                android:textSize="@dimen/date_seance_button_text_size" />
 
             <Button
                 android:id="@+id/modifierHeureButton"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="2"
+                android:layout_gravity="center"
+                android:layout_weight="2.5"
                 android:background="@drawable/tw__transparent"
-                android:text="Heure"
-                android:textColor="@color/colorAccent"
-                android:textSize="@dimen/heure_debut_button_text_size" />
-
-            <Button
-                android:id="@+id/validerAppelButton"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="right|center"
-                android:layout_weight="4"
-                android:background="@drawable/tw__transparent"
+                android:drawableStart="@drawable/time_icon"
                 android:gravity="center"
-                android:text="@string/valider_appel_button"
-                android:textColor="@color/colorAccent" />
+                android:text="Heure"
+                android:textColor="@color/colorPrimary"
+                android:textSize="@dimen/heure_debut_button_text_size" />
 
         </LinearLayout>
 

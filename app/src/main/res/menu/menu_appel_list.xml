@@ -2,8 +2,8 @@
 <menu xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/appelUnParUnMenuItem"
-        android:icon="@drawable/person_icon"
+        android:id="@+id/validerAppelMenuItem"
+        android:icon="@drawable/valider_appel_icon"
         android:title="@string/appel_un_par_un_menu_title"
         app:showAsAction="always" />
 </menu>

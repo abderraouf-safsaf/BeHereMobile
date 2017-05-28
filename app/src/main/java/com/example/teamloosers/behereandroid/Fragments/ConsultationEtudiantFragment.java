@@ -23,6 +23,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.teamloosers.behereandroid.Structures.Justification;
 import com.example.teamloosers.behereandroid.Structures.Seance;
 import com.example.teamloosers.behereandroid.Utils.ItemViewHolder;
 import com.example.teamloosers.behereandroid.R;
@@ -36,6 +37,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+
+import jp.wasabeef.recyclerview.animators.SlideInRightAnimator;
 
 /**
  * Created by teamloosers on 01/05/17.
@@ -81,6 +84,10 @@ public class ConsultationEtudiantFragment extends Fragment implements View.OnCli
         etudiantsAbsencesRecyclerView.setLayoutManager(absenceLinearLayoutManager);
 
         Utils.setRecyclerViewDecoration(etudiantsAbsencesRecyclerView);
+
+        SlideInRightAnimator animator = new SlideInRightAnimator();
+        animator.setAddDuration(getResources().getInteger(R.integer.animation_duration));
+        etudiantsAbsencesRecyclerView.setItemAnimator(animator);
 
         plusImageButton.setOnClickListener(this);
         minusImageButton.setOnClickListener(this);
@@ -161,7 +168,7 @@ public class ConsultationEtudiantFragment extends Fragment implements View.OnCli
         String pathToEtudiant = Utils.firebasePath(Utils.CYCLES, etudiant.getIdCycle(), etudiant.getIdFilliere(),
                 etudiant.getIdPromo(), etudiant.getIdSection(), etudiant.getIdGroupe(), etudiant.getId(), module.getId());
 
-        Query etudiantRef = Utils.database.getReference(pathToEtudiant).orderByChild("idModule")
+        final Query etudiantRef = Utils.database.getReference(pathToEtudiant).orderByChild("idModule")
                 .startAt("");
         etudiantRef.keepSynced(true); // Keeping data fresh
 
@@ -210,7 +217,36 @@ public class ConsultationEtudiantFragment extends Fragment implements View.OnCli
                         @Override
                         public void onClick(View v) {
 
-                            // TODO: consulter justification
+                            String pathToJustification = Utils.firebasePath(Utils.CYCLES, etudiant.getIdCycle(),
+                                    etudiant.getIdFilliere(), etudiant.getIdPromo(), etudiant.getIdSection(),
+                                    etudiant.getIdGroupe(), etudiant.getId(), module.getId(), absence.getId());
+
+                            DatabaseReference justificationRef = Utils.database.getReference(pathToJustification);
+
+                            System.out.println("Path = " + justificationRef.getRef());
+                            justificationRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+
+                                    Justification justification = new Justification();
+
+                                    AlertDialog alertDialog = new AlertDialog.Builder(getContext()).create();
+                                    alertDialog.setTitle("Justification");
+                                    alertDialog.setMessage("justification de l'absence");
+                                    alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+
+                                            dialog.dismiss();
+                                        }
+                                    });
+                                    alertDialog.show();
+                                }
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+
+                                }
+                            });
                         }
                     });
                 }

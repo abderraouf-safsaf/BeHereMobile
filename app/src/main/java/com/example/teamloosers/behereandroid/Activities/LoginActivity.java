@@ -3,13 +3,16 @@ package com.example.teamloosers.behereandroid.Activities;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.media.Image;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageButton;
 
 import com.example.teamloosers.behereandroid.R;
 import com.example.teamloosers.behereandroid.Structures.Enseignant;
 import com.example.teamloosers.behereandroid.Utils.LoginServices;
+import com.example.teamloosers.behereandroid.Utils.SpotlightSequence;
 import com.example.teamloosers.behereandroid.Utils.Utils;
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.ErrorCodes;
@@ -27,6 +30,7 @@ public class LoginActivity extends AppCompatActivity implements DialogInterface.
     private static final int SIGN_IN_REQUEST_CODE = 123;
 
     private ProgressDialog progressDialog;
+    private ImageButton loginImageButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +40,15 @@ public class LoginActivity extends AppCompatActivity implements DialogInterface.
         Utils.makeActivityFullScreen(this);
 
         setContentView(R.layout.activity_login);
+
+
+        loginImageButton = (ImageButton) findViewById(R.id.loginImageButton);
+
+        SpotlightSequence spotlightSequence = new SpotlightSequence(this);
+        spotlightSequence.addSpotlight(loginImageButton,
+                R.string.login_spotlight_title,
+                R.string.login_spotlight_subtitle, "login_spotlight");
+        spotlightSequence.startSequence();
     }
     @Override
     protected void onStart() {

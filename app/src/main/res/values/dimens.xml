@@ -58,11 +58,11 @@
     <dimen name="login_image_button_width">100dp</dimen>
     <dimen name="login_image_button_height">100dp</dimen>
     <dimen name="structure_viewer_height">100dp</dimen>
-    <dimen name="date_seance_text_size">18sp</dimen>
+    <dimen name="date_seance_button_text_size">16sp</dimen>
     <dimen name="consulter_absence_image_button_height">20dp</dimen>
     <dimen name="nombre_absences_text_size">16sp</dimen>
     <dimen name="date_seance_text_view_size">15sp</dimen>
-    <dimen name="heure_debut_button_text_size">18sp</dimen>
+    <dimen name="heure_debut_button_text_size">16sp</dimen>
     <dimen name="cours_image_view_height">30dp</dimen>
     <dimen name="td_tp_image_view_height">30dp</dimen>
     <dimen name="cours_text_view_text_size">18sp</dimen>
@@ -72,4 +72,5 @@
     <dimen name="send_message_icon_height">30dp</dimen>
     <dimen name="remarque_text_view_text_size">18sp</dimen>
     <dimen name="type_seance_text_view_text_size">16sp</dimen>
+    <dimen name="date_text_view_text_size">16sp</dimen>
 </resources>

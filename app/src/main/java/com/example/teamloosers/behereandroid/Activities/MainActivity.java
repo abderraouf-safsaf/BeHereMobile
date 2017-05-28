@@ -1,10 +1,12 @@
 package com.example.teamloosers.behereandroid.Activities;
 
+import com.example.teamloosers.behereandroid.Fragments.AppelUnParUnFragment;
 import com.example.teamloosers.behereandroid.Fragments.MainFragment;
 import com.example.teamloosers.behereandroid.R;
 import com.example.teamloosers.behereandroid.Structures.Enseignant;
 import com.example.teamloosers.behereandroid.Structures.Module;
 import com.example.teamloosers.behereandroid.Utils.LoginServices;
+import com.example.teamloosers.behereandroid.Utils.SpotlightSequence;
 import com.example.teamloosers.behereandroid.Utils.Utils;
 import com.firebase.ui.auth.AuthUI;
 import com.google.firebase.auth.FirebaseAuth;
@@ -13,6 +15,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
+import com.wooplr.spotlight.utils.SpotlightListener;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -87,6 +90,12 @@ public class MainActivity extends AppCompatActivity
         modulePagerTitleStrip.setTextSize(TypedValue.COMPLEX_UNIT_SP,
                 getResources().getDimension(R.dimen.module_designation_text_size));
 
+        SpotlightSequence spotlightSequence = new SpotlightSequence(this);
+        spotlightSequence.addSpotlight(modulePagerTitleStrip, R.string.pagerTitleStrip_title,
+                R.string.pagerTitleStrip_subtitle, "pagerTitleStrip");
+
+        spotlightSequence.startSequence();
+
         loadEnseignantModules();
     }
 
@@ -129,9 +138,10 @@ public class MainActivity extends AppCompatActivity
         }
         else if (id == R.id.aideItem)   {
 
-                Utils.showSnackBar(this, getString(R.string.app_name));
+                SpotlightSequence.resetSpotlights(this);
+                finish();
+                startActivity(getIntent());
             }
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;

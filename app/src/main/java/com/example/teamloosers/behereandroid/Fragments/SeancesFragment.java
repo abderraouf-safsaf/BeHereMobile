@@ -36,6 +36,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.Collections;
 
+import jp.wasabeef.recyclerview.animators.SlideInRightAnimator;
 import jp.wasabeef.recyclerview.animators.SlideInUpAnimator;
 
 /**
@@ -77,7 +78,7 @@ public class SeancesFragment<T extends Structurable> extends Fragment {
         seancesRecyclerView = (RecyclerView) rootView.findViewById(R.id.seancesRecyclerView);
 
         SlideInUpAnimator animator = new SlideInUpAnimator();
-        animator.setAddDuration(200);
+        animator.setAddDuration(getResources().getInteger(R.integer.animation_duration));
         seancesRecyclerView.setItemAnimator(animator);
 
         LinearLayoutManager seancesLinearLayoutManager = new LinearLayoutManager(getContext());

@@ -26,6 +26,8 @@ import com.example.teamloosers.behereandroid.Utils.Utils;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import jp.wasabeef.recyclerview.animators.SlideInRightAnimator;
+
 public class EtudiantsPresencesActivity extends AppCompatActivity {
 
     private HashMap<Etudiant, Boolean> etudiantsPresenecesHashMap;
@@ -80,6 +82,10 @@ public class EtudiantsPresencesActivity extends AppCompatActivity {
                 linearLayoutManager.getOrientation());
         dividerItemDecoration.setDrawable(ContextCompat.getDrawable(this, R.drawable.recyclerview_divider));
         etudiantsPresencesRecyclerView.addItemDecoration(dividerItemDecoration);
+
+        SlideInRightAnimator animator = new SlideInRightAnimator();
+        animator.setAddDuration(R.integer.animation_duration);
+        etudiantsPresencesRecyclerView.setItemAnimator(animator);
     }
 
     @Override

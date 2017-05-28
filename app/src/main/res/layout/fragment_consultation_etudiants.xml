@@ -182,7 +182,6 @@
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
         android:paddingStart="10dp"
-        android:scrollIndicators="left"
         android:scrollbarAlwaysDrawHorizontalTrack="false"
         android:scrollbarAlwaysDrawVerticalTrack="true"
         android:scrollbars="vertical"

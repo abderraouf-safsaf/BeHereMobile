@@ -37,6 +37,7 @@ import com.example.teamloosers.behereandroid.Structures.Etudiant;
 import com.example.teamloosers.behereandroid.Structures.Module;
 import com.example.teamloosers.behereandroid.Structures.Seance;
 import com.example.teamloosers.behereandroid.Structures.Structurable;
+import com.example.teamloosers.behereandroid.Utils.SpotlightSequence;
 import com.example.teamloosers.behereandroid.Utils.Utils;
 import com.firebase.ui.database.ChangeEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -47,6 +48,8 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+
+import jp.wasabeef.recyclerview.animators.SlideInRightAnimator;
 
 public class AppelListActivity <T extends Structurable> extends AppCompatActivity
         implements DatePickerFragment.OnDateSelectedListener, View.OnClickListener {
@@ -64,7 +67,8 @@ public class AppelListActivity <T extends Structurable> extends AppCompatActivit
     private ProgressDialog loadingProgressDialog;
     private Toolbar toolbar;
     private RecyclerView etudiantAppelListRecyclerView;
-    private Button validerAppelButton, modifierDateButton, modifierHeureButton;
+    private TextView dateTextView, heureTextView;
+    private Button modifierDateButton, modifierHeureButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,9 +84,17 @@ public class AppelListActivity <T extends Structurable> extends AppCompatActivit
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         etudiantAppelListRecyclerView = (RecyclerView) findViewById(R.id.etudiantsAppelListRecyclerView);
-        validerAppelButton = (Button) findViewById(R.id.validerAppelButton);
         modifierDateButton = (Button) findViewById(R.id.modifierDateButton);
         modifierHeureButton = (Button) findViewById(R.id.modifierHeureButton);
+        dateTextView = (TextView) findViewById(R.id.dateTextView);
+        heureTextView = (TextView) findViewById(R.id.heureTextView);
+
+        SpotlightSequence spotlightSequence = new SpotlightSequence(this);
+        spotlightSequence.addSpotlight(toolbar, R.string.valider_appel_spotlight_title,
+                R.string.valider_appel_spotlight_subtitle, "");
+        spotlightSequence.addSpotlight(modifierDateButton, R.string.date_spotlight_title,
+                R.string.date_spotlight_subtitle, "datespotlight");
+        spotlightSequence.startSequence();
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -96,11 +108,13 @@ public class AppelListActivity <T extends Structurable> extends AppCompatActivit
         etudiantAppelListRecyclerView.setLayoutManager(linearLayoutManager);
         Utils.setRecyclerViewDecoration(etudiantAppelListRecyclerView);
 
+        SlideInRightAnimator animator = new SlideInRightAnimator();
+        animator.setAddDuration(getResources().getInteger(R.integer.animation_duration));
+        etudiantAppelListRecyclerView.setItemAnimator(animator);
+
         modifierDateButton.setOnClickListener(this);
-        validerAppelButton.setOnClickListener(this);
         modifierHeureButton.setOnClickListener(this);
     }
-
     @Override
     protected void onStart() {
 
@@ -115,7 +129,6 @@ public class AppelListActivity <T extends Structurable> extends AppCompatActivit
         else if (structure instanceof Section)
             loadEtudiantSection();
     }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
@@ -127,28 +140,14 @@ public class AppelListActivity <T extends Structurable> extends AppCompatActivit
 
         int id = item.getItemId();
 
-        if (id == R.id.appelUnParUnMenuItem) {
-
-            HashMap<Etudiant, Boolean> etudiantsPresenceMap = new HashMap<>();
-
-            for (Etudiant etudiant: getEtudiantsList()) {
-
-                etudiantsPresenceMap.put(etudiant, Absence.PRESENT);
-            }
+        if (id == R.id.validerAppelMenuItem)   {
 
             instancierNouvelleSeance(jour, mois, annee, heureDebut, minuteDebut);
 
-            Intent appelUnParUnIntent = new Intent(this, AppelUpParUnActivity.class);
-            appelUnParUnIntent.putExtra("module", module);
-            appelUnParUnIntent.putExtra("seance", seance);
-            appelUnParUnIntent.putExtra("etudiantsPresenceMap", etudiantsPresenceMap);
-
-            startActivity(appelUnParUnIntent);
-
+            ajouterAbsencesDb();
+            Toast.makeText(AppelListActivity.this, R.string.valider_appel_toast, Toast.LENGTH_SHORT).show();
             finish();
-            return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -316,14 +315,14 @@ public class AppelListActivity <T extends Structurable> extends AppCompatActivit
      */
     private void updateDateSeanceTextView() {
 
-        modifierDateButton.setText(String.format("%s/%s/%s", jour, mois, annee));
+        dateTextView.setText(String.format("%s/%s/%s", jour, mois, annee));
     }
     /*
         Update time textview from date fields
      */
     private void updateHeureSeanceTextView()    {
 
-        modifierHeureButton.setText(String.format("%s:%s", heureDebut, minuteDebut));
+        heureTextView.setText(String.format("%s:%s", heureDebut, minuteDebut));
     }
 
     /*
@@ -540,14 +539,7 @@ public class AppelListActivity <T extends Structurable> extends AppCompatActivit
             DatePickerFragment changerDateDialog = new DatePickerFragment();
             changerDateDialog.show(getSupportFragmentManager(), "datePickerDialog");
         }
-        else if (v == validerAppelButton)   {
-            instancierNouvelleSeance(jour, mois, annee, heureDebut, minuteDebut);
-
-            ajouterAbsencesDb();
-            Toast.makeText(AppelListActivity.this, R.string.valider_appel_toast, Toast.LENGTH_SHORT).show();
-            finish();
-        }
-        if (v == modifierHeureButton)   {
+        else if (v == modifierHeureButton)   {
 
             final Calendar c = Calendar.getInstance();
             int hour = c.get(Calendar.HOUR_OF_DAY);

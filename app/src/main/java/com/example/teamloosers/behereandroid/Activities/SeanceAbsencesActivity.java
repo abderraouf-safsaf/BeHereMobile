@@ -30,6 +30,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import jp.wasabeef.recyclerview.animators.SlideInRightAnimator;
+
 public class SeanceAbsencesActivity<T extends Structurable> extends AppCompatActivity {
 
     private Module module;
@@ -61,6 +63,10 @@ public class SeanceAbsencesActivity<T extends Structurable> extends AppCompatAct
         seanceAbsencesRecyclerView.setLayoutManager(seancesLinearLayoutManager);
 
         Utils.setRecyclerViewDecoration(seanceAbsencesRecyclerView);
+
+        SlideInRightAnimator animator = new SlideInRightAnimator();
+        animator.setAddDuration(getResources().getInteger(R.integer.animation_duration));
+        seanceAbsencesRecyclerView.setItemAnimator(animator);
     }
 
     @Override

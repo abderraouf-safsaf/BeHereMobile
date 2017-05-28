@@ -79,7 +79,7 @@ public class EtudiantsFragment <T extends Structurable> extends Fragment {
         etudiantsListRecyclerView.setLayoutManager(linearLayoutManager);
 
         SlideInRightAnimator animator = new SlideInRightAnimator();
-        animator.setAddDuration(300);
+        animator.setAddDuration(getResources().getInteger(R.integer.animation_duration));
         etudiantsListRecyclerView.setItemAnimator(animator);
 
         Utils.setRecyclerViewDecoration(etudiantsListRecyclerView);

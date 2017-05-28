@@ -21,6 +21,7 @@ import com.example.teamloosers.behereandroid.Structures.Groupe;
 import com.example.teamloosers.behereandroid.Structures.Module;
 import com.example.teamloosers.behereandroid.Structures.Seance;
 import com.example.teamloosers.behereandroid.Structures.Structurable;
+import com.example.teamloosers.behereandroid.Utils.SpotlightSequence;
 
 public class StructureActivity <T extends Structurable> extends AppCompatActivity
         implements View.OnClickListener{
@@ -56,6 +57,12 @@ public class StructureActivity <T extends Structurable> extends AppCompatActivit
 
         nouveauAppelFloatButton = (FloatingActionButton) findViewById(R.id.nouveauAppelFlatButton);
         nouveauAppelFloatButton.setOnClickListener(this);
+
+        SpotlightSequence spotlightSequence = new SpotlightSequence(this);
+        spotlightSequence.addSpotlight(nouveauAppelFloatButton, R.string.nouvel_appel_spotlight_title,
+                R.string.nouvel_appel_spotlight_subtitle, "nouvelappelspotlight");
+        spotlightSequence.startSequence();
+
     }
     @Override
     public boolean onSupportNavigateUp() {

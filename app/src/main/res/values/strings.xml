@@ -87,4 +87,18 @@
     <string name="annuler">Annuler</string>
     <string name="remarque">Remarque :</string>
     <string name="remarque_edit_text_hint">Entrer une remarque</string>
+    <string name="login_spotlight_subtitle">Cliquer pour se connecter avec votre E-mail</string>
+    <string name="login_spotlight_title">Connexion</string>
+    <string name="pagerTitleStrip_title">Modules</string>
+    <string name="pagerTitleStrip_subtitle">Vous trouvez ici les modules que vous enseignez</string>
+    <string name="sections_recycler_spotlight_title">Sections</string>
+    <string name="sections_recycler_spotlight_subtitle">Pour commencer un cours cliquez ici</string>
+    <string name="groupes_recycler_spotlight_title">Groupes</string>
+    <string name="groupes_recycler_spotlight_subtitle">Pour commencer un TD/TP cliquez ici</string>
+    <string name="valider_appel_spotlight_title">Validation</string>
+    <string name="valider_appel_spotlight_subtitle">Aprés avoir fait l\'appel, cliquer pour le valider</string>
+    <string name="nouvel_appel_spotlight_title">Appel</string>
+    <string name="nouvel_appel_spotlight_subtitle">Cliquer pour faire un nouvel appel</string>
+    <string name="date_spotlight_title">Date</string>
+    <string name="date_spotlight_subtitle">Vous pouvez modifier la date et l\'heure de la séance</string>
 </resources>
