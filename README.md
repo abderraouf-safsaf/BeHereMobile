@@ -1,6 +1,6 @@
 # BeHere
 
-Attendence processing is effective only when it's real-time. 
+Attendence processing is effective only when it's real-time.
 BeHere is an attendance manager that handles recording with simplicity and efficiency.
 
 ## Getting Started
@@ -19,19 +19,19 @@ A full database created and managed by BeHere Desktop Application
 
 ## Built With
 
-[Android Studio](https://developer.android.com/studio/index.html) - IDE for Android platform
-[Maven](https://maven.apache.org/) - Dependency Manager
-[Firebase](https://firebase.google.com/) - Mobile and web application development platform
-[Flaticon](http://www.flaticon.com/) - Search engine for free icons
+[Android Studio](https://developer.android.com/studio/index.html) - IDE for Android platform  
+[Maven](https://maven.apache.org/) - Dependency Manager  
+[Firebase](https://firebase.google.com/) - Mobile and web application development platform  
+[Flaticon](http://www.flaticon.com/) - Search engine for free icons  
 
 ## Contributors
 
-* **Abderraouf Safsaf**
-* **Hichem Sidi Mohamed Zekri**
-* **Nadjia Alahoum**
-* **Badreddine Yacine Yacheur**
-* **Omar Mokhfi**
-* **Abderrahmen Tayebcherif**
+* **Abderraouf Safsaf**  
+* **Hichem Sidi Mohamed Zekri**  
+* **Nadjia Alahoum**  
+* **Badreddine Yacine Yacheur**  
+* **Omar Mokhfi**  
+* **Abderrahmen Tayebcherif**  
 
 ## License
 [MIT](https://github.com/johnlerouge/BeHereAndroid/blob/master/LICENSE)
