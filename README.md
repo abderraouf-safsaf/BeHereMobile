@@ -15,3 +15,22 @@ A full database created and managed by BeHere Desktop Application
 ### Installing
 
 ## Running the tests
+
+## Built With
+
+[Android Studio](https://developer.android.com/studio/index.html) - IDE for Android platform
+[Maven](https://maven.apache.org/) - Dependency Manager
+[Firebase](https://firebase.google.com/) - Mobile and web application development platform
+[Flaticon](http://www.flaticon.com/) - Search engine for free icons
+
+## Contributors
+
+* **Abderraouf Safsaf**
+* **Hichem Sidi Mohamed Zekri**
+* **Nadjia Alahoum**
+* **Badreddine Yacine Yacheur**
+* **Omar Mokhfi**
+* **Abderrahmen Tayebcherif**
+
+## License
+[MIT](rezrz)
