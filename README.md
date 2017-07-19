@@ -25,6 +25,8 @@ A full database created and managed by BeHere Desktop Application
 ![Student details screen](https://raw.githubusercontent.com/johnlerouge/BeHereAndroid/master/screenshots/Screenshot_20170719-232408.png)
 ![](https://raw.githubusercontent.com/johnlerouge/BeHereAndroid/master/screenshots/Screenshot_20170719-231736.png)  
 
+An application demo video is available here: https://www.youtube.com/watch?v=IuMyWWUAtzw
+
 ## Built With
 
 [Android Studio](https://developer.android.com/studio/index.html) - IDE for Android platform  
