@@ -34,4 +34,4 @@ A full database created and managed by BeHere Desktop Application
 * **Abderrahmen Tayebcherif**
 
 ## License
-[MIT](rezrz)
+[MIT](https://github.com/johnlerouge/BeHereAndroid/blob/master/LICENSE)
