@@ -15,9 +15,16 @@ A full database created and managed by BeHere Desktop Application
 
 ## Running the tests
 
-![Home Screen](https://raw.githubusercontent.com/johnlerouge/BeHereAndroid/master/screenshots/Screenshot_20170714-201031.png)
-![Studens Screen](https://raw.githubusercontent.com/johnlerouge/BeHereAndroid/master/screenshots/Screenshot_20170714-201057.png)
-![Calling screen](https://raw.githubusercontent.com/johnlerouge/BeHereAndroid/master/screenshots/Screenshot_20170714-201151.png)
+
+![Splash screen](https://raw.githubusercontent.com/johnlerouge/BeHereAndroid/master/screenshots/Screenshot_20170714-201031.png)
+![Authentication screen](https://raw.githubusercontent.com/johnlerouge/BeHereAndroid/master/screenshots/Screenshot_20170719-231935.png)  
+
+![Main screen](https://raw.githubusercontent.com/johnlerouge/BeHereAndroid/master/screenshots/Screenshot_20170719-232303.png)
+![Calling screen](https://raw.githubusercontent.com/johnlerouge/BeHereAndroid/master/screenshots/Screenshot_20170714-201151.png)  
+
+![Student details screen](https://raw.githubusercontent.com/johnlerouge/BeHereAndroid/master/screenshots/Screenshot_20170719-232408.png)
+![](https://raw.githubusercontent.com/johnlerouge/BeHereAndroid/master/screenshots/Screenshot_20170719-231736.png)  
+
 ## Built With
 
 [Android Studio](https://developer.android.com/studio/index.html) - IDE for Android platform  
