@@ -34,19 +34,7 @@ An application demo video is available here: https://www.youtube.com/watch?v=IuM
 [Firebase](https://firebase.google.com/) - Mobile and web application development platform  
 [Flaticon](http://www.flaticon.com/) - Search engine for free icons  
 
-## Contributors
-
-* **Abderraouf Safsaf**  
-* **Hichem Sidi Mohamed Zekri**  
-* **Nadjia Alahoum**  
-* **Badreddine Yacine Yacheur**  
-* **Omar Mokhfi**  
-* **Abderrahmen Tayebcherif**  
 
 ## License
 [MIT](https://github.com/johnlerouge/BeHereAndroid/blob/master/LICENSE)
 
-## Acknowledgement
-
-I would like to express my special thanks of gratitude to our teacher HICHEM BADSI who gaves us the opportunity to do this project, and Mr DJAMEL AMAR BEN SABER who also helped us in designing most diagrams.
-Secondly i would also like to thank MOHAMED MEDIN from Startimes forum who helped us in finalizing this project and gave us a lot of tips with his extensive experience in computer science.
