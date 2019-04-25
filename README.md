@@ -30,9 +30,7 @@ An application demo video is available here: https://www.youtube.com/watch?v=IuM
 ## Built With
 
 [Android Studio](https://developer.android.com/studio/index.html) - IDE for Android platform  
-[Maven](https://maven.apache.org/) - Dependency Manager  
 [Firebase](https://firebase.google.com/) - Mobile and web application development platform  
-[Flaticon](http://www.flaticon.com/) - Search engine for free icons  
 
 
 ## License
